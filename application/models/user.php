@@ -3,10 +3,10 @@
 /**
  * The User Model
  *
- * @author Faizan Ayubi
+ * @author Shreyansh Goel
  */
-namespace Models;
-class User extends Shared\Model {
+namespace models;
+class User extends \Shared\Model {
 
     /**
      * @column
@@ -14,10 +14,10 @@ class User extends Shared\Model {
      * @type text
      * @length 100
      * 
-     * @validate required, alpha, min(3), max(32)
-     * @label first name
+     * @validate required
+     * @label full name
      */
-    protected $_first;
+    protected $_full_name;
 
     /**
      * @column
@@ -25,10 +25,10 @@ class User extends Shared\Model {
      * @type text
      * @length 100
      * 
-     * @validate required, alpha, min(3), max(32)
-     * @label last name
+     * @validate required
+     * @label mobile number
      */
-    protected $_last;
+    protected $_mobile;
 
     /**
      * @column
@@ -37,7 +37,7 @@ class User extends Shared\Model {
      * @length 100
      * @uindex
      * 
-     * @validate required, max(100)
+     * @validate required
      * @label email address
      */
     protected $_email;
@@ -49,10 +49,39 @@ class User extends Shared\Model {
      * @length 100
      * @index
      * 
-     * @validate required, alpha, min(8), max(32)
+     * @validate required
      * @label password
      */
     protected $_password;
+
+    /**
+     * @column
+     * @readwrite
+     * @type text
+     * @length 100
+     * @uindex
+     *
+     * @label shop name
+     */
+    protected $_shop_name = NULL;
+
+    /**
+     * @column
+     * @readwrite
+     * @type text
+     * @length 100
+     * @uindex
+     *
+     * @label shop name
+     */
+    protected $_shop_document = NULL;
+
+    /**
+    * @column
+    * @readwrite
+    * @type boolean
+    */
+    protected $_shop = false;
     
     /**
     * @column
