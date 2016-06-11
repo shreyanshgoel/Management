@@ -176,20 +176,12 @@ class Users extends Controller {
     	$layoutView = $this->getLayoutView();
     	$layoutView->set("seo", Framework\Registry::get("seo"));
 
-    	$tables = models\Table::all(array(
-    		'user_id = ?' => $this->user->id
-    		));
-
-    	if(!empty($tables)){
-
-    		$view->set('tables', $tables);
-    	}
     }
 
     /**
 	* @before secure_user
 	*/
-    public function your_tables() {
+    public function tables() {
     	$layoutView = $this->getLayoutView();
     	$layoutView->set("seo", Framework\Registry::get("seo"));
     }
@@ -206,6 +198,70 @@ class Users extends Controller {
     	$numbers = array(1,2,3,4,5,6,7,8,9,10);
 
     	$view->set('numbers', $numbers);
+
+    	if(RequestMethods::post('create')){
+
+    		$i = 1;
+    		$j = 1;
+    		while($i < 11){
+
+    			$name = 'name' . $i;
+
+	    		if(!empty(RequestMethods::post($name))){
+
+	    			$c[$j] = RequestMethods::post($name);
+	    			$j++;
+	    		}
+
+	    		$i++;
+	    	}
+
+	    	while($j < 11){
+
+	    		$c[$j] = NULL;
+	    		$j++;
+	    	}
+
+	    	$count = models\Table::count(array(
+	    		'user_id = ?' => $this->user->id
+	    		));
+	    	$count++;
+
+    		$table = new models\Table(array(
+    			'user_id' => $this->user->id,
+    			'table_number' => $count,
+    			'table_name' => RequestMethods::post('table_name'),
+    			'column1_name' => $c[1],
+    			'column2_name' => $c[2],
+    			'column3_name' => $c[3],
+    			'column4_name' => $c[4],
+    			'column5_name' => $c[5],
+    			'column6_name' => $c[6],
+    			'column7_name' => $c[7],
+    			'column8_name' => $c[8],
+    			'column9_name' => $c[9],
+    			'column10_name' => $c[10]
+    			));
+
+    		if($table->validate()){
+
+    			$table->save();
+
+    		}else{
+    			echo "Validation Not Good";
+    		}
+    	}
+    }
+
+	/**
+	* @before secure_user
+	*/
+
+    public function logout(){
+        
+        $this->setUser(false);
+
+        header("Location: /users/login");
     }
 
 }

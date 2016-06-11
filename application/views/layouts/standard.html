@@ -1,3 +1,5 @@
+{script $tables = models\Table::all(array('user_id = ?' => $user->id))}
+        
 <!DOCTYPE html>
 <html>
 
@@ -8,6 +10,10 @@
     <title>INSPINIA | Dashboard</title>
     <link href="{echo CDN}css/bootstrap.min.css" rel="stylesheet">
     <link href="{echo CDN}font-awesome/css/font-awesome.css" rel="stylesheet">
+
+    <link href="{echo CDN}css/plugins/jQueryUI/jquery-ui-1.10.4.custom.min.css" rel="stylesheet">
+    <link href="{echo CDN}css/plugins/jqGrid/ui.jqgrid.css" rel="stylesheet">
+    
     <!-- Gritter -->
     <link href="{echo CDN}js/plugins/gritter/jquery.gritter.css" rel="stylesheet">
     <link href="{echo CDN}css/animate.css" rel="stylesheet">
@@ -76,7 +82,7 @@
                         <a href="index.html#"><i class="fa fa-table"></i> <span class="nav-label">Your Tables</span><span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level collapse">
 
-                            {if isset($tables)}
+                            {if !empty($tables)}
                                 {foreach $t in $tables}
                                     <li id=""><a href=""><span class="fa fa-arrow-right"></span></a></li>
                                 {/foreach}
@@ -87,7 +93,7 @@
                         </ul>
                     </li>
                     <li id="">
-                        <a href=""><i class="fa fa-plus"></i> <span class="nav-label">Create Table</span>  </a>
+                        <a href="/users/create_table"><i class="fa fa-plus"></i> <span class="nav-label">Create Table</span>  </a>
                     </li>
                     
                     <li id="">
@@ -215,7 +221,7 @@
                             </ul>
                         </li>
                         <li>
-                            <a href="login.html">
+                            <a href="/users/logout">
                                 <i class="fa fa-sign-out"></i> Log out
                             </a>
                         </li>

@@ -44,8 +44,6 @@ class Table extends \Shared\Model {
      * @column
      * @readwrite
      * @type text
-     * @length 100
-     * @index
      * 
      * @validate required
      * @label password

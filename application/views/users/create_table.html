@@ -21,11 +21,11 @@
         
                     </div>
                     <div class="ibox-content">
-                        <form method="get" class="form-horizontal">
+                        <form method="post" class="form-horizontal">
                            <div class="form-group">
                                 <label class="col-sm-2 control-label">Table Name<sup style="color:red;">*</sup></label>
                                 <div class="col-sm-5">
-                                    <input type="text" class="form-control" placeholder="Table Name">
+                                    <input type="text" class="form-control" name="table_name" placeholder="Table Name" required>
                                 </div>
                             </div>
                             <div class="hr-line-dashed"></div>
@@ -33,14 +33,14 @@
                                 <div class="form-group">
                                     <label class="col-sm-2 control-label">Column Name {$i}{if $i == 1}<sup style="color:red;">*</sup>{/if}</label>
                                     <div class="col-sm-5">
-                                        <input type="text" class="form-control" placeholder="Column Name {$i}">
+                                        <input type="text" class="form-control" name="name{$i}" placeholder="Column Name {$i}" {if $i == 1} required  {/if}>
                                     </div>
                                 </div>
                                 <div class="hr-line-dashed"></div>
                            {/foreach}
                             <div class="form-group">
                                 <div class="col-sm-4 col-sm-offset-2">
-                                    <button class="btn btn-primary" type="submit"><i class="fa fa-plus"></i>&nbsp;Create</button>
+                                    <button class="btn btn-primary" name="create" value="hehe" type="submit"><i class="fa fa-plus"></i>&nbsp;Create</button>
                                 </div>
                             </div>
                         </form>
