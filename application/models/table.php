@@ -6,7 +6,7 @@
  * @author Shreyansh Goel
  */
 namespace models;
-class Column extends \Shared\Model {
+class Table extends \Shared\Model {
 
     /**
      * @column
