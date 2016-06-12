@@ -184,8 +184,103 @@ class Users extends Controller {
     public function tables($id = -1) {
     	$layoutView = $this->getLayoutView();
     	$layoutView->set("seo", Framework\Registry::get("seo"));
+    	
+    	$view = $this->getActionView();
+
+    	$table = models\Table::first(array(
+    		'id = ?' => $id,
+    		'user_id = ?' => $this->user->id
+    		));
 
     	
+
+    	if(!empty($table)){
+
+    		$entries = models\Entry::all(array(
+    			'table_id = ?' => $id
+    			));
+
+    		$n1 = $table->column1_name;
+    		$n2 = $table->column2_name;
+    		$n3 = $table->column3_name;
+    		$n4 = $table->column4_name;
+    		$n5 = $table->column5_name;
+    		$n6 = $table->column6_name;
+    		$n7 = $table->column7_name;
+    		$n8 = $table->column8_name;
+    		$n9 = $table->column9_name; 
+    		$n10 = $table->column10_name;
+
+    		$c = "['S No.'";
+
+    		$i = 1;
+    		while($i < 11){
+
+    			$n = 'n' . $i;
+
+    			if($$n != NULL){
+
+    				$c = $c . ", '" . $$n . "' ";
+    			}
+
+    			$i++;
+    		}
+
+    		$c = $c . ']';
+
+    		$view->set('entries', $entries)->set('c', $c);
+
+    		$obj = array();
+	        $data = $view->data;
+
+	        if ($data) {
+	            foreach ($data as $keys => $values) {
+	                switch (gettype($values)) {
+	                    case 'object':
+	                        if (get_class($values) == "stdClass") {
+	                            $obj[$keys] = $values;
+	                        } elseif (is_a($values, 'Framework\Model')) {
+	                            $obj[$keys] = $values->getJsonData();
+	                        } else {
+	                            $obj[$keys] = $values;
+	                        }
+	                        break;
+	                    case 'array':
+	                        foreach ($values as $key => $value) {
+	                            if (gettype($value) == "object") {
+	                                if (get_class($value) == "stdClass") {
+	                                    $obj[$keys][] = $value;
+	                                } elseif (is_a($value, 'Framework\Model')) {
+	                                    $obj[$keys][] = $value->getJsonData();
+	                                } else {
+	                                    $obj[$keys][] = $value;
+	                                }
+	                            } else{
+	                                $obj[$keys] = $values;
+	                            }
+	                        }
+	                        break;
+
+	                    case 'string':
+	                    case 'integer':
+	                    case 'boolean':
+	                        $obj[$keys] = $values;
+	                        break;
+
+	                    default:
+	                        break;
+
+	                }
+	            }
+	        }
+	        
+	        $view->set('json', json_encode($obj['entries'], JSON_PRETTY_PRINT));
+
+    	}else{
+
+    		self::redirect('/404');
+    	}
+
 
     }
 
@@ -246,9 +341,46 @@ class Users extends Controller {
     			'column10_name' => $c[10]
     			));
 
+    		$count = models\Table::count();
+	    	$count++;
+
+	    	$i = 1;
+
+	    	while($i < 11){
+
+	    		$name = 'type' . $i;
+
+	    		if(RequestMethods::post($name) == 1 || RequestMethods::post($name) == 2 || RequestMethods::post($name) == 3){
+
+	    			$c[$i] = RequestMethods::post($name);
+	 
+	    		}else{
+	    			$c[$i] = 1;
+	    		}
+
+	    		$i++;
+
+	    	}
+
+    		$type = new models\Table_Type(array(
+    			'table_id' => $count,
+    			'type1' => $c[1],
+    			'type2' => $c[2],
+    			'type3' => $c[3],
+    			'type4' => $c[4],
+    			'type5' => $c[5],
+    			'type6' => $c[6],
+    			'type7' => $c[7],
+    			'type8' => $c[8],
+    			'type9' => $c[9],
+    			'type10' => $c[10]
+    			));
+
     		if($table->validate()){
 
     			$table->save();
+
+    			$type->save();
 
     		}else{
     			echo "Validation Not Good";

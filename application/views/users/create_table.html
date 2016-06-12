@@ -24,7 +24,7 @@
                         <form method="post" class="form-horizontal">
                            <div class="form-group">
                                 <label class="col-sm-2 control-label">Table Name<sup style="color:red;">*</sup></label>
-                                <div class="col-sm-5">
+                                <div class="col-sm-3">
                                     <input type="text" class="form-control" name="table_name" placeholder="Table Name" required>
                                 </div>
                             </div>
@@ -32,8 +32,16 @@
                             {foreach $i in $numbers}
                                 <div class="form-group">
                                     <label class="col-sm-2 control-label">Column Name {$i}{if $i == 1}<sup style="color:red;">*</sup>{/if}</label>
-                                    <div class="col-sm-5">
+                                    <div class="col-sm-3">
                                         <input type="text" class="form-control" name="name{$i}" placeholder="Column Name {$i}" {if $i == 1} required  {/if}>
+                                    </div>
+
+                                    <div class="col-sm-2">
+                                        <select class="form-control m-b" name="type{$i}">
+                                            <option value="1">Text</option>
+                                            <option value="2">Number</option>
+                                            <option value="3">Date/Time</option>
+                                        </select>
                                     </div>
                                 </div>
                                 <div class="hr-line-dashed"></div>
