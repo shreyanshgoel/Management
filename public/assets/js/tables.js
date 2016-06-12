@@ -18,7 +18,6 @@ $(document).ready(function() {
         // Add responsive to jqGrid
         $(window).bind('resize', function() {
             var width = $('.jqGrid_wrapper').width();
-            $('#table_list_1').setGridWidth(width);
             $('#table_list_2').setGridWidth(width);
         });
     });

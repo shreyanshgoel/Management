@@ -228,7 +228,66 @@ class Users extends Controller {
 
     		$c = $c . ']';
 
-    		$view->set('entries', $entries)->set('c', $c);
+    		$t_t = models\Table_Type::first(array('id = ?' => $id));
+
+    		$t1 = $t_t->type1;
+    		$t2 = $t_t->type2;
+    		$t3 = $t_t->type3;
+    		$t4 = $t_t->type4;
+    		$t5 = $t_t->type5;
+    		$t6 = $t_t->type6;
+    		$t7 = $t_t->type7;
+    		$t8 = $t_t->type8;
+    		$t9 = $t_t->type9; 
+    		$t10 = $t_t->type10;
+
+    		$e = '[{
+                name: "_sno",
+                index: "_sno",
+                width: 90,
+                align: "right",
+                sorttype: "number"
+            }';
+
+            $i = 1;
+    		while($i < 11){
+
+    			$n = 'n' . $i;
+
+    			$t = 't' . $i;
+
+    			if($$t == 1){
+
+    				$type="false";
+    			}
+
+    			if($$t == 2){
+
+    				$type="float";
+    			}
+
+    			if($$t == 3){
+
+    				$type="date";
+    			}
+
+    			if($$n != NULL){
+
+    				$e = $e . ', {
+		                name: "_entry' . $i . '",
+		                index: "_entry' . $i . '",
+		                width: 80,
+		                align: "right",
+		                sorttype: "' . $type . '"
+		            }';
+    			}
+
+    			$i++;
+    		}
+
+            $e = $e . ']';
+
+    		$view->set('entries', $entries)->set('c', $c)->set('e', $e);
 
     		$obj = array();
 	        $data = $view->data;
@@ -272,6 +331,14 @@ class Users extends Controller {
 
 	                }
 	            }
+	        }
+
+	        $i = 0;
+
+	        while($i < count($obj['entries'])){
+
+	        	$obj['entries'][$i]['_sno'] = $i + 1;
+	        	$i++;
 	        }
 	        
 	        $view->set('json', json_encode($obj['entries'], JSON_PRETTY_PRINT));

@@ -30,12 +30,14 @@
     <script src="{echo CDN}js/plugins/jqGrid/i18n/grid.locale-en.js"></script>
     <script src="{echo CDN}js/plugins/jqGrid/jquery.jqGrid.min.js"></script>
     <script type="text/javascript">
-        
+    
+    $(document).ready(function() {
+       
         // Examle data for jqGrid
         var mydata = {$json};
         
         // Configuration for jqGrid Example 2
-       
+   
         $("#table_list_2").jqGrid({
             data: mydata,
             datatype: "local",
@@ -45,35 +47,7 @@
             rowNum: 20,
             rowList: [10, 20, 30],
             colNames: {$c},
-            colModel: [{
-                name: 'id',
-                index: 'id',
-                width: 60,
-                sorttype: "int"
-            }, {
-                name: 'invdate',
-                index: 'invdate',
-                width: 90,
-                sorttype: "date",
-                formatter: "date"
-            }, {
-                name: 'name',
-                index: 'name',
-                width: 100
-            }, {
-                name: 'amount',
-                index: 'amount',
-                width: 80,
-                align: "right",
-                sorttype: "float",
-                formatter: "number"
-            }, {
-                name: 'tax',
-                index: 'tax',
-                width: 80,
-                align: "right",
-                sorttype: "float"
-            }],
+            colModel: {$e},
             pager: "#pager_list_2",
             viewrecords: true,
             caption: "Example jqGrid 2",
@@ -83,7 +57,10 @@
             edittext: 'Edit',
             hidegrid: false
         });
+    });
 
+
+    </script>
 
     </script>
     <script src="{echo CDN}js/tables.js"></script>
