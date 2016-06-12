@@ -23,7 +23,7 @@ class Users extends Controller {
 	* @before NotLoggedIn
 	*/
 	public function register(){
-		$this->setLayout("layouts/login");
+		$this->setLayout("layouts/empty");
 		;
 		if(!$this->user){
 			if(RequestMethods::post('register')){
@@ -108,7 +108,7 @@ class Users extends Controller {
 	*/
 
 	public function login(){
-		$this->setLayout("layouts/login");
+		$this->setLayout("layouts/empty");
 
 		if(!$this->user){
 
@@ -181,9 +181,12 @@ class Users extends Controller {
     /**
 	* @before secure_user
 	*/
-    public function tables() {
+    public function tables($id = -1) {
     	$layoutView = $this->getLayoutView();
     	$layoutView->set("seo", Framework\Registry::get("seo"));
+
+    	
+
     }
 
     /**

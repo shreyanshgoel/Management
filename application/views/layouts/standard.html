@@ -84,7 +84,7 @@
 
                             {if !empty($tables)}
                                 {foreach $t in $tables}
-                                    <li id=""><a href=""><span class="fa fa-arrow-right"></span></a></li>
+                                    <li id=""><a href="/users/tables/{$t->id}"><span class="fa fa-arrow-right"></span>&nbsp;&nbsp;{$t->table_name}</a></li>
                                 {/foreach}
                             {/if}
                             {else}

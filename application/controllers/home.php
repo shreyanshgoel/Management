@@ -9,9 +9,11 @@ use Shared\Controller as Controller;
 
 class Home extends Controller {
 
+
     public function index() {
-    	$layoutView = $this->getLayoutView();
-    	$layoutView->set("seo", Framework\Registry::get("seo"));
+
+        $this->setLayout("layouts/empty");
+
     }
 
     public function install(){
