@@ -9,12 +9,12 @@
     <meta name="author" content="">
     <title>INSPINIA - Landing Page</title>
     <!-- Bootstrap core CSS -->
-    <link href="{echo CDN}css/bootstrap.min.css" rel="stylesheet">
+    <link href="{echo CDN}css/bootstrap.css" rel="stylesheet">
     <!-- Animation CSS -->
-    <link href="{echo CDN}css/animate.css" rel="stylesheet">
-    <link href="{echo CDN}font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    <link href="{echo CDN}main/css/animate.css" rel="stylesheet">
+    <link href="{echo CDN}main/font-awesome/css/font-awesome.min.css" rel="stylesheet">
     <!-- Custom styles for this template -->
-    <link href="{echo CDN}css/style.css" rel="stylesheet">
+    <link href="{echo CDN}main/css/style.css" rel="stylesheet">
 </head>
 
 <body id="page-top" class="landing-page">
@@ -38,8 +38,14 @@
                         <li><a class="page-scroll" href="#testimonials">Testimonials</a></li>
                         <li><a class="page-scroll" href="#pricing">Pricing</a></li>
                         <li><a class="page-scroll" href="#contact">Contact</a></li>
+                        
+                        {if !$user}
                         <li><a class="page-scroll" href="/users/login">Login</a></li>
                         <li><a class="page-scroll" href="/users/register">Register</a></li>
+                        {/if}
+                        {else}
+                        <li><a class="page-scroll" href="/users/dashboard">Hello {$user->full_name}</a></li>
+                        {/else}
                     </ul>
                 </div>
             </div>
@@ -65,7 +71,7 @@
                         </p>
                     </div>
                     <div class="carousel-image wow zoomIn">
-                        <img src="{echo CDN}img/landing/laptop.png" alt="laptop" />
+                        <img src="{echo CDN}main/img/landing/laptop.png" alt="laptop" />
                     </div>
                 </div>
                 <!-- Set background for slide in css -->
@@ -138,7 +144,7 @@
                 </div>
             </div>
             <div class="col-md-6 text-center  wow zoomIn">
-                <img src="{echo CDN}img/landing/perspective.png" alt="dashboard" class="img-responsive">
+                <img src="{echo CDN}main/img/landing/perspective.png" alt="dashboard" class="img-responsive">
             </div>
             <div class="col-md-3 text-center wow fadeInRight">
                 <div>
@@ -168,7 +174,7 @@
                 <a href="" class="btn btn-primary">Learn more</a>
             </div>
             <div class="col-lg-6 text-right wow fadeInRight">
-                <img src="{echo CDN}img/landing/dashboard.png" alt="dashboard" class="img-responsive pull-right">
+                <img src="{echo CDN}main/img/landing/dashboard.png" alt="dashboard" class="img-responsive pull-right">
             </div>
         </div>
     </section>
@@ -184,7 +190,7 @@
             <div class="row">
                 <div class="col-sm-4 wow fadeInLeft">
                     <div class="team-member">
-                        <img src="{echo CDN}img/landing/avatar3.jpg" class="img-responsive img-circle img-small" alt="">
+                        <img src="{echo CDN}main/img/landing/avatar3.jpg" class="img-responsive img-circle img-small" alt="">
                         <h4><span class="navy">Amelia</span> Smith</h4>
                         <p>Lorem ipsum dolor sit amet, illum fastidii dissentias quo ne. Sea ne sint animal iisque, nam an soluta sensibus. </p>
                         <ul class="list-inline social-icon">
@@ -199,7 +205,7 @@
                 </div>
                 <div class="col-sm-4">
                     <div class="team-member wow zoomIn">
-                        <img src="{echo CDN}img/landing/avatar1.jpg" class="img-responsive img-circle" alt="">
+                        <img src="{echo CDN}main/img/landing/avatar1.jpg" class="img-responsive img-circle" alt="">
                         <h4><span class="navy">John</span> Novak</h4>
                         <p>Lorem ipsum dolor sit amet, illum fastidii dissentias quo ne. Sea ne sint animal iisque, nam an soluta sensibus.</p>
                         <ul class="list-inline social-icon">
@@ -214,7 +220,7 @@
                 </div>
                 <div class="col-sm-4 wow fadeInRight">
                     <div class="team-member">
-                        <img src="{echo CDN}img/landing/avatar2.jpg" class="img-responsive img-circle img-small" alt="">
+                        <img src="{echo CDN}main/img/landing/avatar2.jpg" class="img-responsive img-circle img-small" alt="">
                         <h4><span class="navy">Peter</span> Johnson</h4>
                         <p>Lorem ipsum dolor sit amet, illum fastidii dissentias quo ne. Sea ne sint animal iisque, nam an soluta sensibus.</p>
                         <ul class="list-inline social-icon">
@@ -252,7 +258,7 @@
                     <a href="" class="btn btn-primary">Learn more</a>
                 </div>
                 <div class="col-lg-6 text-right m-t-n-lg wow zoomIn">
-                    <img src="{echo CDN}img/landing/iphone.jpg" class="img-responsive" alt="dashboard">
+                    <img src="{echo CDN}main/img/landing/iphone.jpg" class="img-responsive" alt="dashboard">
                 </div>
                 <div class="col-lg-3 features-text text-right wow fadeInRight">
                     <small>INSPINIA</small>
@@ -348,7 +354,7 @@
                     </div>
                     <div class="comments-avatar">
                         <a href="" class="pull-left">
-                            <img alt="image" src="{echo CDN}img/landing/avatar3.jpg">
+                            <img alt="image" src="{echo CDN}main/img/landing/avatar3.jpg">
                         </a>
                         <div class="media-body">
                             <div class="commens-name">
@@ -364,7 +370,7 @@
                     </div>
                     <div class="comments-avatar">
                         <a href="" class="pull-left">
-                            <img alt="image" src="{echo CDN}img/landing/avatar1.jpg">
+                            <img alt="image" src="{echo CDN}main/img/landing/avatar1.jpg">
                         </a>
                         <div class="media-body">
                             <div class="commens-name">
@@ -380,7 +386,7 @@
                     </div>
                     <div class="comments-avatar">
                         <a href="" class="pull-left">
-                            <img alt="image" src="{echo CDN}img/landing/avatar2.jpg">
+                            <img alt="image" src="{echo CDN}main/img/landing/avatar2.jpg">
                         </a>
                         <div class="media-body">
                             <div class="commens-name">
@@ -596,15 +602,15 @@
         </div>
     </section>
     <!-- Mainly scripts -->
-    <script src="{echo CDN}js/jquery-2.1.1.js"></script>
-    <script src="{echo CDN}js/bootstrap.min.js"></script>
-    <script src="{echo CDN}js/plugins/metisMenu/jquery.metisMenu.js"></script>
-    <script src="{echo CDN}js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+    <script src="{echo CDN}main/jquery-2.1.1.js"></script>
+    <script src="{echo CDN}js/bootstrap.js"></script>
+    <script src="{echo CDN}main/plugins/metisMenu/jquery.metisMenu.js"></script>
+    <script src="{echo CDN}main/plugins/slimscroll/jquery.slimscroll.min.js"></script>
     <!-- Custom and plugin javascript -->
-    <script src="{echo CDN}js/inspinia.js"></script>
-    <script src="{echo CDN}js/plugins/pace/pace.min.js"></script>
-    <script src="{echo CDN}js/plugins/wow/wow.min.js"></script>
-    <script src="{echo CDN}js/main.js"></script>
+    <script src="{echo CDN}main/inspinia.js"></script>
+    <script src="{echo CDN}main/plugins/pace/pace.min.js"></script>
+    <script src="{echo CDN}main/plugins/wow/wow.min.js"></script>
+    <script src="{echo CDN}main/index.js"></script>
 </body>
 
 </html>
