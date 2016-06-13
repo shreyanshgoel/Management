@@ -192,7 +192,48 @@ class Users extends Controller {
     		'user_id = ?' => $this->user->id
     		));
 
-    	
+    	if(RequestMethods::post('save')){
+
+    		if(!empty($table)){
+
+    			$n = RequestMethods::post('row-number');
+    			$i = 1;
+    			while($i < $n){
+
+    				if( !empty(RequestMethods::post('entry' . $i . '_1')) || 
+    					!empty(RequestMethods::post('entry' . $i . '_2')) || 
+    					!empty(RequestMethods::post('entry' . $i . '_3')) ||
+    					!empty(RequestMethods::post('entry' . $i . '_4')) || 
+    					!empty(RequestMethods::post('entry' . $i . '_5')) || 
+    					!empty(RequestMethods::post('entry' . $i . '_6')) || 
+    					!empty(RequestMethods::post('entry' . $i . '_7')) || 
+    					!empty(RequestMethods::post('entry' . $i . '_8')) || 
+    					!empty(RequestMethods::post('entry' . $i . '_9')) || 
+						!empty(RequestMethods::post('entry' . $i . '_10'))
+						){
+
+    						$entry = new models\Entry(array(
+	    						'table_id' => $id,
+	    						'entry1' => RequestMethods::post('entry' . $i . '_1'),
+	    						'entry2' => RequestMethods::post('entry' . $i . '_2'),
+	    						'entry3' => RequestMethods::post('entry' . $i . '_3'),
+	    						'entry4' => RequestMethods::post('entry' . $i . '_4'),
+	    						'entry5' => RequestMethods::post('entry' . $i . '_5'),
+	    						'entry6' => RequestMethods::post('entry' . $i . '_6'),
+	    						'entry7' => RequestMethods::post('entry' . $i . '_7'),
+	    						'entry8' => RequestMethods::post('entry' . $i . '_8'),
+	    						'entry9' => RequestMethods::post('entry' . $i . '_9'),
+	    						'entry10' => RequestMethods::post('entry' . $i . '_10'),
+
+	    					));
+
+    						$entry->save();
+						}
+    				
+    				$i++;
+    			}
+    		}
+    	}
 
     	if(!empty($table)){
 
@@ -200,149 +241,7 @@ class Users extends Controller {
     			'table_id = ?' => $id
     			));
 
-    		$n1 = $table->column1_name;
-    		$n2 = $table->column2_name;
-    		$n3 = $table->column3_name;
-    		$n4 = $table->column4_name;
-    		$n5 = $table->column5_name;
-    		$n6 = $table->column6_name;
-    		$n7 = $table->column7_name;
-    		$n8 = $table->column8_name;
-    		$n9 = $table->column9_name; 
-    		$n10 = $table->column10_name;
-
-    		$c = "['S No.'";
-
-    		$i = 1;
-    		while($i < 11){
-
-    			$n = 'n' . $i;
-
-    			if($$n != NULL){
-
-    				$c = $c . ", '" . $$n . "' ";
-    			}
-
-    			$i++;
-    		}
-
-    		$c = $c . ']';
-
-    		$t_t = models\Table_Type::first(array('id = ?' => $id));
-
-    		$t1 = $t_t->type1;
-    		$t2 = $t_t->type2;
-    		$t3 = $t_t->type3;
-    		$t4 = $t_t->type4;
-    		$t5 = $t_t->type5;
-    		$t6 = $t_t->type6;
-    		$t7 = $t_t->type7;
-    		$t8 = $t_t->type8;
-    		$t9 = $t_t->type9; 
-    		$t10 = $t_t->type10;
-
-    		$e = '[{
-                name: "_sno",
-                index: "_sno",
-                width: 90,
-                align: "right",
-                sorttype: "number"
-            }';
-
-            $i = 1;
-    		while($i < 11){
-
-    			$n = 'n' . $i;
-
-    			$t = 't' . $i;
-
-    			if($$t == 1){
-
-    				$type="false";
-    			}
-
-    			if($$t == 2){
-
-    				$type="float";
-    			}
-
-    			if($$t == 3){
-
-    				$type="date";
-    			}
-
-    			if($$n != NULL){
-
-    				$e = $e . ', {
-		                name: "_entry' . $i . '",
-		                index: "_entry' . $i . '",
-		                width: 80,
-		                align: "right",
-		                sorttype: "' . $type . '"
-		            }';
-    			}
-
-    			$i++;
-    		}
-
-            $e = $e . ']';
-
-    		$view->set('entries', $entries)->set('c', $c)->set('e', $e);
-
-    		$obj = array();
-	        $data = $view->data;
-
-	        if ($data) {
-	            foreach ($data as $keys => $values) {
-	                switch (gettype($values)) {
-	                    case 'object':
-	                        if (get_class($values) == "stdClass") {
-	                            $obj[$keys] = $values;
-	                        } elseif (is_a($values, 'Framework\Model')) {
-	                            $obj[$keys] = $values->getJsonData();
-	                        } else {
-	                            $obj[$keys] = $values;
-	                        }
-	                        break;
-	                    case 'array':
-	                        foreach ($values as $key => $value) {
-	                            if (gettype($value) == "object") {
-	                                if (get_class($value) == "stdClass") {
-	                                    $obj[$keys][] = $value;
-	                                } elseif (is_a($value, 'Framework\Model')) {
-	                                    $obj[$keys][] = $value->getJsonData();
-	                                } else {
-	                                    $obj[$keys][] = $value;
-	                                }
-	                            } else{
-	                                $obj[$keys] = $values;
-	                            }
-	                        }
-	                        break;
-
-	                    case 'string':
-	                    case 'integer':
-	                    case 'boolean':
-	                        $obj[$keys] = $values;
-	                        break;
-
-	                    default:
-	                        break;
-
-	                }
-	            }
-	        }
-
-	        $i = 0;
-
-	        while($i < count($obj['entries'])){
-
-	        	$obj['entries'][$i]['_sno'] = $i + 1;
-	        	$i++;
-	        }
-	        
-	        $view->set('json', json_encode($obj['entries'], JSON_PRETTY_PRINT));
-
+    		$view->set('table', $table)->set('entries', $entries);
     	}else{
 
     		self::redirect('/404');

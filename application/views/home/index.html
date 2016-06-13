@@ -39,7 +39,7 @@
                         <li><a class="page-scroll" href="#pricing">Pricing</a></li>
                         <li><a class="page-scroll" href="#contact">Contact</a></li>
                         
-                        {if !$user}
+                        {if !isset($user)}
                         <li><a class="page-scroll" href="/users/login">Login</a></li>
                         <li><a class="page-scroll" href="/users/register">Register</a></li>
                         {/if}

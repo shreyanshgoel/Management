@@ -43,6 +43,96 @@ $(function () {
 
 $(document).ready(function () {
 
+    $('.add').on('click', function () {
+
+        var self = $(this), target = $('#data-body');
+        var v = parseInt(self.val()) + 1;
+
+        var n = parseInt($('.row-number').val());
+
+        var n_dup = n;
+        var n2 = parseInt($('.numberofrows').val());
+
+        while(n < n_dup + n2){
+            
+            target.append('<tr id="data-td' + n + '"><td></td></tr>');
+
+            var i = 1;
+            while(i < v){
+                var target2 = $('#data-td' + n);
+                target2.append('<td><input type="text" class="form-control" name="entry' + n + '_' + i + '"></td>');
+                i = i + 1;
+            }
+
+            n = n +1;
+        }
+
+        target2.append('</tr>');
+
+        var target3 = $('#row-id');
+
+        target3.html('<input type="text" class="row-number" name="row-number" value="' + n + '"  hidden="">');
+
+        document.getElementById("saveandcancel").style.display = "block";
+
+
+    });
+
+    $('.cancel').on('click', function () {
+
+        
+        var n = parseInt($('.row-number').val());
+
+        var i = 1;
+        while(i < n){
+            var target = $('#data-td' + i);
+
+            target.remove();
+
+            i = i +1;
+        }
+
+        var target2 = $('#row-id');
+
+        target2.html('<input type="text" class="row-number" name="row-number" value="1"  hidden="">');
+
+        document.getElementById("saveandcancel").style.display = "none";
+
+
+    });
+
+     $("#category").change(function() {
+        var self = $(this), target = $('#sub_category');
+        target.html('<option> Select a Sub Category </option>');
+        Request.post({ action: "admin/sub/" + self.val() }, function(data) {
+             
+            $.each(data, function(index, value){
+
+                if(value._name != undefined){
+
+                    target.append('<option value="' + value._id + '">' + value._name + '</option>');
+                }
+            });
+            
+        });
+    });
+
+    $("#sub_category").change(function() {
+        var self = $(this), target = $('#sub_sub_category');
+        target.html('<option> Select a Sub Sub Category </option>');
+        Request.post({ action: "admin/sub_sub/" + self.val() }, function(data) {
+             
+             $.each(data, function(index, value){
+
+                if(value._name != undefined){
+
+                    target.append('<option value="' + value._id + '">' + value._name + '</option>');
+                }
+            });
+            
+        });
+    });
+
     
     //initialize beautiful datetime picker
     $("input[type=date]").datepicker();
@@ -126,37 +216,7 @@ $(document).ready(function () {
         }
     });
 
-    $("#category").change(function() {
-        var self = $(this), target = $('#sub_category');
-        target.html('<option> Select a Sub Category </option>');
-        Request.post({ action: "admin/sub/" + self.val() }, function(data) {
-             
-             $.each(data, function(index, value){
-
-                if(value._name != undefined){
-
-                    target.append('<option value="' + value._id + '">' + value._name + '</option>');
-                }
-            });
-            
-        });
-    });
-
-    $("#sub_category").change(function() {
-        var self = $(this), target = $('#sub_sub_category');
-        target.html('<option> Select a Sub Sub Category </option>');
-        Request.post({ action: "admin/sub_sub/" + self.val() }, function(data) {
-             
-             $.each(data, function(index, value){
-
-                if(value._name != undefined){
-
-                    target.append('<option value="' + value._id + '">' + value._name + '</option>');
-                }
-            });
-            
-        });
-    });
+   
 
     $("#searchModel").change(function() {
         var self = $(this), target = $('#searchField');
