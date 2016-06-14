@@ -192,6 +192,37 @@ class Users extends Controller {
     		'user_id = ?' => $this->user->id
     		));
 
+    	if(RequestMethods::post('savechanges')){
+
+    		$entry = models\Entry::first(array(
+    			'id = ?' => RequestMethods::post('edit_entry_number')
+    			));
+
+    		if(!empty($entry)){
+	    		
+	    		$t = models\Table::first(array(
+	    			'id = ?' => $entry->table_id,
+	    			'user_id = ?' => $this->user->id
+	    			));
+
+	    		if(!empty($t)){
+
+	    			$entry->entry1 = RequestMethods::post('edit_entry1');
+	    			$entry->entry2 = RequestMethods::post('edit_entry2');
+	    			$entry->entry3 = RequestMethods::post('edit_entry3');
+	    			$entry->entry4 = RequestMethods::post('edit_entry4');
+	    			$entry->entry5 = RequestMethods::post('edit_entry5');
+	    			$entry->entry6 = RequestMethods::post('edit_entry6');
+	    			$entry->entry7 = RequestMethods::post('edit_entry7');
+	    			$entry->entry8 = RequestMethods::post('edit_entry8');
+	    			$entry->entry9 = RequestMethods::post('edit_entry9');
+	    			$entry->entry10 = RequestMethods::post('edit_entry10');
+
+	    			$entry->save();
+	    		}
+	    	}
+    	}
+
     	if(RequestMethods::post('save')){
 
     		if(!empty($table)){
@@ -235,6 +266,27 @@ class Users extends Controller {
     		}
     	}
 
+    	if(RequestMethods::post('delete')){
+
+    		$entry = models\Entry::first(array(
+    			'id = ?' => RequestMethods::post('delete')
+    			));
+
+    		if(!empty($entry)){
+
+	    		$t = models\Table::first(array(
+	    			'id = ?' => $entry->table_id,
+	    			'user_id = ?' => $this->user->id
+	    			));
+
+
+	    		if(!empty($t)){
+
+	    			$entry->delete();
+	    		}
+	    	}
+    	}
+
     	if(!empty($table)){
 
     		$entries = models\Entry::all(array(
@@ -247,6 +299,39 @@ class Users extends Controller {
     		self::redirect('/404');
     	}
 
+
+    }
+
+    /**
+	* @before secure_user
+	*/
+    public function edit($id = -1) {
+    	
+    	$view = $this->getActionView();
+
+    	$entry = models\Entry::first(array(
+    		'id = ?' => $id
+    		));
+
+    	if(!empty($entry)){
+
+    		$table = models\Table::first(array(
+    			'id = ?' => $entry->table_id,
+    			'user_id = ?' => $this->user->id
+    			));
+
+    		if(!empty($table)){
+
+    			$data = array($entry, $table);
+
+    			$view->set($data);
+
+    		}else{
+
+    			$view->set(false);
+    		}
+
+    	} 
 
     }
 

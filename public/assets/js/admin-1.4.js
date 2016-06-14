@@ -101,7 +101,146 @@ $(document).ready(function () {
 
     });
 
-     $("#category").change(function() {
+    $('.edit').on('click', function () {
+
+        var self = $(this), target = $('.modal-body');
+        target.html('');
+
+        var v = self.val();
+
+        Request.post({ action: "users/edit/" + v }, function(data) {
+        
+            var i = 0;
+            var column1, column2, column3, column4, column5, column6, column7, column8, column9, column10;
+            
+            $.each(data, function(index, value){
+
+
+                if(value._column1_name != null && value._column1_name != undefined){
+
+                    column1 = value._column1_name;
+                    i = i+1;
+                }
+                if(value._column2_name != null){
+
+                    column2 = value._column2_name;
+                    i = i+1;
+                }
+                if(value._column3_name != null){
+
+                    column3 = value._column3_name;
+                    i = i+1;
+                }
+                if(value._column4_name != null){
+
+                    column4 = value._column4_name;
+                    i = i+1;
+                }
+                if(value._column5_name != null){
+
+                    column5 = value._column5_name;
+                    i = i+1;
+                }
+                if(value._column6_name != null){
+
+                    column6 = value._column6_name;
+                    i = i+1;
+                }
+                if(value._column7_name != null){
+
+                    column7 = value._column7_name;
+                    i = i+1;
+                }
+                if(value._column8_name != null){
+
+                    column8 = value._column8_name;
+                    i = i+1;
+                }
+                if(value._column9_name != null){
+
+                    column9 = value._column9_name;
+                    i = i+1;
+                }
+                if(value._column10_name != null){
+
+                    column10 = value._column10_name;
+                    i = i+1;
+                }
+
+            });
+
+            $.each(data, function(index, value){
+
+                if(i > 0 && value._entry1 != undefined){
+
+                    target.append('<div class="form-group"><label class="col-sm-2 control-label">' + column1 + '</label><div class="col-sm-10"><input type="text" class="form-control" name="edit_entry1" value="' + value._entry1 + '"></div></div><br><br>');
+                    i = i - 1;
+                }
+
+                if(i > 0 && value._entry2 != undefined){
+
+                    target.append('<div class="form-group"><label class="col-sm-2 control-label">' + column2 + '</label><div class="col-sm-10"><input type="text" class="form-control" name="edit_entry2" value="' + value._entry2 + '"></div></div><br><br>');
+                    i = i - 1;
+                }
+
+                if(i > 0 && value._entry3 != undefined){
+
+                    target.append('<div class="form-group"><label class="col-sm-2 control-label">' + column3 + '</label><div class="col-sm-10"><input type="text" class="form-control" name="edit_entry3" value="' + value._entry3 + '"></div></div><br><br>');
+                    i = i - 1;
+                }
+
+                if(i > 0 && value._entry4 != undefined){
+
+                    target.append('<div class="form-group"><label class="col-sm-2 control-label">' + column4 + '</label><div class="col-sm-10"><input type="text" class="form-control" name="edit_entry4" value="' + value._entry4 + '"></div></div><br><br>');
+                    i = i - 1;
+                }
+
+                if(i > 0 && value._entry5 != undefined){
+
+                    target.append('<div class="form-group"><label class="col-sm-2 control-label">' + column5 + '</label><div class="col-sm-10"><input type="text" class="form-control" name="edit_entry5" value="' + value._entry5 + '"></div></div><br><br>');
+                    i = i - 1;
+                }
+
+                if(i > 0 && value._entry6 != undefined){
+
+                    target.append('<div class="form-group"><label class="col-sm-2 control-label">' + column6 + '</label><div class="col-sm-10"><input type="text" class="form-control" name="edit_entry6" value="' + value._entry6 + '"></div></div><br><br>');
+                    i = i - 1;
+                }
+
+                if(i > 0 && value._entry7 != undefined){
+
+                    target.append('<div class="form-group"><label class="col-sm-2 control-label">' + column7 + '</label><div class="col-sm-10"><input type="text" class="form-control" name="edit_entry7" value="' + value._entry7 + '"></div></div><br><br>');
+                    i = i - 1;
+                }
+
+                if(i > 0 && value._entry8 != undefined){
+
+                    target.append('<div class="form-group"><label class="col-sm-2 control-label">' + column8 + '</label><div class="col-sm-10"><input type="text" class="form-control" name="edit_entry8" value="' + value._entry8 + '"></div></div><br><br>');
+                    i = i - 1;
+                }
+
+                if(i > 0 && value._entry9 != undefined){
+
+                    target.append('<div class="form-group"><label class="col-sm-2 control-label">' + column9 + '</label><div class="col-sm-10"><input type="text" class="form-control" name="edit_entry9" value="' + value._entry9 + '"></div></div><br><br>');
+                    i = i - 1;
+                }
+
+                if(i > 0 && value._entry10 != undefined){
+
+                    target.append('<div class="form-group"><label class="col-sm-2 control-label">' + column10 + '</label><div class="col-sm-10"><input type="text" class="form-control" name="edit_entry10" value="' + value._entry10 + '"></div></div><br><br>');
+                    i = i - 1;
+                }
+            
+            });
+
+            target.append('<input type="text" name="edit_entry_number" value="' + v + '"  hidden="">');
+
+
+
+        });
+    });
+
+    $("#category").change(function() {
         var self = $(this), target = $('#sub_category');
         target.html('<option> Select a Sub Category </option>');
         Request.post({ action: "admin/sub/" + self.val() }, function(data) {

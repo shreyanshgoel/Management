@@ -11,13 +11,13 @@
             <i class="fa-home"></i>Home</a>
     </li>
     <li>
-        <a href="../main/index">Tables</a>
+        <a href="../main/index">Your Tables</a>
     </li>
     <li class="active">
-        <strong>Data Tables</strong>
+        <strong>{$table->table_name}</strong>
     </li>
 </ol>
-<h2>Data Tables</h2>
+<h2>{echo ucfirst($table->table_name)}</h2>
 <br />
 <script type="text/javascript" src="{echo CDN}js/tables/tables1.js"></script>
 <form method="post">
@@ -91,12 +91,12 @@
                 {/if}
 
                 <td>
-                    <a href="index#" class="btn btn-info btn-sm btn-icon icon-left">
+                    <button type="button" value="{$entry->id}" data-toggle="modal" data-target="#myModal" class="edit btn btn-info btn-sm btn-icon icon-left">
                         <i class="entypo-pencil"></i> Edit
-                    </a>
-                    <a href="index#" class="btn btn-danger btn-sm btn-icon icon-left">
+                    </button>&nbsp;&nbsp;
+                    <button type="submit" name="delete" value="{$entry->id}" class="btn btn-danger btn-sm btn-icon icon-left">
                         <i class="entypo-cancel"></i> Delete
-                    </a>
+                    </button>
                 </td>
             </tr>
 
@@ -125,8 +125,8 @@
 
         <div class="pull-right" id="saveandcancel" style="display:none">
             <button type="submit" name="save" value="save" class="btn btn-success btn-sm btn-icon icon-left"><i class="entypo-check"></i> Save</a>
-            &nbsp;&nbsp;
-            <button type="button" class="cancel btn btn-danger btn-sm btn-icon icon-left"><i class="entypo-cancel"></i> Cancel</a>        
+            
+            <button type="button" style="margin-left:10px" class="cancel btn btn-danger btn-sm btn-icon icon-left"><i class="entypo-cancel"></i> Cancel</a>        
         </div>
     </div>
     <div id="row-id">
@@ -135,4 +135,24 @@
 </form>
 <br />
 <br />
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Edit Entry</h4>
+      </div>
+      <form class="form-horizontal" role="form" method="post">
+      <div class="modal-body">
+                    ...
+      </div>
+      <div class="modal-footer">
+        <button type="submit" name="savechanges" value="save" class="btn btn-success">Save changes</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+      </div>
+      </form>
+    </div>
+  </div>
+</div>
 
