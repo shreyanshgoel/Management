@@ -176,6 +176,29 @@ class Users extends Controller {
     	$layoutView = $this->getLayoutView();
     	$layoutView->set("seo", Framework\Registry::get("seo"));
 
+    	$view = $this->getActionView();
+
+    	$t_count = models\Table::count(array(
+    		'user_id = ?' => $this->user->id
+    		));
+
+    	$e_count = 0;
+
+    	$tables = models\Table::all(array(
+    		'user_id = ?' => $this->user->id
+    		));
+
+    	foreach($tables as $t){
+
+    		$e = models\Entry::count(array(
+    			'table_id = ?' => $t->id
+    			));
+
+    		$e_count = $e_count + $e;
+    	}
+
+    	$view->set('t_count', $t_count)->set('e_count', $e_count)->set('tables', $tables);
+
     }
 
     /**
@@ -219,6 +242,7 @@ class Users extends Controller {
 	    			$entry->entry10 = RequestMethods::post('edit_entry10');
 
 	    			$entry->save();
+	    			$view->set('edit_success', 1);
 	    		}
 	    	}
     	}
@@ -229,6 +253,7 @@ class Users extends Controller {
 
     			$n = RequestMethods::post('row-number');
     			$i = 1;
+    			$j = 0;
     			while($i < $n){
 
     				if( !empty(RequestMethods::post('entry' . $i . '_1')) || 
@@ -259,10 +284,14 @@ class Users extends Controller {
 	    					));
 
     						$entry->save();
+    						$j++;
+
 						}
     				
     				$i++;
     			}
+
+    			$view->set('add_row_success', 1)->set('number_of_rows', $j);
     		}
     	}
 
@@ -283,6 +312,8 @@ class Users extends Controller {
 	    		if(!empty($t)){
 
 	    			$entry->delete();
+
+	    			$view->set('delete_success', 1);
 	    		}
 	    	}
     	}
@@ -376,24 +407,173 @@ class Users extends Controller {
 	    		));
 	    	$count++;
 
-    		$table = new models\Table(array(
-    			'user_id' => $this->user->id,
-    			'table_number' => $count,
-    			'table_name' => RequestMethods::post('table_name'),
-    			'column1_name' => $c[1],
-    			'column2_name' => $c[2],
-    			'column3_name' => $c[3],
-    			'column4_name' => $c[4],
-    			'column5_name' => $c[5],
-    			'column6_name' => $c[6],
-    			'column7_name' => $c[7],
-    			'column8_name' => $c[8],
-    			'column9_name' => $c[9],
-    			'column10_name' => $c[10]
+	    	$exist = models\Table::first(array(
+	    		'user_id = ?' => $this->user->id,
+	    		'table_name = ?' => RequestMethods::post('table_name')
+	    		));
+
+	    	if(empty($exist)){
+
+	    		$table = new models\Table(array(
+	    			'user_id' => $this->user->id,
+	    			'table_number' => $count,
+	    			'table_name' => RequestMethods::post('table_name'),
+	    			'column1_name' => $c[1],
+	    			'column2_name' => $c[2],
+	    			'column3_name' => $c[3],
+	    			'column4_name' => $c[4],
+	    			'column5_name' => $c[5],
+	    			'column6_name' => $c[6],
+	    			'column7_name' => $c[7],
+	    			'column8_name' => $c[8],
+	    			'column9_name' => $c[9],
+	    			'column10_name' => $c[10]
+	    			));
+
+	    		$count = models\Table::count();
+		    	$count++;
+
+		    	$i = 1;
+
+		    	while($i < 11){
+
+		    		$name = 'type' . $i;
+
+		    		if(RequestMethods::post($name) == 1 || RequestMethods::post($name) == 2 || RequestMethods::post($name) == 3){
+
+		    			$c[$i] = RequestMethods::post($name);
+		 
+		    		}else{
+		    			$c[$i] = 1;
+		    		}
+
+		    		$i++;
+
+		    	}
+
+	    		$type = new models\Table_Type(array(
+	    			'table_id' => $count,
+	    			'type1' => $c[1],
+	    			'type2' => $c[2],
+	    			'type3' => $c[3],
+	    			'type4' => $c[4],
+	    			'type5' => $c[5],
+	    			'type6' => $c[6],
+	    			'type7' => $c[7],
+	    			'type8' => $c[8],
+	    			'type9' => $c[9],
+	    			'type10' => $c[10]
+	    			));
+
+	    		if($table->validate()){
+
+	    			$table->save();
+
+	    			$type->save();
+	    			$view->set('success', 1);
+
+	    		}else{
+	    			echo "Validation Not Good";
+	    		}
+	    	}else{
+
+	    		$view->set('exist', 1);
+	    	}
+    	}
+    }
+
+    /**
+	* @before secure_user
+	*/
+	public function edit_table($id = -1) {
+    	
+    	$layoutView = $this->getLayoutView();
+    	$layoutView->set("seo", Framework\Registry::get("seo"));
+
+    	$view = $this->getActionView();
+
+    	$edit_table = models\Table::first(array(
+    		'id = ?' => $id,
+    		'user_id = ?' => $this->user->id
+    		));
+
+    	if(!empty($edit_table)){
+
+    		$numbers = array(1,2,3,4,5,6,7,8,9,10);
+
+    		$type = models\Table_Type::first(array(
+    			'table_id = ?' => $id
     			));
 
-    		$count = models\Table::count();
-	    	$count++;
+	    	$view->set('numbers', $numbers)->set('edit_table', $edit_table)->set('type', $type);
+
+    	}
+    	
+
+    	if(RequestMethods::post('savechanges') && !empty($edit_table)){
+
+
+    		$e_c1 = $edit_table->column1_name;
+			$e_c2 = $edit_table->column2_name;
+			$e_c3 = $edit_table->column3_name;
+			$e_c4 = $edit_table->column4_name;
+			$e_c5 = $edit_table->column5_name;
+			$e_c6 = $edit_table->column6_name;
+			$e_c7 = $edit_table->column7_name;
+			$e_c8 = $edit_table->column8_name;
+			$e_c9 = $edit_table->column9_name;
+			$e_c10 = $edit_table->column10_name;
+
+    		$i = 1;
+    		$j = 1;
+    		while($i < 11){
+
+    			$name = 'name' . $i;
+    			$e_c = 'e_c' . $i;
+
+	    		if(!empty(RequestMethods::post($name))){
+
+	    			$c[$j] = RequestMethods::post($name);
+	    			$j++;
+	    		}else{
+
+	    			if(!empty($$e_c)){
+
+	    				$c[$j] = $$e_c;
+	    				$j++;
+
+	    			}
+	    		}
+    			
+    			$i++;
+	    	}
+
+	    	while($j < 11){
+
+	    		$c[$j] = NULL;
+	    		$j++;
+	    	}
+
+	    	if(!empty(RequestMethods::post('table_name'))){
+
+	    		$table_name = RequestMethods::post('table_name');
+
+	    	}else{
+
+	    		$table_name = $edit_table->table_name;
+	    	}
+
+    		$edit_table->table_name = $table_name;
+    		$edit_table->column1_name = $c[1];
+    		$edit_table->column2_name = $c[2];
+    		$edit_table->column3_name = $c[3];
+    		$edit_table->column4_name = $c[4];
+    		$edit_table->column5_name = $c[5];
+    		$edit_table->column6_name = $c[6];
+    		$edit_table->column7_name = $c[7];
+    		$edit_table->column8_name = $c[8];
+    		$edit_table->column9_name = $c[9];
+    		$edit_table->column10_name = $c[10];
 
 	    	$i = 1;
 
@@ -413,41 +593,68 @@ class Users extends Controller {
 
 	    	}
 
-    		$type = new models\Table_Type(array(
-    			'table_id' => $count,
-    			'type1' => $c[1],
-    			'type2' => $c[2],
-    			'type3' => $c[3],
-    			'type4' => $c[4],
-    			'type5' => $c[5],
-    			'type6' => $c[6],
-    			'type7' => $c[7],
-    			'type8' => $c[8],
-    			'type9' => $c[9],
-    			'type10' => $c[10]
-    			));
+    		$type->type1 = $c[1];
+			$type->type2 = $c[2];
+    		$type->type3 = $c[3];
+    		$type->type4 = $c[4];
+    		$type->type5 = $c[5];
+    		$type->type6 = $c[6];
+    		$type->type7 = $c[7];
+    		$type->type8 = $c[8];
+    		$type->type9 = $c[9];
+    		$type->type10 = $c[10];
 
-    		if($table->validate()){
 
-    			$table->save();
+    		if($edit_table->validate()){
+
+    			$edit_table->save();
 
     			$type->save();
+
+    			self::redirect('/users/tables/' . $edit_table->id . '?edit_table_success=1');
 
     		}else{
     			echo "Validation Not Good";
     		}
+    
     	}
     }
+
+
 
 	/**
 	* @before secure_user
 	*/
+    public function search_in_tables(){
+        
+        
+    }
 
+    /**
+	* @before secure_user
+	*/
+    public function analytics(){
+        
+        
+    }
+
+    /**
+	* @before secure_user
+	*/
+    public function profile(){
+        
+        
+    }
+ 
+
+	/**
+	* @before secure_user
+	*/
     public function logout(){
         
         $this->setUser(false);
 
-        header("Location: /users/login");
+        header("Location: /");
     }
 
 }
