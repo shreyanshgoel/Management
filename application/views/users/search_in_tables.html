@@ -1,0 +1,48 @@
+<script type="text/javascript">
+document.getElementById("search").className = "active";
+</script>
+<div id="page-wrapper">
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header text-center"><i class="entypo-search"></i>Search</h1>
+            <form class="form-inline text-center" role="form" method="get" action="">
+                <div class="form-group">
+                    <div class="input-group">
+                        <label class="sr-only">Keyword</label>
+                        <input type="text" style="width: 300px" name="value" class="form-control" placeholder="keywords..." value="" />
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary">Search</button>
+            </form>
+            <hr>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <i class="entypo-list"></i> Results
+                </div>
+                <div class="panel-body text-center">
+                    {if (isset($success))}
+                    {echo $success}
+                    {/if} {else}
+                        Select field to search and enter keyword and then click on search button to see results.
+                    {/else}
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-striped text-center table-hover table-bordered">
+                        <thead>
+                            
+                        </thead>
+                        <tbody>
+                            
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

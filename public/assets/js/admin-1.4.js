@@ -240,38 +240,6 @@ $(document).ready(function () {
         });
     });
 
-    $("#category").change(function() {
-        var self = $(this), target = $('#sub_category');
-        target.html('<option> Select a Sub Category </option>');
-        Request.post({ action: "admin/sub/" + self.val() }, function(data) {
-             
-            $.each(data, function(index, value){
-
-                if(value._name != undefined){
-
-                    target.append('<option value="' + value._id + '">' + value._name + '</option>');
-                }
-            });
-            
-        });
-    });
-
-    $("#sub_category").change(function() {
-        var self = $(this), target = $('#sub_sub_category');
-        target.html('<option> Select a Sub Sub Category </option>');
-        Request.post({ action: "admin/sub_sub/" + self.val() }, function(data) {
-             
-             $.each(data, function(index, value){
-
-                if(value._name != undefined){
-
-                    target.append('<option value="' + value._id + '">' + value._name + '</option>');
-                }
-            });
-            
-        });
-    });
-
     
     //initialize beautiful datetime picker
     $("input[type=date]").datepicker();
@@ -379,29 +347,6 @@ $(document).ready(function () {
         };
     });
 
-    $('.pingStats').on('click', function (e) {
-        e.preventDefault();
-        var item = $(this),
-            status = $('#status_' + item.data('pingid'));
-        item.html('<i class="fa fa-spinner fa-pulse"></i>');
-
-        Request.get({
-            action: 'analytics/ping',
-            data: {link: item.data('record')}
-        }, function (data) {
-            if (data.success) {
-                item.html('Pinged: ' + data.count);
-            } else {
-                item.html('Pinged: 0');
-            }
-
-            if (data.status == "up") {
-                status.html('<span class="label label-success"><i class="fa fa-arrow-up"></i> UP</span>');
-            } else if (data.status == "down") {
-                status.html('<span class="label label-danger"><i class="fa fa-arrow-down"></i> DOWN</span>')
-            }
-        });
-    });
 
     $('#serp_stats').submit(function (e) {
         $('#stats').html('<p class="text-center"><i class="fa fa-spinner fa-spin fa-5x"></i></p>');
@@ -427,14 +372,7 @@ $(document).ready(function () {
         });
     });
 
-    $('.addIP').on('click', function (e) {
-        e.preventDefault();
-        var self = $(this);
-        $('#serverID').val(self.data('serverid'));
-        $('#allotServerIP').modal('show');
-    });
-
-    $('.delete').click(function(e) {
+      $('.delete').click(function(e) {
         e.preventDefault();
         var self = $(this), message = '';
 

@@ -318,13 +318,110 @@ class Users extends Controller {
 	    	}
     	}
 
+    	if(RequestMethods::post('delete_table')){
+
+    		$del_table = models\Table::first(array(
+    			'id = ?' => RequestMethods::post('delete_table'),
+    			'user_id = ?' => $this->user->id
+    			));
+
+    		if(!empty($del_table)){
+
+    			$del_table->delete();
+
+    			self::redirect('/users/dashboard');
+    		}
+
+    	}
+
+    	if(RequestMethods::post('allow-add-operation')){
+
+    		$number = RequestMethods::post('number-of-columns');
+
+    		$view->set('allowed', $number);
+    	}
+
+    	if(RequestMethods::post('try-add-operation')){
+
+    		if(!empty($table)){
+
+    			$i = 1;
+
+    			$flag = 0;
+
+    			if(RequestMethods::post('result')){
+	    			
+	    			while($i < 10){
+	    			
+	    				if(RequestMethods::post('o_col_' . $i) && 
+	    					RequestMethods::post('o_col_' . $i + 1) && 
+	    					RequestMethods::post('o_col_' . $i) != RequestMethods::post('result')){
+
+	    					if(RequestMethods::post('o_' . $i) == 1 ||
+	    					   RequestMethods::post('o_' . $i) == 2 ||
+	    					   RequestMethods::post('o_' . $i) == 3 ||
+	    					   RequestMethods::post('o_' . $i) == 4){
+		    					$op[$i] = RequestMethods::post('o_' . $i);
+		    					$flag++;
+		    				}else{
+
+		    					$op[$i] = -1;
+		    				}
+	    				}else{
+
+		    					$op[$i] = -1;
+		    			}
+
+	    			}
+	    		}
+
+    			if($flag != 0){
+    				
+    				$op_add = new models\Operation(array(
+    					'table_id' => $id,
+    					'o_col_1' => RequestMethods::post('o_col_1'),
+    					'operation_1' => $op[1],
+    					'o_col_2' => RequestMethods::post('o_col_2'),
+    					'operation_2' => $op[2],
+    					'o_col_3' => RequestMethods::post('o_col_3'),
+    					'operation_3' => $op[3],
+    					'o_col_4' => RequestMethods::post('o_col_4'),
+    					'operation_4' => $op[4],
+    					'o_col_5' => RequestMethods::post('o_col_5'),
+    					'operation_5' => $op[5],
+    					'o_col_6' => RequestMethods::post('o_col_6'),
+    					'operation_6' => $op[6],
+    					'o_col_7' => RequestMethods::post('o_col_7'),
+    					'operation_7' => $op[7],
+    					'o_col_8' => RequestMethods::post('o_col_8'),
+    					'operation_8' => $op[8],
+    					'o_col_9' => RequestMethods::post('o_col_9'),
+    					'result_col' => RequestMethods::post('result')
+    					));
+
+    				if($op_add->validate()){
+    					$op_add->save();
+    					$view->set('add_operation_success', 1);
+    				}else{
+    					$view->set('add_operation_error', 1);
+    				}
+    			}
+    		}
+    	}
+
     	if(!empty($table)){
 
     		$entries = models\Entry::all(array(
     			'table_id = ?' => $id
     			));
 
-    		$view->set('table', $table)->set('entries', $entries);
+    		$operations = models\Operation::all(array(
+    			'table_id = ?' => $id
+    			));
+
+    		$numbers = array(1,2,3,4,5,6,7,8,9,10);
+
+    		$view->set('table', $table)->set('entries', $entries)->set('numbers', $numbers)->set('operations', $operations);
     	}else{
 
     		self::redirect('/404');

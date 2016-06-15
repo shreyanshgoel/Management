@@ -30,7 +30,7 @@
                     <a href="/users/edit_table/{$table->id}" class="btn btn-link">Edit Table</a>
                 </li>
                 <li>
-                    <a href="../main/index" data-toggle="modal" data-target="#myModal2" class="btn btn-link">Delete Table</a>
+                    <a href="" data-toggle="modal" data-target="#myModal2" class="btn btn-link">Delete Table</a>
                 </li>
                 
             
@@ -40,6 +40,20 @@
 <h2>{echo ucfirst($table->table_name)}</h2>
 
 <br />
+{if isset($add_operation_error)}
+<div class="alert alert-danger">
+    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+    <strong>Invalid operation!</strong> Try again
+</div>
+{/if}
+
+{if isset($add_operation_success)}
+<div class="alert alert-success">
+    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+    <strong>Success!</strong> 1 Operation Added
+</div>
+{/if}
+
 {script $s = Framework\RequestMethods::get('edit_table_success')}
 {if $s == 1}
 <div class="alert alert-success">
@@ -50,7 +64,7 @@
 {if isset($delete_success)}
 <div class="alert alert-success">
     <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-    <strong>Success!</strong>1 Row Deleted
+    <strong>Success!</strong> 1 Row Deleted
 </div>
 {/if}
 {if isset($add_row_success)}
@@ -71,18 +85,23 @@
         <thead>
             <tr>
                 {script $c = 0}
+
+                {script $col1 = $table->column1_name}
+                {script $col2 = $table->column2_name}
+                {script $col3 = $table->column3_name}
+                {script $col4 = $table->column4_name}
+                {script $col5 = $table->column5_name}
+                {script $col6 = $table->column6_name}
+                {script $col7 = $table->column7_name}
+                {script $col8 = $table->column8_name}
+                {script $col9 = $table->column9_name}
+                {script $col10 = $table->column10_name}
                 
                 <th>S No.</th>
-                {if $table->column1_name != NULL}<th>{$table->column1_name}{script $c++}</th>{/if}
-                {if $table->column2_name != NULL}<th>{$table->column2_name}{script $c++}</th>{/if}
-                {if $table->column3_name != NULL}<th>{$table->column3_name}{script $c++}</th>{/if}
-                {if $table->column4_name != NULL}<th>{$table->column4_name}{script $c++}</th>{/if}
-                {if $table->column5_name != NULL}<th>{$table->column5_name}{script $c++}</th>{/if}
-                {if $table->column6_name != NULL}<th>{$table->column6_name}{script $c++}</th>{/if}
-                {if $table->column7_name != NULL}<th>{$table->column7_name}{script $c++}</th>{/if}
-                {if $table->column8_name != NULL}<th>{$table->column8_name}{script $c++}</th>{/if}
-                {if $table->column9_name != NULL}<th>{$table->column9_name}{script $c++}</th>{/if}
-                {if $table->column10_name != NULL}<th>{$table->column10_name}{script $c++}</th>{/if}
+                {foreach $n in $numbers}
+                    {script $col = 'col' . $n}
+                    {if $$col != NULL}<th>{$$col}{script $c++}</th>{/if}
+                {/foreach}
 
                 <th>Actions</th>
 
@@ -168,6 +187,10 @@
         <button type="button" class="add btn btn-primary" value="{echo $c}">
             <i class="entypo-plus"></i> Add Row
         </button>
+        <div id="row-id" style="display:none">
+            <input type="text" class="row-number" name="row-number" value="1"  hidden="">
+        </div>
+
 
         <div class="pull-right" id="saveandcancel" style="display:none">
             <button type="submit" name="save" value="save" class="btn btn-success btn-sm btn-icon icon-left"><i class="entypo-check"></i> Save</a>
@@ -175,55 +198,220 @@
             <button type="button" style="margin-left:10px" class="cancel btn btn-danger btn-sm btn-icon icon-left"><i class="entypo-cancel"></i> Cancel</a>        
         </div>
     </div>
-    <div id="row-id">
-    <input type="text" class="row-number" name="row-number" value="1"  hidden="">
+    <br>
+    
+    {if !empty($operations)}
+        <div class="pull-left">
+            Table Operations
+        </div>
+        
+        <br>
+        
+        {script $i = 1}
+        {foreach $o in $operations}
+            <div class="pull-left">
+                {script $op1 = $o->operation_1}
+                {script $op2 = $o->operation_2}
+                {script $op3 = $o->operation_3}
+                {script $op4 = $o->operation_4}
+                {script $op5 = $o->operation_5}
+                {script $op6 = $o->operation_6}
+                {script $op7 = $o->operation_7}
+                {script $op8 = $o->operation_8}
+
+                {script $c1 = $o->o_col_1}
+                {script $c2 = $o->o_col_2}
+                {script $c3 = $o->o_col_3}
+                {script $c4 = $o->o_col_4}
+                {script $c5 = $o->o_col_5}
+                {script $c6 = $o->o_col_6}
+                {script $c7 = $o->o_col_7}
+                {script $c8 = $o->o_col_8}
+                {script $c9 = $o->o_col_9}
+                {script $c10 = $o->result_col}
+
+                {foreach $n in $numbers}
+                    
+                    {script $op = 'op' . $n}
+
+                    {if $n != 9}
+
+                        break
+
+                    {/if}
+
+                    {if $$op != -1}
+
+                        {script $c = 'c' . $n}
+                        
+                        {script $col = 'col' . $c}
+                        
+                        {$$col} 
+
+                        {if $$op == 1} + {/if}
+                        {if $$op == 2} - {/if}
+                        {if $$op == 3} * {/if}
+                        {if $$op == 4} / {/if}
+                    {/if}
+                    {else}
+
+                        {script $c = 'c' . $n}
+                        
+                        {script $col = 'col' . $c}
+                        
+                        {$$col} = {script $col = 'col' . $c10} {$$col}
+
+                        {script break}
+                        
+                    {/else}
+
+                {/foreach}
+            </div>
+            {script $i++}
+        {/foreach}
+
+    {/if}
+    
+    <div {if isset($allowed)} style="display:none" {/if}>
+        <div class="pull-left" style="margin-left:10px; margin-top:4px">
+        Number of columns?
+        </div>
+        <div class="pull-left">
+            <select style="width:50px; margin-left:10px" name="number-of-columns" class="form-control">
+                {foreach $n in $numbers}
+                    {script $col = 'col' . $n}
+                    {if $$col != NULL && $n != 1 && $n != 2}
+                        <option value="{echo $n-1}">{echo $n-1}</option>
+                    {/if}
+                {/foreach}
+            </select>
+        </div>
+        <button type="submit" style="margin-left:5px" name="allow-add-operation" value="add" class="btn btn-primary pull-left">
+                <i class="entypo-plus"></i> Add an operation
+        </button>
     </div>
+
+{if isset($allowed)}
+    <div>
+        
+        {foreach $o in $numbers}
+
+            {if $allowed > 1}
+                <div class="pull-left">
+                    <select name="o_col_{$o}" style="width:auto; margin-left:10px" class="form-control">
+                        <option value="">Column</option>
+                            {foreach $n in $numbers}
+                               
+                                {script $col = 'col' . $n}
+            
+                                {if $$col != NULL}<option value="{$n}">{$$col}</option>{/if}
+                            {/foreach}
+                        
+                    </select>
+                </div>
+
+                <div class="pull-left">
+                    <select name="o_{$o}" style="width:auto; margin-left:10px" class="form-control">
+                        <option value="1">+</option>
+                        <option value="2">-</option>
+                        <option value="3">*</option>
+                        <option value="4">/</option>
+                    </select>
+                </div>
+                {script $allowed--}
+            {/if}
+            {else}
+                {script break}
+            {/else}
+        {/foreach}
+
+        <div class="pull-left">
+            <select name="o_col_{$o}" style="width:auto; margin-left:10px" class="form-control">
+                <option value="">Column</option>
+                {foreach $n in $numbers}
+                    {script $col = 'col' . $n}
+                    {if $$col != NULL}<option value="{$n}">{$$col}</option>{/if}
+                {/foreach}
+            </select>
+        </div>
+        
+        <div class="pull-left" style="margin-left:10px;margin-top:3px">
+            =
+        </div>
+
+        <div class="pull-left">
+            <select name="result" style="width:auto; margin-left:10px" class="form-control">
+                <option value="">Column</option>
+                {foreach $n in $numbers}
+                    {script $col = 'col' . $n}
+                    {if $$col != NULL}<option value="{$n}">{$$col}</option>{/if}
+                {/foreach}
+            </select>
+        </div>
+
+        &nbsp;&nbsp;
+        <button type="sumbit" class="btn btn-danger pull-right" style="margin-top:10px; margin-left:10px">
+            <i class="entypo-cancel"></i> Cancel
+        </button>
+        <button type="button" class="btn btn-success pull-right" name="try-add-operation" value="try" style="margin-top:10px" value="{echo $c}">
+            <i class="entypo-plus"></i> Add Operation
+        </button>
+        
+    </div>
+
+{/if}
+
+    
 
 <br />
 <br />
 
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="myModalLabel">Edit Entry</h4>
-      </div>
-     
-      <div class="modal-body">
-                    ...
-      </div>
-      <div class="modal-footer">
-        <button type="submit" name="savechanges" value="save" class="btn btn-success">Save changes</button>
-        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-      </div>
-      </form>
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="myModalLabel">Edit Entry</h4>
+            </div>
+            <div class="modal-body">
+                ...
+            </div>
+            <div class="modal-footer">
+                <button type="submit" name="savechanges" value="save" class="btn btn-success">Save changes</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+            </div>
+        </div>
     </div>
-  </div>
+</div>
+<div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <center>
+            <div class="modal-content" style="margin-top:100px; width:500px">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel"></h4>
+                </div>
+                <div class="modal-body2">
+                    <br>
+                    <br>
+                    <center>
+                        <p>Are you sure that you want to delete this table?</p>
+                    </center>
+                    <br>
+                    <br>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" name="delete_table" value="{$table->id}" class="btn btn-danger">Delete</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </center>
+    </div>
 </div>
 
-<div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-  <div class="modal-dialog" role="document">
-    <center>
-    <div class="modal-content" style="margin-top:100px; width:500px">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="myModalLabel"></h4>
-      </div>
-     
-      <div class="modal-body2">
-      <br><br>
-                    <center><p>Are you sure that you want to delete this table?</p></center>
-      <br><br>
-      </div>
-      <div class="modal-footer">
-        <button type="submit" name="delete_table" value="{$table->id}" class="btn btn-danger">Delete</button>
-        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-      </div>
-      </form>
-    </div>
-    </center>
-  </div>
-</div>
 
 </form>
