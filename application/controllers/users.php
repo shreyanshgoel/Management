@@ -343,19 +343,32 @@ class Users extends Controller {
 
     	if(RequestMethods::post('try-add-operation')){
 
+
+
     		if(!empty($table)){
+
+    			$work = -1;
 
     			$i = 1;
 
     			$flag = 0;
 
-    			if(RequestMethods::post('result')){
-	    			
+    			$exist = models\Operation::first(array(
+    				'result_col = ?' => RequestMethods::post('result'),
+    				'table_id = ?' => $id
+    				));
+
+
+    			if(RequestMethods::post('result') && empty($exist)){
+	    		
 	    			while($i < 10){
+
+	    				$j = $i +1;
 	    			
-	    				if(RequestMethods::post('o_col_' . $i) && 
-	    					RequestMethods::post('o_col_' . $i + 1) && 
-	    					RequestMethods::post('o_col_' . $i) != RequestMethods::post('result')){
+	    				if(!empty(RequestMethods::post('o_col_' . $i)) && 
+	    					!empty(RequestMethods::post('o_col_' . $j)) && 
+	    					RequestMethods::post('o_col_' . $i) != RequestMethods::post('result')&& 
+	    					RequestMethods::post('o_col_' . $j) != RequestMethods::post('result')){
 
 	    					if(RequestMethods::post('o_' . $i) == 1 ||
 	    					   RequestMethods::post('o_' . $i) == 2 ||
@@ -369,8 +382,10 @@ class Users extends Controller {
 		    				}
 	    				}else{
 
-		    					$op[$i] = -1;
+		    				$op[$i] = -1;
 		    			}
+
+		    			$i++;
 
 	    			}
 	    		}
@@ -402,9 +417,32 @@ class Users extends Controller {
     				if($op_add->validate()){
     					$op_add->save();
     					$view->set('add_operation_success', 1);
-    				}else{
-    					$view->set('add_operation_error', 1);
+    					$work++;
     				}
+    				
+    			}
+    		}
+
+    		if($work == -1){
+
+    			$view->set('add_operation_error', 1);
+    		}
+    	}
+
+    	if(RequestMethods::post('delete_operation')){
+
+    		if(!empty($table)){
+
+    			$op = models\Operation::first(array(
+    				'id = ?' => RequestMethods::post('delete_operation'),
+    				'table_id = ?' => $id
+    				));
+
+    			if(!empty($op)){
+
+    				$op->delete();
+
+    				$view->set('delete_operation_success', 1);
     			}
     		}
     	}

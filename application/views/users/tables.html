@@ -53,6 +53,12 @@
     <strong>Success!</strong> 1 Operation Added
 </div>
 {/if}
+{if isset($delete_operation_success)}
+<div class="alert alert-success">
+    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+    <strong>Success!</strong> 1 Operation Deleted
+</div>
+{/if}
 
 {script $s = Framework\RequestMethods::get('edit_table_success')}
 {if $s == 1}
@@ -112,49 +118,87 @@
         {script $i = 1} 
 
         {foreach $entry in $entries}
+
+            {script $e1 = $entry->entry1}
+            {script $e2 = $entry->entry2}
+            {script $e3 = $entry->entry3}
+            {script $e4 = $entry->entry4}
+            {script $e5 = $entry->entry5}
+            {script $e6 = $entry->entry6}
+            {script $e7 = $entry->entry7}
+            {script $e8 = $entry->entry8}
+            {script $e9 = $entry->entry9}
+            {script $e10 = $entry->entry10}
             <tr>
                 <td>{$i}</td>
-                
-                {if $c >= 1}
-                    <td>{$entry->entry1}</td>
-                {/if}
-                
-                {if $c >= 2}
-                    <td>{$entry->entry2}</td>
-                {/if}
+                {foreach $n in $numbers}
+                    {script $e = 'e' . $n}
+                    
+                        
+                        {if $c >= $n}
+                            {script $op = models\Operation::first(array('result_col = ?' => $n, 'table_id = ?' => $table->id))}
+                            
+                            {if !empty($op) && empty($$e)}
+                                
+                                {script $t1 = $op->o_col_1}
+                                {script $t2 = $op->o_col_2}
+                                {script $t3 = $op->o_col_3}
+                                {script $t4 = $op->o_col_4}
+                                {script $t5 = $op->o_col_5}
+                                {script $t6 = $op->o_col_6}
+                                {script $t7 = $op->o_col_7}
+                                {script $t8 = $op->o_col_8}
+                                {script $t9 = $op->o_col_9}
 
-                {if $c >= 3}
-                    <td>{$entry->entry3}</td>
-                {/if}
-                
-                {if $c >= 4}
-                    <td>{$entry->entry4}</td>
-                {/if}
-                
-                {if $c >= 5}
-                    <td>{$entry->entry5}</td>
-                {/if}
+                                {script $o1 = $op->operation_1}
+                                {script $o2 = $op->operation_2}
+                                {script $o3 = $op->operation_3}
+                                {script $o4 = $op->operation_4}
+                                {script $o5 = $op->operation_5}
+                                {script $o6 = $op->operation_6}
+                                {script $o7 = $op->operation_7}
+                                {script $o8 = $op->operation_8}
 
-                {if $c >= 6}
-                    <td>{$entry->entry6}</td>
-                {/if}
+                                {script $temp = 'e' . $t1}
 
-                {if $c >= 7}
-                    <td>{$entry->entry7}</td>
-                {/if}
+                                {script $res = $$temp}
 
-                {if $c >= 8}
-                <td>{$entry->entry8}</td>
-                {/if}
+                                {foreach $n2 in $numbers}
+                                    {if $n2 == 9}
+                                        {script break}
+                                    {/if}
+                                    {script $o = 'o' . $n2}
+                                    
+                                    {script $temp = $n2 + 1}
+                                    
+                                    {script $t = 't' . $temp}
 
-                {if $c >= 9}
-                    <td>{$entry->entry9}</td>
-                {/if}
+                                    {script $t_2 = 'e' . $$t}
 
-                {if $c >= 10}
-                    <td>{$entry->entry10}</td>
-                {/if}
+                                    {if $$o != -1}
+                                        
+                                        {if $$o == 1} {script $res = $res + $$t_2}{/if}
+                                        {if $$o == 2} {script $res = $res - $$t_2}{/if}
+                                        {if $$o == 3} {script $res = $res * $$t_2}{/if}
+                                        {if $$o == 4} {script $res = $res / $$t_2}{/if}
 
+
+                                    {/if}
+
+                                {/foreach}
+                                
+                                <td>{$res}</td>
+
+                            {/if}
+                            {else}
+                            
+                                <td>{$$e}</td>
+
+                            {/else}
+                        {/if}
+            
+                        
+                {/foreach}
                 <td>
                     <button type="button" value="{$entry->id}" data-toggle="modal" data-target="#myModal" class="edit btn btn-info btn-sm btn-icon icon-left">
                         <i class="entypo-pencil"></i> Edit
@@ -229,14 +273,14 @@
                 {script $c8 = $o->o_col_8}
                 {script $c9 = $o->o_col_9}
                 {script $c10 = $o->result_col}
-
+                {$i}.
                 {foreach $n in $numbers}
                     
                     {script $op = 'op' . $n}
 
-                    {if $n != 9}
+                    {if $n == 9}
 
-                        break
+                        {script break}
 
                     {/if}
 
@@ -244,8 +288,8 @@
 
                         {script $c = 'c' . $n}
                         
-                        {script $col = 'col' . $c}
-                        
+                        {script $col = 'col' . $$c}
+                         
                         {$$col} 
 
                         {if $$op == 1} + {/if}
@@ -257,9 +301,12 @@
 
                         {script $c = 'c' . $n}
                         
-                        {script $col = 'col' . $c}
+                        {script $col = 'col' . $$c}
                         
                         {$$col} = {script $col = 'col' . $c10} {$$col}
+                        
+                            <button type="sumbit" name="delete_operation" value="{$o->id}" style="color:red" class="btn btn-link">Delete </button>
+
 
                         {script break}
                         
@@ -267,9 +314,12 @@
 
                 {/foreach}
             </div>
+
+            <br><br>
             {script $i++}
         {/foreach}
-
+    
+    <br>
     {/if}
     
     <div {if isset($allowed)} style="display:none" {/if}>
@@ -353,7 +403,7 @@
         <button type="sumbit" class="btn btn-danger pull-right" style="margin-top:10px; margin-left:10px">
             <i class="entypo-cancel"></i> Cancel
         </button>
-        <button type="button" class="btn btn-success pull-right" name="try-add-operation" value="try" style="margin-top:10px" value="{echo $c}">
+        <button type="submit" class="btn btn-success pull-right" name="try-add-operation" value="try" style="margin-top:10px" value="{echo $c}">
             <i class="entypo-plus"></i> Add Operation
         </button>
         
