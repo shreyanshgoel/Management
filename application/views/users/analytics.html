@@ -9,8 +9,7 @@ document.getElementById("analytics").className = "active";
                 <div class="input-group">
                     <label class="sr-only">Model</label>
                     <select name="model" id="item" class="form-control">
-                        {script $models = Shared\Markup::models()}
-                        {foreach $m in $models}
+                        {script $models = Shared\Markup::models()} {foreach $m in $models}
                         <option value="{echo $m}">{echo ucfirst($m)}</option>
                         {/foreach}
                     </select>
@@ -19,14 +18,16 @@ document.getElementById("analytics").className = "active";
             <div class="form-group">
                 <div class="input-group">
                     <label class="sr-only">From</label>
-                    <span class="add-on input-group-addon"><i class="fa fa-calendar fa-fw"></i> From</span>
+                    <span class="add-on input-group-addon">
+                        <i class="fa fa-calendar fa-fw"></i> From</span>
                     <input type="date" style="width: 200px" name="startdate" class="form-control" />
                 </div>
             </div>
             <div class="form-group">
                 <div class="input-group">
                     <label class="sr-only">To</label>
-                    <span class="add-on input-group-addon"><i class="fa fa-calendar fa-fw"></i> To</span>
+                    <span class="add-on input-group-addon">
+                        <i class="fa fa-calendar fa-fw"></i> To</span>
                     <input type="date" style="width: 200px" name="enddate" class="form-control" />
                 </div>
             </div>

@@ -47,10 +47,10 @@ document.getElementById("create_table").className = "active";
                             <div class="hr-line-dashed"></div>
                             {foreach $i in $numbers}
                             <div class="form-group">
-                                <label class="col-sm-2 control-label">if $i == 1}
-                                    <sup style="color:red;">*</sup>{/if}Column Name {$i}{</label>
+                                <label class="col-sm-2 control-label">{if $i == 1}
+                                    <sup style="color:red;">*</sup>{/if}Column Name {$i}</label>
                                 <div class="col-sm-3">
-                                    <input type="text" class="form-control" name="name{$i}" placeholder="Column Name {$i}" {if $i==1 } required {/if}>
+                                    <input type="text" class="form-control" name="name{$i}" placeholder="Column Name {$i}" {if $i==1} required {/if}>
                                 </div>
                                 <div class="col-sm-2">
                                     <select class="form-control m-b" name="type{$i}">

@@ -755,6 +755,20 @@ class Users extends Controller {
     	}
     }
 
+    /**
+	* @before secure_user
+	*/
+    public function import_from_excel(){
+     	
+
+		$inputFileName = './sampleData/example1.xls';
+		
+		$objPHPExcel = PHPExcel\Classes\PHPExcel\PHPExcel_IOFactory::load($inputFileName);
+
+		$sheetData = $objPHPExcel->getActiveSheet()->toArray(null,true,true,true);
+     
+    }
+
 
 
 	/**
@@ -762,7 +776,63 @@ class Users extends Controller {
 	*/
     public function search_in_tables(){
         
-        
+    	$view = $this->getActionView();
+
+        if(RequestMethods::get('search')){
+
+        	$search = RequestMethods::get('search');
+
+        	$search_words = explode(' ', $search);
+
+        	$i = 1;
+
+        	$j = 1;
+
+        	while($i < 11){
+
+        		$len = count($search_words);
+
+        		$j = 0;
+
+        		while ($j < $len) {
+        			
+		        	$result = models\Entry::all(array(
+		        		'entry' . $i . ' Like ?' => '%' . $search_words[$j] . '%'
+		        		));
+
+		        	foreach ($result as $r){
+
+		        		$t = models\Table::first(array(
+		        			'id = ?' => $r->table_id,
+		        			'user_id = ?' => $this->user->id 
+		        			));
+
+		        		if(!empty($t)){
+
+		        			$search_result[$j++] = $r->id;
+
+		        		}
+
+	        		}
+
+	        		$j++;
+
+		        }
+
+	        	$i++;
+
+        	}
+
+        	$numbers = array(1,2,3,4,5,6,7,8,9,10);	
+
+        	$view->set('numbers', $numbers)->set('search', $search);
+
+        	if(isset($search_result)){
+        		$view->set('search_result', $search_result);
+        	}else{
+        		$view->set('search_result', '');
+        	}
+        }
     }
 
     /**
