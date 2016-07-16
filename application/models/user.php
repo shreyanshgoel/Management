@@ -34,6 +34,24 @@ class User extends \Shared\Model {
      * @column
      * @readwrite
      * @type text
+     * 
+     * @label mobile number
+     */
+    protected $_designation;
+
+    /**
+     * @column
+     * @readwrite
+     * @type text
+     * 
+     * @label mobile number
+     */
+    protected $_company_name;
+
+    /**
+     * @column
+     * @readwrite
+     * @type text
      * @length 100
      * @uindex
      * 
@@ -45,44 +63,29 @@ class User extends \Shared\Model {
     /**
      * @column
      * @readwrite
+     * @type boolean
+     */
+    protected $_email_confirm = false;
+
+    /**
+     * @column
+     * @readwrite
      * @type text
-     * @length 100
-     * @index
+     * 
+     * @label mobile number
+     */
+    protected $_email_confirm_string;
+
+    /**
+     * @column
+     * @readwrite
+     * @type text
      * 
      * @validate required
      * @label password
      */
     protected $_password;
 
-    /**
-     * @column
-     * @readwrite
-     * @type text
-     * @length 100
-     * @uindex
-     *
-     * @label shop name
-     */
-    protected $_shop_name = NULL;
-
-    /**
-     * @column
-     * @readwrite
-     * @type text
-     * @length 100
-     * @uindex
-     *
-     * @label shop name
-     */
-    protected $_shop_document = NULL;
-
-    /**
-    * @column
-    * @readwrite
-    * @type boolean
-    */
-    protected $_shop = false;
-    
     /**
     * @column
     * @readwrite

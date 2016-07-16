@@ -86,7 +86,9 @@
 </div>
 {/if}
 <script type="text/javascript" src="{echo CDN}js/tables/tables1.js"></script>
-<form method="post" action="/users/tables/{$table->id}">
+
+<!--Action important-->
+<form method="post" action="/users/tables/{$table->id}" enctype="multipart/form-data">
     <table class="table table-bordered datatable" id="table-1">
         <thead>
             <tr>
@@ -323,7 +325,7 @@
     {/if}
     
     <div {if isset($allowed)} style="display:none" {/if}>
-        <div class="pull-left" style="margin-left:10px; margin-top:4px">
+        <div class="pull-left" style="margin-top:4px">
         Number of columns?
         </div>
         <div class="pull-left">
@@ -338,6 +340,15 @@
         </div>
         <button type="submit" style="margin-left:5px" name="allow-add-operation" value="add" class="btn btn-primary pull-left">
                 <i class="entypo-plus"></i> Add an operation
+        </button>
+    
+        <br><br><br>
+
+        <div class="pull-left">
+            <input type="file" name="sheet">   
+        </div>
+        <button type="submit" style="margin-left:-50px" name="excel_add" value="add" class="btn btn-primary pull-left">
+                <i class="entypo-plus"></i> Import From Excel
         </button>
     </div>
 

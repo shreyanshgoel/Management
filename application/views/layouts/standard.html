@@ -59,6 +59,12 @@
                             <span class="title">Dashboard</span>
                         </a>
                     </li>
+                    <li id="profile">
+                        <a href="/users/profile">
+                            <i class="entypo-user"></i>
+                            <span class="title">Profile</span>
+                        </a>
+                    </li>
                     <li class="has-sub" id="your_tables">
                         <a href="">
                             <i class="entypo-window"></i>
@@ -80,6 +86,12 @@
                             {/else}
                         </ul>
                     </li>
+                    <li id="invoice">
+                        <a href="/users/invoice">
+                            <i class="entypo-window"></i>
+                            <span class="title">Invoice</span>
+                        </a>
+                    </li>
                     <li id="create_table">
                         <a href="/users/create_table">
                             <i class="entypo-plus"></i>
@@ -92,12 +104,7 @@
                             <span class="title">Search In Tables</span>
                         </a>
                     </li>
-                    <li id="analytics">
-                        <a href="/users/analytics">
-                            <i class="entypo-chart-line"></i>
-                            <span class="title">Analytics</span>
-                        </a>
-                    </li>
+
                 </ul>
             </div>
         </div>
@@ -110,34 +117,10 @@
                         <!-- Profile Info -->
                         <li class="profile-info dropdown">
                             <!-- add class "pull-right" if you want to place this from right -->
-                            <a href="index#" class="dropdown-toggle" data-toggle="dropdown">
+                            <a href="index#">
                                 <img src="{echo CDN}images/thumb-1@2x.png" alt="" class="img-circle" width="44" /> {$user->full_name}
                             </a>
-                            <ul class="dropdown-menu">
-                                <!-- Reverse Caret -->
-                                <li class="caret"></li>
-                                <!-- Profile sub-links -->
-                                <li>
-                                    <a href="../../extra/timeline/index">
-                                        <i class="entypo-user"></i> Edit Profile
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="../../mailbox/main/index">
-                                        <i class="entypo-mail"></i> Inbox
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="../../extra/calendar/index">
-                                        <i class="entypo-calendar"></i> Calendar
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="index#">
-                                        <i class="entypo-clipboard"></i> Tasks
-                                    </a>
-                                </li>
-                            </ul>
+                            
                         </li>
                     </ul>
                     <ul class="user-info pull-left pull-right-xs pull-none-xsm">

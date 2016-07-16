@@ -447,6 +447,109 @@ class Users extends Controller {
     		}
     	}
 
+    	if(RequestMethods::post('excel_add')){
+    		if(!empty($table)){
+	    		if(!empty($_FILES['sheet']['name'])){
+
+	    			$target_file = APP_PATH . '/public/uploads/sheets/' . $this->user->id;
+
+	    			if($_FILES['sheet']['size'] < 5000000){
+
+	    				$ext = pathinfo($_FILES["sheet"]["name"],PATHINFO_EXTENSION);
+
+	    				move_uploaded_file($_FILES['sheet']["tmp_name"], $target_file . '.' . $ext);
+	    			}
+	  
+
+		     		$excel = new PhpExcelReader;
+
+		     		$file = $target_file . '.' . $ext;
+
+					$excel->read($file);
+
+					$sheet = $excel->sheets[0];
+
+		     		$i = 0;
+
+					$x = 1;
+					  
+				  	while($x <= $sheet['numRows']) {
+				    
+				    	$y = 1;
+
+				    	$flag = 0;
+				    	
+				    	$j = 0;
+
+				    	while($y <= $sheet['numCols']) {
+				    
+					      $sheet_data[$i][$j++] = isset($sheet['cells'][$x][$y]) ? $sheet['cells'][$x][$y] : '';
+					      $y++;
+
+					      $flag = 1;
+				    
+				    	}
+
+				    	if($flag = 1){
+				    		$i++;
+				    	}
+				    
+				    $x++;
+				  	
+				  	}
+
+				  	$k = 0;
+
+				  	while($k <= $i){
+
+				  		$i = 1;
+
+				  		$flag = 0;
+
+				  		while($i <= 10){
+				  			
+				  			if(isset($sheet_data[$k][$i])){
+
+				  				$entry[$i] = $sheet_data[$k][$i];
+				  				$flag = 1;
+				  			}else{
+
+				  				$entry[$i] = NULL;
+
+				  			}
+
+				  			$i++;
+
+				  		}
+
+				  		if($flag == 1){
+
+				  			$e = new models\Entry(array(
+				  				'table_id' => $table->id,
+				  				'entry1' => $entry[1],
+				  				'entry2' => $entry[2],
+				  				'entry3' => $entry[3],
+				  				'entry4' => $entry[4],
+				  				'entry5' => $entry[5],
+				  				'entry6' => $entry[6],
+				  				'entry7' => $entry[7],
+				  				'entry8' => $entry[8],
+				  				'entry9' => $entry[9],
+				  				'entry10' => $entry[10]
+				  				));
+
+				  			$e->save();
+				  		}
+
+				  		$k++;
+
+				  	}
+
+				}
+			}
+
+    	}
+
     	if(!empty($table)){
 
     		$entries = models\Entry::all(array(
@@ -466,6 +569,14 @@ class Users extends Controller {
     	}
 
 
+    }
+
+    /**
+	* @before secure_user
+	*/
+    public function import_from_excel($input = NULL){
+     		
+     	
     }
 
     /**
@@ -755,22 +866,6 @@ class Users extends Controller {
     	}
     }
 
-    /**
-	* @before secure_user
-	*/
-    public function import_from_excel(){
-     	
-
-		$inputFileName = './sampleData/example1.xls';
-		
-		$objPHPExcel = PHPExcel\Classes\PHPExcel\PHPExcel_IOFactory::load($inputFileName);
-
-		$sheetData = $objPHPExcel->getActiveSheet()->toArray(null,true,true,true);
-     
-    }
-
-
-
 	/**
 	* @before secure_user
 	*/
@@ -835,18 +930,12 @@ class Users extends Controller {
         }
     }
 
-    /**
-	* @before secure_user
-	*/
-    public function analytics(){
-        
-        
-    }
 
     /**
 	* @before secure_user
 	*/
     public function profile(){
+
         
         
     }
