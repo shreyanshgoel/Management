@@ -1,4 +1,5 @@
-{script $tables = models\Table::all(array('user_id = ?' => $user->id), array('*'), 'table_name')}
+{script $other_tables = models\Table::all(array('user_id = ?' => $user->id, 'type = ?' => 'other'), array('*'), 'table_name')}
+{script $inventory_tables = models\Table::all(array('user_id = ?' => $user->id, 'type = ?' => 'inventory'), array('*'), 'table_name')}
 <!DOCTYPE html>
 <html lang="en">
 
@@ -65,15 +66,15 @@
                             <span class="title">Profile</span>
                         </a>
                     </li>
-                    <li class="has-sub" id="your_tables">
+                    <li class="has-sub" id="inventory_tables">
                         <a href="">
                             <i class="entypo-window"></i>
-                            <span class="title">Your Tables</span>
+                            <span class="title">Inventory</span>
                         </a>
                         <ul>
-                            {if !empty($tables)} {foreach $t in $tables}
+                            {if !empty($inventory_tables)} {foreach $t in $inventory_tables}
                             <li id="{$t->table_name}">
-                                <a href="/users/tables/{$t->id}">
+                                <a href="/users/inventory/{$t->id}">
                                     <span class="title">{echo ucfirst($t->table_name)}</span>
                                 </a>
                             </li>
@@ -86,10 +87,64 @@
                             {/else}
                         </ul>
                     </li>
-                    <li id="invoice">
+                    <li id="customers">
                         <a href="/users/invoice">
                             <i class="entypo-window"></i>
+                            <span class="title">Customers</span>
+                        </a>
+                    </li>
+                    <li id="suppliers">
+                        <a href="/users/invoice">
+                            <i class="entypo-window"></i>
+                            <span class="title">Suppliers</span>
+                        </a>
+                    </li>
+                    <li class="has-sub" id="invoice">
+                        <a href="">
+                            <i class="entypo-window"></i>
                             <span class="title">Invoice</span>
+                        </a>
+                        <ul>
+                            {if !empty($tables)} {foreach $t in $tables}
+                            <li id="{$t->table_name}">
+                                <a href="/users/invoice/{$t->id}">
+                                    <span class="title">{echo ucfirst($t->table_name)}</span>
+                                </a>
+                            </li>
+                            {/foreach} {/if} {else}
+                            <li>
+                                <a>
+                                    <span class="title">No Tables Yet</span>
+                                </a>
+                            </li>
+                            {/else}
+                        </ul>
+                    </li>
+                    <li class="has-sub" id="other_tables">
+                        <a href="">
+                            <i class="entypo-window"></i>
+                            <span class="title">Other Tables</span>
+                        </a>
+                        <ul>
+                            {if !empty($other_tables)} {foreach $t in $other_tables}
+                            <li id="{$t->table_name}">
+                                <a href="/users/other_tables/{$t->id}">
+                                    <span class="title">{echo ucfirst($t->table_name)}</span>
+                                </a>
+                            </li>
+                            {/foreach} {/if} {else}
+                            <li>
+                                <a>
+                                    <span class="title">No Tables Yet</span>
+                                </a>
+                            </li>
+                            {/else}
+                        </ul>
+                    </li>
+                    <li id="mailbox">
+                        <a href="/users/invoice">
+                            <i class="entypo-mail"></i>
+                            <span class="title">Mailbox</span>
                         </a>
                     </li>
                     <li id="create_table">
@@ -118,7 +173,8 @@
                         <li class="profile-info dropdown">
                             <!-- add class "pull-right" if you want to place this from right -->
                             <a href="index#">
-                                <img src="{echo CDN}images/thumb-1@2x.png" alt="" class="img-circle" width="44" /> {$user->full_name}
+                            {script $name = ucfirst($user->full_name)}
+                                <img src="{echo CDN}images/thumb-1@2x.png" alt="" class="img-circle" width="44" /> {$name}
                             </a>
                             
                         </li>
@@ -387,12 +443,42 @@
                 <!-- Raw Links -->
                 <div class="col-md-6 col-sm-4 clearfix hidden-xs">
                     <ul class="list-inline links-list pull-right">
-                        
-                        <li>
-                            <a href="index#" data-toggle="chat" data-collapse-sidebar="1">
-                                <i class="entypo-chat"></i> Chat
-                                <span class="badge badge-success chat-notifications-badge is-hidden">0</span>
-                            </a>
+                        <li class="dropdown language-selector">
+                            Language: &nbsp;
+                            <a href="index#" class="dropdown-toggle" data-toggle="dropdown" data-close-others="true">
+                                <img src="{echo CDN}images/flags/flag-uk.png" width="16" height="16"> </a>
+                            <ul class="dropdown-menu pull-right">
+                                <li>
+                                    <a href="index#">
+                                        <img src="{echo CDN}images/flags/flag-de.png" width="16" height="16">
+                                        <span>Deutsch</span>
+                                    </a>
+                                </li>
+                                <li class="active">
+                                    <a href="index#">
+                                        <img src="{echo CDN}images/flags/flag-uk.png" width="16" height="16">
+                                        <span>English</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="index#">
+                                        <img src="{echo CDN}images/flags/flag-fr.png" width="16" height="16">
+                                        <span>François</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="index#">
+                                        <img src="{echo CDN}images/flags/flag-al.png" width="16" height="16">
+                                        <span>Shqip</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="index#">
+                                        <img src="{echo CDN}images/flags/flag-es.png" width="16" height="16">
+                                        <span>Español</span>
+                                    </a>
+                                </li>
+                            </ul>
                         </li>
                         <li class="sep"></li>
                         <li>

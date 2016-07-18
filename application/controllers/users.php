@@ -169,10 +169,215 @@ class Users extends Controller {
 		}
 	}
 
+
+	public function enroll(){
+
+		if(!$this->user){
+
+			header("Location: /users/login");
+
+		}
+
+
+		$user = models\User::first(array(
+			'id = ?' => $this->user->id
+			));
+
+		$user->manage = 1;
+
+		$user->save();
+
+		//first inventory table
+		$table = new models\Table(array(
+	    			'user_id' => $this->user->id,
+	    			'type' => 'inventory',
+	    			'table_number' => '1',
+	    			'table_name' => '',
+	    			'column1_name' => '',
+	    			'column2_name' => '',
+	    			'column3_name' => '',
+	    			'column4_name' => '',
+	    			'column5_name' => '',
+	    			'column6_name' => '',
+	    			'column7_name' => '',
+	    			'column8_name' => '',
+	    			'column9_name' => '',
+	    			'column10_name' => ''
+	    			));
+
+		$table->save();
+
+		$count = models\Table::count();
+
+		$type = new models\Table_Type(array(
+	    			'table_id' => $count,
+	    			'type1' => '',
+	    			'type2' => '',
+	    			'type3' => '',
+	    			'type4' => '',
+	    			'type5' => '',
+	    			'type6' => '',
+	    			'type7' => '',
+	    			'type8' => '',
+	    			'type9' => '',
+	    			'type10' => ''
+	    			));
+
+		//Purchase invoice
+		$table = new models\Table(array(
+	    			'user_id' => $this->user->id,
+	    			'type' => 'inventory',
+	    			'table_number' => '1',
+	    			'table_name' => '',
+	    			'column1_name' => '',
+	    			'column2_name' => '',
+	    			'column3_name' => '',
+	    			'column4_name' => '',
+	    			'column5_name' => '',
+	    			'column6_name' => '',
+	    			'column7_name' => '',
+	    			'column8_name' => '',
+	    			'column9_name' => '',
+	    			'column10_name' => ''
+	    			));
+
+		$table->save();
+
+		$count = models\Table::count();
+
+		$type = new models\Table_Type(array(
+	    			'table_id' => $count,
+	    			'type1' => '',
+	    			'type2' => '',
+	    			'type3' => '',
+	    			'type4' => '',
+	    			'type5' => '',
+	    			'type6' => '',
+	    			'type7' => '',
+	    			'type8' => '',
+	    			'type9' => '',
+	    			'type10' => ''
+	    			));
+
+		//Sales Invoice table
+		$table = new models\Table(array(
+	    			'user_id' => $this->user->id,
+	    			'type' => 'inventory',
+	    			'table_number' => '1',
+	    			'table_name' => '',
+	    			'column1_name' => '',
+	    			'column2_name' => '',
+	    			'column3_name' => '',
+	    			'column4_name' => '',
+	    			'column5_name' => '',
+	    			'column6_name' => '',
+	    			'column7_name' => '',
+	    			'column8_name' => '',
+	    			'column9_name' => '',
+	    			'column10_name' => ''
+	    			));
+
+		$table->save();
+
+		$count = models\Table::count();
+
+		$type = new models\Table_Type(array(
+	    			'table_id' => $count,
+	    			'type1' => '',
+	    			'type2' => '',
+	    			'type3' => '',
+	    			'type4' => '',
+	    			'type5' => '',
+	    			'type6' => '',
+	    			'type7' => '',
+	    			'type8' => '',
+	    			'type9' => '',
+	    			'type10' => ''
+	    			));
+
+		//Supplier table
+		$table = new models\Table(array(
+	    			'user_id' => $this->user->id,
+	    			'type' => 'inventory',
+	    			'table_number' => '1',
+	    			'table_name' => '',
+	    			'column1_name' => '',
+	    			'column2_name' => '',
+	    			'column3_name' => '',
+	    			'column4_name' => '',
+	    			'column5_name' => '',
+	    			'column6_name' => '',
+	    			'column7_name' => '',
+	    			'column8_name' => '',
+	    			'column9_name' => '',
+	    			'column10_name' => ''
+	    			));
+
+		$table->save();
+
+		$count = models\Table::count();
+
+		$type = new models\Table_Type(array(
+	    			'table_id' => $count,
+	    			'type1' => '',
+	    			'type2' => '',
+	    			'type3' => '',
+	    			'type4' => '',
+	    			'type5' => '',
+	    			'type6' => '',
+	    			'type7' => '',
+	    			'type8' => '',
+	    			'type9' => '',
+	    			'type10' => ''
+	    			));
+
+		//Customers table
+		$table = new models\Table(array(
+	    			'user_id' => $this->user->id,
+	    			'type' => 'inventory',
+	    			'table_number' => '1',
+	    			'table_name' => '',
+	    			'column1_name' => '',
+	    			'column2_name' => '',
+	    			'column3_name' => '',
+	    			'column4_name' => '',
+	    			'column5_name' => '',
+	    			'column6_name' => '',
+	    			'column7_name' => '',
+	    			'column8_name' => '',
+	    			'column9_name' => '',
+	    			'column10_name' => ''
+	    			));
+
+		$table->save();
+
+		$count = models\Table::count();
+
+		$type = new models\Table_Type(array(
+	    			'table_id' => $count,
+	    			'type1' => '',
+	    			'type2' => '',
+	    			'type3' => '',
+	    			'type4' => '',
+	    			'type5' => '',
+	    			'type6' => '',
+	    			'type7' => '',
+	    			'type8' => '',
+	    			'type9' => '',
+	    			'type10' => ''
+	    			));
+
+
+		header("Location: /users/dashboard");	
+
+
+	}
+
 	/**
 	* @before secure_user
 	*/
     public function dashboard() {
+
     	$layoutView = $this->getLayoutView();
     	$layoutView->set("seo", Framework\Registry::get("seo"));
 
@@ -201,14 +406,19 @@ class Users extends Controller {
 
     }
 
+
+  
+
     /**
 	* @before secure_user
 	*/
-    public function tables($id = -1) {
+    public function other_tables($id = -1) {
     	$layoutView = $this->getLayoutView();
     	$layoutView->set("seo", Framework\Registry::get("seo"));
     	
     	$view = $this->getActionView();
+
+    	$view->set('outer', 'other_tables');
 
     	$table = models\Table::first(array(
     		'id = ?' => $id,
@@ -612,7 +822,7 @@ class Users extends Controller {
 
     }
 
-    /**
+        /**
 	* @before secure_user
 	*/
     public function create_table() {
@@ -627,106 +837,175 @@ class Users extends Controller {
 
     	if(RequestMethods::post('create')){
 
-    		$i = 1;
-    		$j = 1;
-    		while($i < 11){
+    		$type_of_table = RequestMethods::post('typeoftable');
 
-    			$name = 'name' . $i;
+    		if($type_of_table == "Inventory"){
 
-	    		if(!empty(RequestMethods::post($name))){
-
-	    			$c[$j] = RequestMethods::post($name);
-	    			$j++;
-	    		}
-
-	    		$i++;
-	    	}
-
-	    	while($j < 11){
-
-	    		$c[$j] = NULL;
-	    		$j++;
-	    	}
-
-	    	$count = models\Table::count(array(
-	    		'user_id = ?' => $this->user->id
-	    		));
-	    	$count++;
-
-	    	$exist = models\Table::first(array(
-	    		'user_id = ?' => $this->user->id,
-	    		'table_name = ?' => RequestMethods::post('table_name')
-	    		));
-
-	    	if(empty($exist)){
-
-	    		$table = new models\Table(array(
-	    			'user_id' => $this->user->id,
-	    			'table_number' => $count,
-	    			'table_name' => RequestMethods::post('table_name'),
-	    			'column1_name' => $c[1],
-	    			'column2_name' => $c[2],
-	    			'column3_name' => $c[3],
-	    			'column4_name' => $c[4],
-	    			'column5_name' => $c[5],
-	    			'column6_name' => $c[6],
-	    			'column7_name' => $c[7],
-	    			'column8_name' => $c[8],
-	    			'column9_name' => $c[9],
-	    			'column10_name' => $c[10]
-	    			));
-
-	    		$count = models\Table::count();
+    			$count = models\Table::count(array(
+		    		'user_id = ?' => $this->user->id
+		    		));
 		    	$count++;
 
-		    	$i = 1;
+		    	$exist = models\Table::first(array(
+		    		'user_id = ?' => $this->user->id,
+		    		'table_name = ?' => RequestMethods::post('table_name')
+		    		));
 
-		    	while($i < 11){
+		    	if(empty($exist)){
 
-		    		$name = 'type' . $i;
+		    		$table = new models\Table(array(
+		    			'user_id' => $this->user->id,
+		    			'type' => 'inventory',
+		    			'table_number' => $count,
+		    			'table_name' => RequestMethods::post('table_name'),
+		    			'column1_name' => '',
+		    			'column2_name' => '',
+		    			'column3_name' => '',
+		    			'column4_name' => '',
+		    			'column5_name' => '',
+		    			'column6_name' => '',
+		    			'column7_name' => '',
+		    			'column8_name' => '',
+		    			'column9_name' => '',
+		    			'column10_name' => ''
+		    			));
 
-		    		if(RequestMethods::post($name) == 1 || RequestMethods::post($name) == 2 || RequestMethods::post($name) == 3){
+		    		$table->save();
 
-		    			$c[$i] = RequestMethods::post($name);
-		 
-		    		}else{
-		    			$c[$i] = 1;
+		    		$view->set('success', 1);
+		    		
+		    		$count = models\Table::count();
+
+		    		$type = new models\Table_Type(array(
+		    			'table_id' => $count,
+		    			'type1' => '',
+		    			'type2' => '',
+		    			'type3' => '',
+		    			'type4' => '',
+		    			'type5' => '',
+		    			'type6' => '',
+		    			'type7' => '',
+		    			'type8' => '',
+		    			'type9' => '',
+		    			'type10' => ''
+		    			));
+
+		    		$type->save();
+		    	}
+
+    		}
+
+    		if($type_of_table == "Other"){
+	    		
+	    		$i = 1;
+	    		$j = 1;
+	    		while($i < 11){
+
+	    			$name = 'name' . $i;
+
+		    		if(!empty(RequestMethods::post($name))){
+
+		    			$c[$j] = RequestMethods::post($name);
+		    			$j++;
 		    		}
 
 		    		$i++;
-
 		    	}
 
-	    		$type = new models\Table_Type(array(
-	    			'table_id' => $count,
-	    			'type1' => $c[1],
-	    			'type2' => $c[2],
-	    			'type3' => $c[3],
-	    			'type4' => $c[4],
-	    			'type5' => $c[5],
-	    			'type6' => $c[6],
-	    			'type7' => $c[7],
-	    			'type8' => $c[8],
-	    			'type9' => $c[9],
-	    			'type10' => $c[10]
-	    			));
+		    	while($j < 11){
 
-	    		if($table->validate()){
+		    		$c[$j] = NULL;
+		    		$j++;
+		    	}
 
-	    			$table->save();
+		    	$count = models\Table::count(array(
+		    		'user_id = ?' => $this->user->id
+		    		));
+		    	$count++;
 
-	    			$type->save();
-	    			$view->set('success', 1);
+		    	$exist = models\Table::first(array(
+		    		'user_id = ?' => $this->user->id,
+		    		'table_name = ?' => RequestMethods::post('table_name')
+		    		));
 
-	    		}else{
-	    			echo "Validation Not Good";
-	    		}
-	    	}else{
+		    	
+		    	$flag = 0;
 
-	    		$view->set('exist', 1);
-	    	}
+	    
+		    	if(empty($exist)){
+
+		    		$table = new models\Table(array(
+		    			'user_id' => $this->user->id,
+		    			'type' => RequestMethods::post('typeoftable'),
+		    			'table_number' => $count,
+		    			'table_name' => RequestMethods::post('table_name'),
+		    			'column1_name' => $c[1],
+		    			'column2_name' => $c[2],
+		    			'column3_name' => $c[3],
+		    			'column4_name' => $c[4],
+		    			'column5_name' => $c[5],
+		    			'column6_name' => $c[6],
+		    			'column7_name' => $c[7],
+		    			'column8_name' => $c[8],
+		    			'column9_name' => $c[9],
+		    			'column10_name' => $c[10]
+		    			));
+
+		    		$count = models\Table::count();
+			    	$count++;
+
+			    	$i = 1;
+
+			    	while($i < 11){
+
+			    		$name = 'type' . $i;
+
+			    		if(RequestMethods::post($name) == 1 || RequestMethods::post($name) == 2 || RequestMethods::post($name) == 3){
+
+			    			$c[$i] = RequestMethods::post($name);
+			 
+			    		}else{
+			    			$c[$i] = 1;
+			    		}
+
+			    		$i++;
+
+			    	}
+
+		    		$type = new models\Table_Type(array(
+		    			'table_id' => $count,
+		    			'type1' => $c[1],
+		    			'type2' => $c[2],
+		    			'type3' => $c[3],
+		    			'type4' => $c[4],
+		    			'type5' => $c[5],
+		    			'type6' => $c[6],
+		    			'type7' => $c[7],
+		    			'type8' => $c[8],
+		    			'type9' => $c[9],
+		    			'type10' => $c[10]
+		    			));
+
+		    		if($table->validate()){
+
+		    			$table->save();
+
+		    			$type->save();
+		    			$view->set('success', 1);
+
+		    		}else{
+		    			echo "Validation Not Good";
+		    		}
+		    	}else{
+
+		    		$view->set('exist', 1);
+		    	}
+		    }else{
+		    	$view->set('invalid', 1);
+		    }
     	}
     }
+
 
     /**
 	* @before secure_user
@@ -758,110 +1037,157 @@ class Users extends Controller {
 
     	if(RequestMethods::post('savechanges') && !empty($edit_table)){
 
+    		$type_of_table = RequestMethods::post('typeoftable');
 
-    		$e_c1 = $edit_table->column1_name;
-			$e_c2 = $edit_table->column2_name;
-			$e_c3 = $edit_table->column3_name;
-			$e_c4 = $edit_table->column4_name;
-			$e_c5 = $edit_table->column5_name;
-			$e_c6 = $edit_table->column6_name;
-			$e_c7 = $edit_table->column7_name;
-			$e_c8 = $edit_table->column8_name;
-			$e_c9 = $edit_table->column9_name;
-			$e_c10 = $edit_table->column10_name;
+    		if($type_of_table == 'Inventory'){
 
-    		$i = 1;
-    		$j = 1;
-    		while($i < 11){
+    			if(!empty(RequestMethods::post('table_name'))){
 
-    			$name = 'name' . $i;
-    			$e_c = 'e_c' . $i;
+		    		$table_name = RequestMethods::post('table_name');
 
-	    		if(!empty(RequestMethods::post($name))){
+		    	}else{
 
-	    			$c[$j] = RequestMethods::post($name);
-	    			$j++;
-	    		}else{
+		    		$table_name = $edit_table->table_name;
+		    	}
 
-	    			if(!empty($$e_c)){
+		    	echo "string";
+    			$edit_table->table_name = $table_name;
+	    		$edit_table->column1_name = '';
+	    		$edit_table->column2_name = '';
+	    		$edit_table->column3_name = '';
+	    		$edit_table->column4_name = '';
+	    		$edit_table->column5_name = '';
+	    		$edit_table->column6_name = '';
+	    		$edit_table->column7_name = '';
+	    		$edit_table->column8_name = '';
+	    		$edit_table->column9_name = '';
+	    		$edit_table->column10_name = '';
 
-	    				$c[$j] = $$e_c;
-	    				$j++;
+	    		$type->type1 = 1;
+				$type->type2 = 1;
+	    		$type->type3 = 1;
+	    		$type->type4 = 1;
+	    		$type->type5 = 1;
+	    		$type->type6 = 1;
+	    		$type->type7 = 1;
+	    		$type->type8 = 1;
+	    		$type->type9 = 1;
+	    		$type->type10 = 1;
 
-	    			}
-	    		}
-    			
-    			$i++;
-	    	}
+	    		$edit_table->save();
+	    		$type->save();
+	    		self::redirect('/users/inventory/' . $edit_table->id . '?edit_table_success=1');
 
-	    	while($j < 11){
-
-	    		$c[$j] = NULL;
-	    		$j++;
-	    	}
-
-	    	if(!empty(RequestMethods::post('table_name'))){
-
-	    		$table_name = RequestMethods::post('table_name');
-
-	    	}else{
-
-	    		$table_name = $edit_table->table_name;
-	    	}
-
-    		$edit_table->table_name = $table_name;
-    		$edit_table->column1_name = $c[1];
-    		$edit_table->column2_name = $c[2];
-    		$edit_table->column3_name = $c[3];
-    		$edit_table->column4_name = $c[4];
-    		$edit_table->column5_name = $c[5];
-    		$edit_table->column6_name = $c[6];
-    		$edit_table->column7_name = $c[7];
-    		$edit_table->column8_name = $c[8];
-    		$edit_table->column9_name = $c[9];
-    		$edit_table->column10_name = $c[10];
-
-	    	$i = 1;
-
-	    	while($i < 11){
-
-	    		$name = 'type' . $i;
-
-	    		if(RequestMethods::post($name) == 1 || RequestMethods::post($name) == 2 || RequestMethods::post($name) == 3){
-
-	    			$c[$i] = RequestMethods::post($name);
-	 
-	    		}else{
-	    			$c[$i] = 1;
-	    		}
-
-	    		$i++;
-
-	    	}
-
-    		$type->type1 = $c[1];
-			$type->type2 = $c[2];
-    		$type->type3 = $c[3];
-    		$type->type4 = $c[4];
-    		$type->type5 = $c[5];
-    		$type->type6 = $c[6];
-    		$type->type7 = $c[7];
-    		$type->type8 = $c[8];
-    		$type->type9 = $c[9];
-    		$type->type10 = $c[10];
-
-
-    		if($edit_table->validate()){
-
-    			$edit_table->save();
-
-    			$type->save();
-
-    			self::redirect('/users/tables/' . $edit_table->id . '?edit_table_success=1');
-
-    		}else{
-    			echo "Validation Not Good";
     		}
+
+
+    		if($type_of_table == 'Other'){
+
+
+	    		$e_c1 = $edit_table->column1_name;
+				$e_c2 = $edit_table->column2_name;
+				$e_c3 = $edit_table->column3_name;
+				$e_c4 = $edit_table->column4_name;
+				$e_c5 = $edit_table->column5_name;
+				$e_c6 = $edit_table->column6_name;
+				$e_c7 = $edit_table->column7_name;
+				$e_c8 = $edit_table->column8_name;
+				$e_c9 = $edit_table->column9_name;
+				$e_c10 = $edit_table->column10_name;
+
+	    		$i = 1;
+	    		$j = 1;
+	    		while($i < 11){
+
+	    			$name = 'name' . $i;
+	    			$e_c = 'e_c' . $i;
+
+		    		if(!empty(RequestMethods::post($name))){
+
+		    			$c[$j] = RequestMethods::post($name);
+		    			$j++;
+		    		}else{
+
+		    			if(!empty($$e_c)){
+
+		    				$c[$j] = $$e_c;
+		    				$j++;
+
+		    			}
+		    		}
+	    			
+	    			$i++;
+		    	}
+
+		    	while($j < 11){
+
+		    		$c[$j] = NULL;
+		    		$j++;
+		    	}
+
+		    	if(!empty(RequestMethods::post('table_name'))){
+
+		    		$table_name = RequestMethods::post('table_name');
+
+		    	}else{
+
+		    		$table_name = $edit_table->table_name;
+		    	}
+
+	    		$edit_table->table_name = $table_name;
+	    		$edit_table->column1_name = $c[1];
+	    		$edit_table->column2_name = $c[2];
+	    		$edit_table->column3_name = $c[3];
+	    		$edit_table->column4_name = $c[4];
+	    		$edit_table->column5_name = $c[5];
+	    		$edit_table->column6_name = $c[6];
+	    		$edit_table->column7_name = $c[7];
+	    		$edit_table->column8_name = $c[8];
+	    		$edit_table->column9_name = $c[9];
+	    		$edit_table->column10_name = $c[10];
+
+		    	$i = 1;
+
+		    	while($i < 11){
+
+		    		$name = 'type' . $i;
+
+		    		if(RequestMethods::post($name) == 1 || RequestMethods::post($name) == 2 || RequestMethods::post($name) == 3){
+
+		    			$c[$i] = RequestMethods::post($name);
+		 
+		    		}else{
+		    			$c[$i] = 1;
+		    		}
+
+		    		$i++;
+
+		    	}
+
+	    		$type->type1 = $c[1];
+				$type->type2 = $c[2];
+	    		$type->type3 = $c[3];
+	    		$type->type4 = $c[4];
+	    		$type->type5 = $c[5];
+	    		$type->type6 = $c[6];
+	    		$type->type7 = $c[7];
+	    		$type->type8 = $c[8];
+	    		$type->type9 = $c[9];
+	    		$type->type10 = $c[10];
+
+
+	    		if($edit_table->validate()){
+
+	    			$edit_table->save();
+
+	    			$type->save();
+
+	    			self::redirect('/users/other_tables/' . $edit_table->id . '?edit_table_success=1');
+
+	    		}else{
+	    			echo "Validation Not Good";
+	    		}
+	    	}
     
     	}
     }
@@ -934,8 +1260,147 @@ class Users extends Controller {
     /**
 	* @before secure_user
 	*/
-    public function profile(){
+    public function profile($success = -1){
 
+    	$view = $this->getActionView();
+
+    	if(RequestMethods::post('profile_update')){
+
+    		$user = models\User::first(array(
+    			'id = ?' => $this->user->id
+    			));
+
+    		$exist = models\User::first(array(
+    			'id <> ?' => $this->user->id,
+    			'email = ?' => RequestMethods::post('email')
+    			));
+
+    		if(empty($exist)){
+
+	    		$user->full_name = RequestMethods::post('full_name');
+
+	    		if(RequestMethods::post('email')){
+
+	    			$user->email = RequestMethods::post('email');
+	    			$user->email_confirm = 0;
+
+	    		}
+
+	    		$user->designation = RequestMethods::post('designation');
+	    		$user->company_name = RequestMethods::post('company_name');
+	    		$user->location = RequestMethods::post('location');
+
+	    		if($user->validate()){
+
+	    			$user->save();
+	    			self::redirect('/users/profile/1');
+	    		}else{
+
+	    			$view->set('validation', 1);
+	    		}
+	    	}else{
+
+	    		$view->set('exist', 1);
+	    	}
+
+    	}
+
+    	$view->set('update_success', $success);
+
+
+    	$cp = -1;
+
+		if(RequestMethods::post('change_password')){
+
+			$cp = 0;
+
+			$old = RequestMethods::post('old');
+
+			$c = strcmp($this->user->password, crypt($old, $this->user->password));
+
+			if($c == 0){
+
+				$pass = RequestMethods::post('new');
+				$confirm = RequestMethods::post('confirm');
+
+				if($pass == $confirm){
+
+					$salt = strtr(base64_encode(mcrypt_create_iv(16, MCRYPT_DEV_URANDOM)), '+', '.');
+			        $cost=10;
+					$salt = sprintf("$2a$%02d\$", $cost) . $salt;
+					$crypt = crypt($pass, $salt);
+
+					$user = models\User::first(array('id = ?' => $this->user->id));
+
+					$user->password = $crypt;
+
+					$user->save();
+
+					$cp = 1;
+
+				}else{
+
+					$cp = 3;
+				}
+
+			}else{
+
+				$cp = 2;
+			}
+
+
+		}
+
+		$view->set('cp', $cp);
+       
+        
+    }
+
+    /**
+	* @before secure_user
+	*/
+    public function inventory($id = -1){
+
+    	$view = new Framework\View(array(
+                    "file" => APP_PATH . "/application/views/users/other_tables.html"
+                ));
+
+        $this->actionView = $view;
+
+    	self::other_tables($id);
+
+        $view->set('outer', 'inventory_tables');
+        
+    } 
+
+	/**
+	* @before secure_user
+	*/
+    public function mailbox(){
+        
+        
+    }
+
+    /**
+	* @before secure_user
+	*/
+    public function inbox(){
+        
+        
+    }
+
+    /**
+	* @before secure_user
+	*/
+    public function compose(){
+        
+        
+    }
+
+    /**
+	* @before secure_user
+	*/
+    public function email_detail(){
         
         
     }

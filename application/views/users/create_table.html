@@ -43,14 +43,21 @@ document.getElementById("create_table").className = "active";
                                 <div class="col-sm-3">
                                     <input type="text" class="form-control" name="table_name" placeholder="Table Name" required>
                                 </div>
+                                <div class="col-sm-2">
+                                    <select class="form-control m-b" id="table_type" name="typeoftable">
+                                        <option>Inventory</option>
+                                        <option>Other</option>
+                                    </select>
+                                </div>
                             </div>
                             <div class="hr-line-dashed"></div>
+                            <div id="custom" style="display:none">
                             {foreach $i in $numbers}
                             <div class="form-group">
                                 <label class="col-sm-2 control-label">{if $i == 1}
                                     <sup style="color:red;">*</sup>{/if}Column Name {$i}</label>
                                 <div class="col-sm-3">
-                                    <input type="text" class="form-control" name="name{$i}" placeholder="Column Name {$i}" {if $i==1} required {/if}>
+                                    <input type="text" class="form-control" id="column{$i}" name="name{$i}" placeholder="Column Name {$i}">
                                 </div>
                                 <div class="col-sm-2">
                                     <select class="form-control m-b" name="type{$i}">
@@ -62,6 +69,7 @@ document.getElementById("create_table").className = "active";
                             </div>
                             <div class="hr-line-dashed"></div>
                             {/foreach}
+                            </div>
                             <div class="form-group">
                                 <div class="col-sm-4 col-sm-offset-2">
                                     <button class="btn btn-primary" name="create" value="hehe" type="submit">
@@ -74,3 +82,4 @@ document.getElementById("create_table").className = "active";
             </div>
         </div>
     </div>
+    <script type="text/javascript" src="{echo CDN}js/create_table.js"></script>

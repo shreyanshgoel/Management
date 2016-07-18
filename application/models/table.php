@@ -32,6 +32,16 @@ class Table extends \Shared\Model {
      * @column
      * @readwrite
      * @type text
+     * 
+     * @validate required
+     * @label inventory/customer/supplier/purchase invoice/sales invoice/other
+     */
+    protected $_type;
+
+    /**
+     * @column
+     * @readwrite
+     * @type text
      * @length 100
      * @uindex
      * 

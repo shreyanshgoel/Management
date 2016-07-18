@@ -1,5 +1,5 @@
 <script type="text/javascript">
-    document.getElementById("your_tables").className = "active opened";
+    document.getElementById('$outer').className = "active opened";
 
     document.getElementById("{$table->table_name}").className = "active";
 
@@ -18,7 +18,7 @@
             <i class="fa-home"></i>Home</a>
     </li>
     <li>
-        <a href="../main/index">Your Tables</a>
+        <a href="../main/index">{if $outer == 'inventory_tables'} Inventory {/if}{if $outer == 'other_tables'} Other Tables {/if}</a>
     </li>
     <li class="active">
         <strong>{echo ucfirst($table->table_name)}</strong>
@@ -64,7 +64,7 @@
 {if $s == 1}
 <div class="alert alert-success">
     <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-    <strong>Success!</strong> Table columns are edited
+    <strong>Success!</strong> Table name and columns are changed
 </div>
 {/if}
 {if isset($delete_success)}
@@ -88,7 +88,7 @@
 <script type="text/javascript" src="{echo CDN}js/tables/tables1.js"></script>
 
 <!--Action important-->
-<form method="post" action="/users/tables/{$table->id}" enctype="multipart/form-data">
+<form method="post" {if $outer == 'inventory_tables'} action="/users/inventory/{$table->id}" {/if} {if $outer == 'other_tables'} action="/users/other_tables/{$table->id}" {/if} enctype="multipart/form-data">
     <table class="table table-bordered datatable" id="table-1">
         <thead>
             <tr>
@@ -325,24 +325,29 @@
     {/if}
     
     <div {if isset($allowed)} style="display:none" {/if}>
-        <div class="pull-left" style="margin-top:4px">
-        Number of columns?
-        </div>
-        <div class="pull-left">
-            <select style="width:50px; margin-left:10px" name="number-of-columns" class="form-control">
-                {foreach $n in $numbers}
-                    {script $col = 'col' . $n}
-                    {if $$col != NULL && $n != 1 && $n != 2}
-                        <option value="{echo $n-1}">{echo $n-1}</option>
-                    {/if}
-                {/foreach}
-            </select>
-        </div>
-        <button type="submit" style="margin-left:5px" name="allow-add-operation" value="add" class="btn btn-primary pull-left">
-                <i class="entypo-plus"></i> Add an operation
-        </button>
-    
-        <br><br><br>
+        
+        {if $outer == 'other_tables'}
+
+            <div class="pull-left" style="margin-top:4px">
+            Number of columns?
+            </div>
+            <div class="pull-left">
+                <select style="width:50px; margin-left:10px" name="number-of-columns" class="form-control">
+                    {foreach $n in $numbers}
+                        {script $col = 'col' . $n}
+                        {if $$col != NULL && $n != 1 && $n != 2}
+                            <option value="{echo $n-1}">{echo $n-1}</option>
+                        {/if}
+                    {/foreach}
+                </select>
+            </div>
+            <button type="submit" style="margin-left:5px" name="allow-add-operation" value="add" class="btn btn-primary pull-left">
+                    <i class="entypo-plus"></i> Add an operation
+            </button>
+        
+            <br><br><br>
+
+        {/if}
 
         <div class="pull-left">
             <input type="file" name="sheet">   
@@ -352,7 +357,7 @@
         </button>
     </div>
 
-{if isset($allowed)}
+{if isset($allowed) && $outer == 'other_tables'}
     <div>
         
         {foreach $o in $numbers}

@@ -46,8 +46,15 @@ document.getElementById("create_table").className = "active";
                             <div class="col-sm-3">
                                 <input type="text" class="form-control" value="{$edit_table->table_name}" name="table_name" placeholder="Table Name" required>
                             </div>
+                            <div class="col-sm-2">
+                                <select class="form-control m-b" id="table_type" name="typeoftable">
+                                    <option {if $edit_table->type == 'Inventory'} selected {/if}>Inventory</option>
+                                    <option {if $edit_table->type == 'Other'} selected {/if}>Other</option>
+                                </select>
+                            </div>
                         </div>
                         <div class="hr-line-dashed"></div>
+                        <div id="custom" style="display:none"> 
                         {script $c1 = $edit_table->column1_name}
                         {script $c2 = $edit_table->column2_name}
                         {script $c3 = $edit_table->column3_name}
@@ -89,6 +96,7 @@ document.getElementById("create_table").className = "active";
                         </div>
                         <div class="hr-line-dashed"></div>
                         {/foreach}
+                        </div>
 
                         <input type="text" name="edit_table_id" value="{$edit_table->id}" hidden="">
                         <div class="form-group">
@@ -104,7 +112,7 @@ document.getElementById("create_table").className = "active";
     </div>
 </div>
 
-
+<script type="text/javascript" src="{echo CDN}js/create_table.js"></script>
 
 {/if}
 {else}

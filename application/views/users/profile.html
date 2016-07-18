@@ -9,17 +9,14 @@
                 <li>
                     <div class="profile-name">
                         <strong>
-                                        <a href="index#">Art Ramadani</a>
-                                        <a href="index#" class="user-status is-online tooltip-primary" data-toggle="tooltip" data-placement="top" data-original-title="Online"></a>
-                                    </strong>
-                        <span>
-                                        <a href="index#">Co-Founder at Laborator</a>
-                                    </span>
+                            {script $name = ucfirst($user->full_name)}
+                            <a href="index#">{$name}</a>
+                            <a href="index#" class="user-status is-online tooltip-primary" data-toggle="tooltip" data-placement="top" data-original-title="Online"></a>
+                        </strong>
                     </div>
                 </li>
             </ul>
         </div>
-       
     </header>
     <section class="profile-info-tabs">
         <div class="row">
@@ -27,49 +24,73 @@
                 <ul class="user-details">
                     <li>
                         <a href="index#">
-                            <i class="entypo-location"></i> Prishtina
+                            <i class="entypo-location"></i> {if !empty($user->location)} {$user->location} {/if}{else} No location{/if}
                         </a>
                     </li>
                     <li>
                         <a href="index#">
-                            <i class="entypo-suitcase"></i> Works as
-                            <span>Laborator</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="index#">
-                            <i class="entypo-calendar"></i> 16 October
+                            <i class="entypo-suitcase"></i>
+                            {if !empty($user->designation)} Works as
+                            <span>{$user->designation}</span> {/if}{else} Employee{/if}
                         </a>
                     </li>
                 </ul>
                 <!-- tabs for the profile links -->
                 <ul class="nav nav-tabs" role="tablist">
-                    <li role="presentation" class="active"><a href="#profile2" aria-controls="profile2" role="tab" data-toggle="tab">Profile</a></li>
-                    <li role="presentation"><a href="#changepassword" aria-controls="changepassword" role="tab" data-toggle="tab">Change Password</a></li>
+                    <li role="presentation" {if $cp==- 1} class="active" {/if}>
+                        <a href="#profile2" aria-controls="profile2" role="tab" data-toggle="tab">Profile</a>
+                    </li>
+                    <li role="presentation" {if $cp !=- 1} class="active" {/if}>
+                        <a href="#changepassword" aria-controls="changepassword" role="tab" data-toggle="tab">Change Password</a>
+                    </li>
                 </ul>
             </div>
         </div>
     </section>
     <div class="tab-content">
-        <div role="tabpanel" class="tab-pane active" id="profile2">
-            <form class="form-horizontal">
+        <div role="tabpanel" class="tab-pane {if $cp == -1} active {/if}" id="profile2">
+            {if isset($update_success) && $update_success == 1}
+            <div class="alert alert-success alert-dismissible fade in" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+                Profile Updated
+                <strong>Successfully!</strong>
+            </div>
+            {/if} {if isset($validation) && $validation == 1}
+            <div class="alert alert-danger alert-dismissible fade in" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+                Entries Not filled Properly
+            </div>
+            {/if} {if isset($exist) && $exist == 1}
+            <div class="alert alert-danger alert-dismissible fade in" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+                Email Already Exists
+            </div>
+            {/if}
+            <form action="/users/profile" class="form-horizontal" method="post">
                 <div class="form-group">
-                    <label class="col-sm-2 control-label">Full Name</label>
+                    <label class="col-sm-2 control-label">
+                        <sup style="color:red">*</sup>Full Name</label>
                     <div class="col-sm-5">
-                        <input type="text" class="form-control" value="{$user->full_name}" placeholder="Full Name">
+                        <input type="text" class="form-control" name="full_name" value="{$user->full_name}" placeholder="Full Name" required="">
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-sm-2 control-label">Email</label>
+                    <label class="col-sm-2 control-label">
+                        <sup style="color:red">*</sup>Email</label>
                     {if $user->email_confirm == 0}
                     <div class="col-sm-5">
-                        <input type="email" class="form-control" value="{$user->email}" placeholder="Email">
+                        <input type="email" name="email" class="form-control" value="{$user->email}" placeholder="Email" required="">
                     </div>
                     <div class="col-sm-3" style="margin-top:5px">
                         <i class="entypo-cancel" style="color:red"></i> Not Confirmed
                     </div>
-                    {/if}
-                    {if $user->email_confirm == 1}
+                    {/if} {if $user->email_confirm == 1}
                     <div class="col-sm-5" style="margin-top:5px; margin-left:5px;">
                         {$user->email}
                     </div>
@@ -81,8 +102,8 @@
                 <div class="form-group">
                     <label class="col-sm-2 control-label">Designation</label>
                     <div class="col-sm-5">
-                        <select class="form-control">
-                            <option value="" s>Select</option>
+                        <select name="designation" class="form-control">
+                            <option value="">Select</option>
                             <option {if $user->designation == "Businessman"} selected {/if}>Businessman</option>
                             <option {if $user->designation == "Co-Founder"} selected {/if}>Co-Founder</option>
                             <option {if $user->designation == "Founder"} selected {/if} >Founder</option>
@@ -97,35 +118,64 @@
                     </div>
                 </div>
                 <div class="form-group">
+                    <label class="col-sm-2 control-label">Location</label>
+                    <div class="col-sm-5">
+                        <input type="text" class="form-control" name="location" value="{$user->location}" placeholder="Location">
+                    </div>
+                </div>
+                <div class="form-group">
                     <div class="col-sm-offset-2 col-sm-10">
-                        <button type="submit" class="btn btn-success">Update</button>
+                        <button type="submit" name="profile_update" value="update" class="btn btn-success">Update</button>
                     </div>
                 </div>
             </form>
         </div>
-        <div role="tabpanel" class="tab-pane" id="changepassword">
-            <form class="form-horizontal">
+        <div role="tabpanel" class="tab-pane {if $cp != -1} active {/if}" id="changepassword">
+            {if $cp == 1}
+            <div class="alert alert-success alert-dismissible fade in" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+                Password Changed
+                <strong>Successfully!</strong>
+            </div>
+            {/if} {if $cp == 2}
+            <div class="alert alert-danger alert-dismissible fade in" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+                Wrong Old Password!
+            </div>
+            {/if} {if $cp == 3}
+            <div class="alert alert-danger alert-dismissible fade in" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+                New passwords do not match!
+            </div>
+            {/if}
+            <form class="form-horizontal" method="post">
                 <div class="form-group">
                     <label class="col-sm-2 control-label">Old Password</label>
                     <div class="col-sm-5">
-                        <input type="password" class="form-control" placeholder="Old Password">
+                        <input type="password" name="old" class="form-control" placeholder="Old Password" required="">
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="col-sm-2 control-label">New Password</label>
                     <div class="col-sm-5">
-                        <input type="password" class="form-control" placeholder="New Password">
+                        <input type="password" name="new" class="form-control" placeholder="New Password" required="">
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="col-sm-2 control-label">Confirm Password</label>
                     <div class="col-sm-5">
-                        <input type="password" class="form-control" placeholder="Confirm Password">
+                        <input type="password" name="confirm" class="form-control" placeholder="Confirm Password" required="">
                     </div>
                 </div>
                 <div class="form-group">
                     <div class="col-sm-offset-2 col-sm-10">
-                        <button type="submit" class="btn btn-success">Update</button>
+                        <button type="submit" name="change_password" value="change" class="btn btn-success">Update</button>
                     </div>
                 </div>
             </form>
