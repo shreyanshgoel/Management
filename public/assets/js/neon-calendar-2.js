@@ -96,6 +96,8 @@ var neonCalendar2 = neonCalendar2 || {};
 
 				var text = $("#add_event_form input");
 
+				var val = text.val();
+
 				if(text.val().length == 0)
 					return false;
 
@@ -103,7 +105,9 @@ var neonCalendar2 = neonCalendar2 || {};
 					_class = classes[ Math.floor(classes.length * Math.random()) ],
 					$event = $('<li><a href="#"></a></li>');
 
-				$event.find('a').text(text.val()).addClass(_class).attr('data-event-class', _class);
+				var d = _class.replace('color-','');
+
+				$event.find('a').text(text.val()).addClass(_class).attr('data-event', '{"title": "' + val + '", "color": "' + d + '"}');
 
 				$event.appendTo($("#draggable_events"));
 

@@ -19,6 +19,9 @@
     <link rel="stylesheet" href="{echo CDN}css/neon-theme.css" id="style-resource-6">
     <link rel="stylesheet" href="{echo CDN}css/neon-forms.css" id="style-resource-7">
     <link rel="stylesheet" href="{echo CDN}css/custom.css" id="style-resource-8">
+
+    <link rel="stylesheet" href="{echo CDN}css/font-icons/font-awesome/css/font-awesome.min.css" id="style-resource-4">
+    
     <script src="{echo CDN}js/jquery-1.11.3.min.js"></script>
     <!--[if lt IE 9]><script src="http://demo.neontheme.com/assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
@@ -141,10 +144,23 @@
                             {/else}
                         </ul>
                     </li>
-                    <li id="mailbox">
-                        <a href="/users/invoice">
-                            <i class="entypo-mail"></i>
+                    <li class="has-sub" id="other_tables">
+                        <a href="">
+                            <i class="entypo-window"></i>
                             <span class="title">Mailbox</span>
+                        </a>
+                        <ul>
+                            <li id="{$t->table_name}">
+                                <a href="/users/mailbox">
+                                    <span class="title">Add Mail</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li id="create_table">
+                        <a href="/users/calendar">
+                            &nbsp;<i class="fa fa-calendar-plus-o"></i>
+                            <span class="title">Calendar</span>
                         </a>
                     </li>
                     <li id="create_table">
@@ -153,7 +169,7 @@
                             <span class="title">Create Table</span>
                         </a>
                     </li>
-                    <li id="search">
+                    <li id="search_in_tables">
                         <a href="/users/search_in_tables">
                             <i class="entypo-search"></i>
                             <span class="title">Search In Tables</span>

@@ -1373,6 +1373,40 @@ class Users extends Controller {
         
     } 
 
+    /**
+	* @before secure_user
+	*/
+    public function suppliers($id = -1){
+
+    	$view = new Framework\View(array(
+                    "file" => APP_PATH . "/application/views/users/other_tables.html"
+                ));
+
+        $this->actionView = $view;
+
+    	self::other_tables($id);
+
+        $view->set('outer', 'inventory_tables');
+        
+    } 
+
+    /**
+	* @before secure_user
+	*/
+    public function customers($id = -1){
+
+    	$view = new Framework\View(array(
+                    "file" => APP_PATH . "/application/views/users/other_tables.html"
+                ));
+
+        $this->actionView = $view;
+
+    	self::other_tables($id);
+
+        $view->set('outer', 'inventory_tables');
+        
+    } 
+
 	/**
 	* @before secure_user
 	*/
@@ -1401,6 +1435,14 @@ class Users extends Controller {
 	* @before secure_user
 	*/
     public function email_detail(){
+        
+        
+    }
+ 
+    /**
+	* @before secure_user
+	*/
+    public function calendar(){
         
         
     }
