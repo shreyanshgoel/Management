@@ -187,185 +187,6 @@ class Users extends Controller {
 
 		$user->save();
 
-		//first inventory table
-		$table = new models\Table(array(
-	    			'user_id' => $this->user->id,
-	    			'type' => 'inventory',
-	    			'table_number' => '1',
-	    			'table_name' => '',
-	    			'column1_name' => '',
-	    			'column2_name' => '',
-	    			'column3_name' => '',
-	    			'column4_name' => '',
-	    			'column5_name' => '',
-	    			'column6_name' => '',
-	    			'column7_name' => '',
-	    			'column8_name' => '',
-	    			'column9_name' => '',
-	    			'column10_name' => ''
-	    			));
-
-		$table->save();
-
-		$count = models\Table::count();
-
-		$type = new models\Table_Type(array(
-	    			'table_id' => $count,
-	    			'type1' => '',
-	    			'type2' => '',
-	    			'type3' => '',
-	    			'type4' => '',
-	    			'type5' => '',
-	    			'type6' => '',
-	    			'type7' => '',
-	    			'type8' => '',
-	    			'type9' => '',
-	    			'type10' => ''
-	    			));
-
-		//Purchase invoice
-		$table = new models\Table(array(
-	    			'user_id' => $this->user->id,
-	    			'type' => 'inventory',
-	    			'table_number' => '1',
-	    			'table_name' => '',
-	    			'column1_name' => '',
-	    			'column2_name' => '',
-	    			'column3_name' => '',
-	    			'column4_name' => '',
-	    			'column5_name' => '',
-	    			'column6_name' => '',
-	    			'column7_name' => '',
-	    			'column8_name' => '',
-	    			'column9_name' => '',
-	    			'column10_name' => ''
-	    			));
-
-		$table->save();
-
-		$count = models\Table::count();
-
-		$type = new models\Table_Type(array(
-	    			'table_id' => $count,
-	    			'type1' => '',
-	    			'type2' => '',
-	    			'type3' => '',
-	    			'type4' => '',
-	    			'type5' => '',
-	    			'type6' => '',
-	    			'type7' => '',
-	    			'type8' => '',
-	    			'type9' => '',
-	    			'type10' => ''
-	    			));
-
-		//Sales Invoice table
-		$table = new models\Table(array(
-	    			'user_id' => $this->user->id,
-	    			'type' => 'inventory',
-	    			'table_number' => '1',
-	    			'table_name' => '',
-	    			'column1_name' => '',
-	    			'column2_name' => '',
-	    			'column3_name' => '',
-	    			'column4_name' => '',
-	    			'column5_name' => '',
-	    			'column6_name' => '',
-	    			'column7_name' => '',
-	    			'column8_name' => '',
-	    			'column9_name' => '',
-	    			'column10_name' => ''
-	    			));
-
-		$table->save();
-
-		$count = models\Table::count();
-
-		$type = new models\Table_Type(array(
-	    			'table_id' => $count,
-	    			'type1' => '',
-	    			'type2' => '',
-	    			'type3' => '',
-	    			'type4' => '',
-	    			'type5' => '',
-	    			'type6' => '',
-	    			'type7' => '',
-	    			'type8' => '',
-	    			'type9' => '',
-	    			'type10' => ''
-	    			));
-
-		//Supplier table
-		$table = new models\Table(array(
-	    			'user_id' => $this->user->id,
-	    			'type' => 'inventory',
-	    			'table_number' => '1',
-	    			'table_name' => '',
-	    			'column1_name' => '',
-	    			'column2_name' => '',
-	    			'column3_name' => '',
-	    			'column4_name' => '',
-	    			'column5_name' => '',
-	    			'column6_name' => '',
-	    			'column7_name' => '',
-	    			'column8_name' => '',
-	    			'column9_name' => '',
-	    			'column10_name' => ''
-	    			));
-
-		$table->save();
-
-		$count = models\Table::count();
-
-		$type = new models\Table_Type(array(
-	    			'table_id' => $count,
-	    			'type1' => '',
-	    			'type2' => '',
-	    			'type3' => '',
-	    			'type4' => '',
-	    			'type5' => '',
-	    			'type6' => '',
-	    			'type7' => '',
-	    			'type8' => '',
-	    			'type9' => '',
-	    			'type10' => ''
-	    			));
-
-		//Customers table
-		$table = new models\Table(array(
-	    			'user_id' => $this->user->id,
-	    			'type' => 'inventory',
-	    			'table_number' => '1',
-	    			'table_name' => '',
-	    			'column1_name' => '',
-	    			'column2_name' => '',
-	    			'column3_name' => '',
-	    			'column4_name' => '',
-	    			'column5_name' => '',
-	    			'column6_name' => '',
-	    			'column7_name' => '',
-	    			'column8_name' => '',
-	    			'column9_name' => '',
-	    			'column10_name' => ''
-	    			));
-
-		$table->save();
-
-		$count = models\Table::count();
-
-		$type = new models\Table_Type(array(
-	    			'table_id' => $count,
-	    			'type1' => '',
-	    			'type2' => '',
-	    			'type3' => '',
-	    			'type4' => '',
-	    			'type5' => '',
-	    			'type6' => '',
-	    			'type7' => '',
-	    			'type8' => '',
-	    			'type9' => '',
-	    			'type10' => ''
-	    			));
 
 
 		header("Location: /users/dashboard");	
@@ -858,15 +679,15 @@ class Users extends Controller {
 		    			'type' => 'inventory',
 		    			'table_number' => $count,
 		    			'table_name' => RequestMethods::post('table_name'),
-		    			'column1_name' => '',
-		    			'column2_name' => '',
-		    			'column3_name' => '',
-		    			'column4_name' => '',
-		    			'column5_name' => '',
-		    			'column6_name' => '',
-		    			'column7_name' => '',
-		    			'column8_name' => '',
-		    			'column9_name' => '',
+		    			'column1_name' => 'Name',
+		    			'column2_name' => 'Alias',
+		    			'column3_name' => 'Unit(kg,g,l)',
+		    			'column4_name' => 'Stock qty',
+		    			'column5_name' => 'Sales price',
+		    			'column6_name' => 'Bulk Quantity?',
+		    			'column7_name' => 'Sale discount',
+		    			'column8_name' => 'Item description',
+		    			'column9_name' => 'Item Valuation(Stock * quantity)',
 		    			'column10_name' => ''
 		    			));
 
@@ -878,15 +699,15 @@ class Users extends Controller {
 
 		    		$type = new models\Table_Type(array(
 		    			'table_id' => $count,
-		    			'type1' => '',
-		    			'type2' => '',
-		    			'type3' => '',
-		    			'type4' => '',
-		    			'type5' => '',
-		    			'type6' => '',
-		    			'type7' => '',
-		    			'type8' => '',
-		    			'type9' => '',
+		    			'type1' => '1',
+		    			'type2' => '1',
+		    			'type3' => '1',
+		    			'type4' => '1',
+		    			'type5' => '1',
+		    			'type6' => '1',
+		    			'type7' => '1',
+		    			'type8' => '1',
+		    			'type9' => '1',
 		    			'type10' => ''
 		    			));
 
