@@ -78,6 +78,7 @@ $(document).ready(function () {
 
     });
 
+  
     $('.cancel').on('click', function () {
 
         
@@ -234,6 +235,57 @@ $(document).ready(function () {
             });
 
             target.append('<input type="text" name="edit_entry_number" value="' + v + '"  hidden="">');
+
+
+
+        });
+    });
+
+    $('.edit_sc').on('click', function () {
+
+        var self = $(this), target = $('.modal-body');
+        target.html('');
+
+        var v = self.val();
+
+        Request.post({ action: "users/edit_sc/" + v }, function(data) {
+            
+            $.each(data, function(index, value){
+                
+                if(value._name != undefined){
+                    target.append('<div class="form-group"><label class="col-sm-2 control-label">Name</label><div class="col-sm-10"><input type="text" class="form-control" name="name" value="' + value._name + '" required></div></div><br><br>');
+                    target.append('<div class="form-group"><label class="col-sm-2 control-label">Phone</label><div class="col-sm-10"><input type="text" class="form-control" name="phone" value="' + value._phone + '" required></div></div><br><br>');
+                    target.append('<div class="form-group"><label class="col-sm-2 control-label">States</label><div class="col-sm-10"><select name="state" class="form-control" id="edit_state" required></select></div></div><br><br>');
+
+                    Request.post({ action: "users/states" }, function(data2) {
+
+                        target2 = $('#edit_state');
+
+                        $.each(data2, function(index2, value2){
+
+                            if(value2._name != undefined){
+
+                                if(value._state == value2._name){
+
+                                    target2.append('<option selected>' + value2._name + '</option>');
+
+                                }else{
+
+                                    target2.append('<option>' + value2._name + '</option>');
+                                }
+
+                            }
+
+                        });
+
+                    });
+
+
+                    target.append('<div class="form-group"><label class="col-sm-2 control-label">Address</label><div class="col-sm-10"><input type="text" class="form-control" name="address" value="' + value._address + '" required></div></div><br><br>');
+                }
+            });                       
+            
+            target.append('<input type="text" name="edit_sc_id" value="' + v + '"  hidden="">');
 
 
 

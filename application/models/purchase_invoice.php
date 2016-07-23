@@ -33,6 +33,16 @@ class Purchase_Invoice extends \Shared\Model {
      * @readwrite
      * @type text
      * 
+     * @validate required
+     * @label password
+     */
+    protected $_item_id;
+
+    /**
+     * @column
+     * @readwrite
+     * @type text
+     * 
      * @label password
      */
     protected $_quantity;
@@ -46,14 +56,7 @@ class Purchase_Invoice extends \Shared\Model {
      */
     protected $_price;
 
-    /**
-     * @column
-     * @readwrite
-     * @type text
-     * 
-     * @label password
-     */
-    protected $_return_quantity;
+
 
 
 }

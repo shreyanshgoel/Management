@@ -6,7 +6,7 @@
  * @author Shreyansh Goel
  */
 namespace models;
-class Supplier extends \Shared\Model {
+class Supplier_or_Customer extends \Shared\Model {
 
     /**
      * @column
@@ -24,6 +24,16 @@ class Supplier extends \Shared\Model {
      * @type text
      * 
      * @validate required
+     * @label supplier = 1/customer = 2
+     */
+    protected $_type;
+
+    /**
+     * @column
+     * @readwrite
+     * @type text
+     * 
+     * @validate required
      * @label password
      */
     protected $_name;
@@ -33,6 +43,7 @@ class Supplier extends \Shared\Model {
      * @readwrite
      * @type text
      * 
+     * @validate required
      * @label password
      */
     protected $_phone;
@@ -51,6 +62,7 @@ class Supplier extends \Shared\Model {
      * @readwrite
      * @type text
      * 
+     * @validate required
      * @label password
      */
     protected $_state;
@@ -60,6 +72,7 @@ class Supplier extends \Shared\Model {
      * @readwrite
      * @type text
      * 
+     * @validate required
      * @label password
      */
     protected $_address;

@@ -34,7 +34,7 @@ class Table extends \Shared\Model {
      * @type text
      * 
      * @validate required
-     * @label inventory/customer/supplier/purchase invoice / sales invoice /other
+     * @label inventory/other
      */
     protected $_type;
 

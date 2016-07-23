@@ -54,34 +54,63 @@ document.getElementById("create_table").className = "active";
                             </div>
                         </div>
                         <div class="hr-line-dashed"></div>
-                        <div id="custom" style="display:none"> 
-                        {script $c1 = $edit_table->column1_name}
-                        {script $c2 = $edit_table->column2_name}
-                        {script $c3 = $edit_table->column3_name}
-                        {script $c4 = $edit_table->column4_name}
-                        {script $c5 = $edit_table->column5_name}
-                        {script $c6 = $edit_table->column6_name}
-                        {script $c7 = $edit_table->column7_name}
-                        {script $c8 = $edit_table->column8_name}
-                        {script $c9 = $edit_table->column9_name}
-                        {script $c10 = $edit_table->column10_name}
+                        <div id="custom" {if $edit_table->type == 'Inventory'} style="display:none" {/if}> 
 
-                        {script $t1 = $type->type1}
-                        {script $t2 = $type->type2}
-                        {script $t3 = $type->type3}
-                        {script $t4 = $type->type4}
-                        {script $t5 = $type->type5}
-                        {script $t6 = $type->type6}
-                        {script $t7 = $type->type7}
-                        {script $t8 = $type->type8}
-                        {script $t9 = $type->type9}
-                        {script $t10 = $type->type10}
+                        {if $edit_table->type == 'Other'}
+
+                            {script $c1 = $edit_table->column1_name}
+                            {script $c2 = $edit_table->column2_name}
+                            {script $c3 = $edit_table->column3_name}
+                            {script $c4 = $edit_table->column4_name}
+                            {script $c5 = $edit_table->column5_name}
+                            {script $c6 = $edit_table->column6_name}
+                            {script $c7 = $edit_table->column7_name}
+                            {script $c8 = $edit_table->column8_name}
+                            {script $c9 = $edit_table->column9_name}
+                            {script $c10 = $edit_table->column10_name}
+
+                            {script $t1 = $type->type1}
+                            {script $t2 = $type->type2}
+                            {script $t3 = $type->type3}
+                            {script $t4 = $type->type4}
+                            {script $t5 = $type->type5}
+                            {script $t6 = $type->type6}
+                            {script $t7 = $type->type7}
+                            {script $t8 = $type->type8}
+                            {script $t9 = $type->type9}
+                            {script $t10 = $type->type10}
+
+                        {/if}{else}
+                            
+                            {script $c1 = ''}
+                            {script $c2 = ''}
+                            {script $c3 = ''}
+                            {script $c4 = ''}
+                            {script $c5 = ''}
+                            {script $c6 = ''}
+                            {script $c7 = ''}
+                            {script $c8 = ''}
+                            {script $c9 = ''}
+                            {script $c10 = ''}
+
+                            {script $t1 = ''}
+                            {script $t2 = ''}
+                            {script $t3 = ''}
+                            {script $t4 = ''}
+                            {script $t5 = ''}
+                            {script $t6 = ''}
+                            {script $t7 = ''}
+                            {script $t8 = ''}
+                            {script $t9 = ''}
+                            {script $t10 = ''}
+    
+                        {/else}
 
                         {foreach $i in $numbers}
                         {script $c = 'c' . $i}
                         {script $t = 't' . $i}
                         <div class="form-group">
-                            <label class="col-sm-2 control-label">{if !empty($$c)}
+                            <label class="col-sm-2 control-label">{if $i == 1}
                                 <sup style="color:red;">*</sup>{/if}Column Name {$i}</label>
                             <div class="col-sm-3">
                                 <input type="text" class="form-control" name="name{$i}" value="{$$c}" placeholder="Column Name {$i}" {if !empty($$c) } required {/if}>

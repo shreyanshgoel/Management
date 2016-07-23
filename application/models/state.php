@@ -1,12 +1,12 @@
 <?php
 
 /**
- * The Payment Model
+ * The State Model
  *
  * @author Shreyansh Goel
  */
 namespace models;
-class Category extends \Shared\Model {
+class State extends \Shared\Model {
 
     /**
      * @column
@@ -15,7 +15,7 @@ class Category extends \Shared\Model {
      * @length 100
      * 
      * @validate required
-     * @label category name
+     * @label state name
      */
     protected $_name;
 
@@ -23,11 +23,9 @@ class Category extends \Shared\Model {
      * @column
      * @readwrite
      * @type text
-     * @length 100
-     * 
-     * @validate required
-     * @label short form
+     *
+     * @label country id
      */
-    protected $_short_name;
+    protected $_country_id = '';
 
 }
