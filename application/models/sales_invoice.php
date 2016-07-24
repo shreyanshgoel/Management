@@ -8,6 +8,17 @@
 namespace models;
 class Sales_Invoice extends \Shared\Model {
 
+
+    /**
+     * @column
+     * @readwrite
+     * @type text
+     * 
+     * @validate required
+     * @label full name
+     */
+    protected $_invoice_id;
+    
     /**
      * @column
      * @readwrite

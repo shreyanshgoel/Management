@@ -16,6 +16,16 @@ class Purchase_Invoice extends \Shared\Model {
      * @validate required
      * @label full name
      */
+    protected $_invoice_id;
+
+    /**
+     * @column
+     * @readwrite
+     * @type text
+     * 
+     * @validate required
+     * @label full name
+     */
     protected $_user_id;
 
     /**
@@ -55,8 +65,6 @@ class Purchase_Invoice extends \Shared\Model {
      * @label password
      */
     protected $_price;
-
-
 
 
 }

@@ -43,6 +43,52 @@ $(function () {
 
 $(document).ready(function () {
 
+    $('#inventory').on('change', function () {
+
+        var self = $(this), target = $('#item');
+
+        target.html('<option value="">Select Item</option>');
+
+        Request.post({ action: "users/get_inventory_items/" + self.val() }, function(data) {
+
+            $.each(data, function(index, value){
+                
+                if(value._entry1 != undefined){
+                    
+                    target.append('<option value="' + value._id + '">' + value._entry1 + '</option>');
+                    
+                }
+            });
+        });
+
+    });
+
+
+    $('#item').on('change', function () {
+
+        var self = $(this), target = $('#quantity');
+
+        target.html('<option value="">Select Quantity</option>');
+
+        Request.post({ action: "users/get_item_quantity/" + self.val() }, function(data) {
+
+            $.each(data, function(index, value){
+                
+                if(value._entry1 != undefined){
+                    
+                    var i =1;
+
+                    while(i <= value._entry3){
+                        target.append('<option value="' + i + '">' + i + '</option>');
+                        i = i+1;
+                    }
+                    
+                }
+            });
+        });
+
+    });
+
     $('.add').on('click', function () {
 
         var self = $(this), target = $('#data-body');

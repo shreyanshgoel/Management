@@ -1,5 +1,5 @@
 <script type="text/javascript">
-    document.getElementById('$outer').className = "active opened";
+    document.getElementById('$outer').className = "active";
 
 </script>
 
@@ -26,19 +26,19 @@
 {if isset($delete_success)}
 <div class="alert alert-success">
     <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-    <strong>Success!</strong> Customer is deleted
+    <strong>Success!</strong>{if $outer == 'customers'} Customer {/if}{if $outer == 'suppliers'} Supplier {/if} is deleted
 </div>
 {/if}
 {if isset($add_success)}
 <div class="alert alert-success">
     <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-    <strong>Success!</strong> Customer is Added
+    <strong>Success!</strong>{if $outer == 'customers'} Customer {/if}{if $outer == 'suppliers'} Supplier {/if} is Added
 </div>
 {/if}
 {if isset($edit_success)}
 <div class="alert alert-success">
     <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-    <strong>Success!</strong> Customer details are edited
+    <strong>Success!</strong>{if $outer == 'customers'} Customer {/if}{if $outer == 'suppliers'} Supplier {/if} details are edited
 </div>
 {/if}
 <script type="text/javascript" src="{echo CDN}js/tables/tables1.js"></script>
@@ -93,7 +93,7 @@
     <div>
 
         <button type="button" data-toggle="modal" data-target="#myModal2" class="btn btn-primary">
-            <i class="entypo-plus"></i> Add Customer
+            <i class="entypo-plus"></i> Add {if $outer == 'customers'} Customer {/if}{if $outer == 'suppliers'} Supplier {/if}
         </button>
         <div id="row-id" style="display:none">
             <input type="text" class="row-number" name="row-number" value="1"  hidden="">
@@ -128,7 +128,7 @@
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
-                <h4 class="modal-title" id="myModalLabel">Edit Customer</h4>
+                <h4 class="modal-title" id="myModalLabel">Edit {if $outer == 'customers'} Customer {/if}{if $outer == 'suppliers'} Supplier {/if}</h4>
             </div>
             <div class="modal-body">
                 ...
@@ -152,7 +152,7 @@
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
-                <h4 class="modal-title" id="myModalLabel">Add Customer</h4>
+                <h4 class="modal-title" id="myModalLabel">Add {if $outer == 'customers'} Customer {/if}{if $outer == 'suppliers'} Supplier {/if}</h4>
             </div>
             <div class="modal-body2">
                 

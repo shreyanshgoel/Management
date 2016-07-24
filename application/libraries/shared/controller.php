@@ -3,7 +3,7 @@
 /**
  * Subclass the Controller class within our application.
  *
- * @author Faizan Ayubi, Hemant Mann
+ * @author Shreyansh Goel
  */
 
 namespace Shared;

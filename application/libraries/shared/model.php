@@ -3,7 +3,7 @@
 /**
  * Contains similar code of all models and some helpful methods
  *
- * @author Faizan Ayubi
+ * @author Shreyansh Goel
  */
 
 namespace Shared {

@@ -3,7 +3,7 @@
 /**
  * The Default Example Controller Class
  *
- * @author Faizan Ayubi, Hemant Mann
+ * @author Shreyansh Goel
  */
 use Shared\Controller as Controller;
 use Framework\RequestMethods as RequestMethods;
@@ -1202,7 +1202,8 @@ class Users extends Controller {
     	$view = $this->getActionView();
 
     	$edit_sc = models\Supplier_or_Customer::all(array(
-    		'id = ?' => $id
+    		'id = ?' => $id,
+    		'user_id = ?' => $this->user->id
     		));
 
     	if(!empty($edit_sc)){
@@ -1278,6 +1279,21 @@ class Users extends Controller {
         	}
         }
 
+        if(RequestMethods::post('delete')){
+
+        	$c = models\Supplier_or_Customer::first(array(
+        		'id = ?' => RequestMethods::post('delete'),
+        		'user_id' => $this->user->id,
+        		'type' => '1',
+        		));
+
+        	if(!empty($c)){
+
+        		$c->delete();
+        		$view->set('delete_success', 1);
+        	}
+        }
+
         $table = models\Supplier_or_Customer::all(array(
         	'user_id = ?' => $this->user->id,
         	'type = ?' => '1'
@@ -1338,6 +1354,21 @@ class Users extends Controller {
         	}
         }
 
+        if(RequestMethods::post('delete')){
+
+        	$c = models\Supplier_or_Customer::first(array(
+        		'id = ?' => RequestMethods::post('delete'),
+        		'user_id' => $this->user->id,
+        		'type' => '2',
+        		));
+
+        	if(!empty($c)){
+
+        		$c->delete();
+        		$view->set('delete_success', 1);
+        	}
+        }
+
         $table = models\Supplier_or_Customer::all(array(
         	'user_id = ?' => $this->user->id,
         	'type = ?' => '2'
@@ -1346,6 +1377,211 @@ class Users extends Controller {
         $states = models\State::all();
 
         $view->set('outer', 'customers')->set('table', $table)->set('states', $states);
+        
+    } 
+
+    /**
+	* @before secure_user
+	*/
+    public function get_inventory_items($id = -1) {
+    	
+    	$view = $this->getActionView();
+
+    	$inventory = models\Table::all(array(
+    		'id = ?' => $id,
+    		'user_id = ?' => $this->user->id
+    		));
+
+    	if(!empty($inventory)){
+
+    		$items = models\Entry::all(array(
+    		'table_id = ?' => $id
+    		));
+
+	    	if(!empty($items)){
+
+	    		$view->set($items);
+
+			}else{
+
+				$view->set(false);
+			}
+    	
+    	}else{
+
+				$view->set(false);
+		}
+
+    	
+
+    }
+
+    /**
+	* @before secure_user
+	*/
+    public function get_item_quantity($id = -1) {
+    	
+    	$view = $this->getActionView();
+
+
+		$quantity = models\Entry::all(array(
+		'id = ?' => $id
+		));
+
+    	if(!empty($quantity)){
+
+    		$view->set($quantity);
+
+		}else{
+
+			$view->set(false);
+		}
+	
+    	
+
+    }
+
+    /**
+	* @before secure_user
+	*/
+    public function purchase_invoice($id = -1){
+
+    	$view = new Framework\View(array(
+                    "file" => APP_PATH . "/application/views/users/purchase_or_sales.html"
+                ));
+
+        $this->actionView = $view;
+
+        if(RequestMethods::post('add_sc')){
+
+        	$c = new models\Supplier_or_Customer(array(
+        		'user_id' => $this->user->id,
+        		'type' => '2',
+        		'name' => RequestMethods::post('name'),
+        		'phone' => RequestMethods::post('phone'),
+        		'state' => RequestMethods::post('state'),
+        		'address' => RequestMethods::post('address')
+        		));
+
+        	if($c->validate()){
+
+        		$c->save();
+        		$view->set('add_success', 1);
+        	}
+        }
+
+        if(RequestMethods::post('edit_sc')){
+
+        	$c = models\Supplier_or_Customer::first(array(
+        		'id = ?' => RequestMethods::post('edit_sc_id'),
+        		'user_id' => $this->user->id,
+        		'type' => '2',
+        		));
+
+        	$c->name = RequestMethods::post('name');
+        	$c->phone = RequestMethods::post('phone');
+        	$c->state = RequestMethods::post('state');
+        	$c->address = RequestMethods::post('address');
+
+        	if($c->validate()){
+
+        		$c->save();
+        		$view->set('edit_success', 1);
+        	}
+        }
+
+        if(RequestMethods::post('delete')){
+
+        	$c = models\Supplier_or_Customer::first(array(
+        		'id = ?' => RequestMethods::post('delete'),
+        		'user_id' => $this->user->id,
+        		'type' => '2',
+        		));
+
+        	$c->name = RequestMethods::post('name');
+        	$c->phone = RequestMethods::post('phone');
+        	$c->state = RequestMethods::post('state');
+        	$c->address = RequestMethods::post('address');
+
+        	if($c->validate()){
+
+        		$c->save();
+        		$view->set('edit_success', 1);
+        	}
+        }
+
+        $inventory = models\Table::all(array(
+        	'user_id = ?' => $this->user->id,
+        	'type = ?' => 'inventory'
+        	));
+
+        $table = models\Purchase_Invoice::all(array(
+        	'user_id = ?' => $this->user->id,
+        	));
+
+        $states = models\State::all();
+
+        $view->set('outer', 'purchase')->set('table', $table)->set('states', $states)->set('inventory', $inventory);
+        
+    } 
+
+    /**
+	* @before secure_user
+	*/
+    public function sales_invoice($id = -1){
+
+    	$view = new Framework\View(array(
+                    "file" => APP_PATH . "/application/views/users/purchase_or_sales.html"
+                ));
+
+        $this->actionView = $view;
+
+        if(RequestMethods::post('add_sc')){
+
+        	$c = new models\Supplier_or_Customer(array(
+        		'user_id' => $this->user->id,
+        		'type' => '2',
+        		'name' => RequestMethods::post('name'),
+        		'phone' => RequestMethods::post('phone'),
+        		'state' => RequestMethods::post('state'),
+        		'address' => RequestMethods::post('address')
+        		));
+
+        	if($c->validate()){
+
+        		$c->save();
+        		$view->set('add_success', 1);
+        	}
+        }
+
+        if(RequestMethods::post('edit_sc')){
+
+        	$c = models\Supplier_or_Customer::first(array(
+        		'id = ?' => RequestMethods::post('edit_sc_id'),
+        		'user_id' => $this->user->id,
+        		'type' => '2',
+        		));
+
+        	$c->name = RequestMethods::post('name');
+        	$c->phone = RequestMethods::post('phone');
+        	$c->state = RequestMethods::post('state');
+        	$c->address = RequestMethods::post('address');
+
+        	if($c->validate()){
+
+        		$c->save();
+        		$view->set('edit_success', 1);
+        	}
+        }
+
+        $table = models\Supplier_or_Customer::all(array(
+        	'user_id = ?' => $this->user->id,
+        	'type = ?' => '2'
+        	));
+
+        $states = models\State::all();
+
+        $view->set('outer', 'sales')->set('table', $table)->set('states', $states);
         
     } 
 

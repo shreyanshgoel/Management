@@ -3,7 +3,7 @@
 /**
  * The Default Example Controller Class
  *
- * @author Faizan Ayubi, Hemant Mann
+ * @author Shreyansh Goel
  */
 use Shared\Controller as Controller;
 

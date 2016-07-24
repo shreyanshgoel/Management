@@ -1,5 +1,5 @@
 <script type="text/javascript">
-    document.getElementById('$outer').className = "active opened";
+    document.getElementById('$outer').className = "active";
 
 </script>
 
@@ -16,44 +16,43 @@
             <i class="fa fa-home"></i>Home</a>
     </li>
     <li>
-        <a href="#">{if $outer == 'customers'} Customers {/if}{if $outer == 'suppliers'} Suppliers {/if}</a>
+        <a href="#">{if $outer == 'purchase'} Purchase {/if}{if $outer == 'sales'} Sales {/if} Invoice</a>
     </li>
 </ol>
-<h2>{if $outer == 'customers'} Customers {/if}{if $outer == 'suppliers'} Suppliers {/if}</h2>
+<h2>{if $outer == 'purchase'} Purchase {/if}{if $outer == 'sales'} Sales {/if} Invoice</h2>
 
 <br />
 
 {if isset($delete_success)}
 <div class="alert alert-success">
     <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-    <strong>Success!</strong> Customer is deleted
+    <strong>Success!</strong>{if $outer == 'purchase'} Purchase {/if}{if $outer == 'sales'} Sale {/if} is deleted
 </div>
 {/if}
 {if isset($add_success)}
 <div class="alert alert-success">
     <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-    <strong>Success!</strong> Customer is Added
+    <strong>Success!</strong>{if $outer == 'purchase'} Purchase {/if}{if $outer == 'sales'} Sales {/if} is Added
 </div>
 {/if}
 {if isset($edit_success)}
 <div class="alert alert-success">
     <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-    <strong>Success!</strong> Customer details are edited
+    <strong>Success!</strong>{if $outer == 'purchase'} Purchase {/if}{if $outer == 'sales'} Sales {/if} details are edited
 </div>
 {/if}
 <script type="text/javascript" src="{echo CDN}js/tables/tables1.js"></script>
 
 <!--Action important-->
-<form method="post" {if $outer == 'customers'} action="/users/customers" {/if} {if $outer == 'suppliers'} action="/users/suppliers" {/if}>
+<form method="post" {if $outer == 'purchase'} action="/users/purchase_invoice" {/if} {if $outer == 'sales'} action="/users/sales_invoice" {/if}>
     <table class="table table-bordered datatable" id="table-1">
         <thead>
             <tr>
                 
                 <th>S No.</th>
-                <th>Name</th>
-                <th>Phone</th>
-                <th>State</th>
+                <th>{if $outer == 'purchase'} Supplier {/if}{if $outer == 'sales'} Customer {/if}</th>
                 <th>Address</th>
+                <th>Total Price</th>
                 <th>Actions</th>
 
             </tr>
@@ -93,33 +92,20 @@
     <div>
 
         <button type="button" data-toggle="modal" data-target="#myModal2" class="btn btn-primary">
-            <i class="entypo-plus"></i> Add Customer
+            <i class="entypo-plus"></i> Create {if $outer == 'purchase'} Purchase {/if}{if $outer == 'sales'} Sales {/if} Invoice
         </button>
         <div id="row-id" style="display:none">
             <input type="text" class="row-number" name="row-number" value="1"  hidden="">
         </div>
 
     </div>
-    <br>
     
-  
-    <div>
-    
-        <div class="pull-left">
-            <input type="file" name="sheet">   
-        </div>
-        <button type="submit" style="margin-left:-50px" name="excel_add" value="add" class="btn btn-primary pull-left">
-                <i class="entypo-plus"></i> Import From Excel
-        </button>
-    </div>
-    
-
 <br />
 <br />
 
 </form>
 
-<form method="post" {if $outer == 'customers'} action="/users/customers" {/if} {if $outer == 'suppliers'} action="/users/suppliers" {/if}>
+<form method="post" {if $outer == 'purchase'} action="/users/purchase" {/if} {if $outer == 'sales'} action="/users/sales" {/if}>
 
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog" role="document">
@@ -128,13 +114,13 @@
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
-                <h4 class="modal-title" id="myModalLabel">Edit Customer</h4>
+                <h4 class="modal-title" id="myModalLabel">Edit {if $outer == 'purchase'} Purchase {/if}{if $outer == 'sales'} Sales {/if} Invoice</h4>
             </div>
             <div class="modal-body">
                 ...
             </div>
             <div class="modal-footer">
-                <button type="submit" name="savechanges" value="save" class="btn btn-success">Save changes</button>
+                <button type="submit" name="edit_sc" value="save" class="btn btn-success">Save changes</button>
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
             </div>
         </div>
@@ -143,7 +129,7 @@
 
 </form>
 
-<form method="post" {if $outer == 'customers'} action="/users/customers" {/if} {if $outer == 'suppliers'} action="/users/suppliers" {/if}>
+<form method="post" {if $outer == 'purchase'} action="/users/purchase" {/if} {if $outer == 'sales'} action="/users/sales" {/if} class="form-horizontal">
 
 <div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog" role="document">
@@ -152,52 +138,79 @@
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
-                <h4 class="modal-title" id="myModalLabel">Add Customer</h4>
+                <h4 class="modal-title" id="myModalLabel">Create {if $outer == 'purchase'} Purchase {/if}{if $outer == 'sales'} Sales {/if} Invoice</h4>
             </div>
-            <div class="modal-body2">
+            <div class="modal-body2" style="margin-left:0px">
                 
+                <br><br>
                 <div class="form-group">
-                    <label class="col-sm-2 control-label">Name</label>
-                    <div class="col-sm-10">
+                    <label class="col-sm-3 control-label">{if $outer == 'purchase'} Supplier {/if}{if $outer == 'sales'} Customer {/if}</label>
+                    <div class="col-sm-6">
                         <input type="text" class="form-control" name="name" required="" placeholder="Enter Name">
                     </div>
                 </div>
 
-                <br><br><br>
-
                 <div class="form-group">
-                    <label class="col-sm-2 control-label">Phone</label>
-                    <div class="col-sm-10">
-                        <input type="text" class="form-control" name="phone" required="" placeholder="Enter Phone Number">
+                    <label class="col-sm-3 control-label">Items Added</label>
+                    <div class="col-sm-6">
+
+                        <span style="padding-top:10px; position:absolute; color:red">No Items Yet</span>
+                        
                     </div>
                 </div>
 
-                <br><br>
-
                 <div class="form-group">
-                    <label class="col-sm-2 control-label">State</label>
-                    <div class="col-sm-10">
-                        <select class="form-control" name="state">
-                            {foreach $state in $states}
-                                <option>{$state->name}</option>
+                    <label class="col-sm-3 control-label">Select Inventory</label>
+                    <div class="col-sm-6">
+                        <select class="form-control" id="inventory">
+                            <option value=""> Select Inventory</option>
+                            {foreach $i in $inventory}
+                                <option value="{$i->id}">{$i->table_name}</option>
                             {/foreach}
                         </select>
                     </div>
                 </div>
 
-                <br><br>  
-
                 <div class="form-group">
-                    <label class="col-sm-2 control-label">Address</label>
-                    <div class="col-sm-10">
-                        <input type="text" class="form-control" name="address" required="" placeholder="Enter Address">
+                    <label class="col-sm-3 control-label">Select Item</label>
+                    <div class="col-sm-6">
+                        <select class="form-control" id="item">
+                            <option value="">Item</option>
+                        </select>
                     </div>
                 </div>
 
-                <br><br> 
+
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">Price per piece</label>
+                    <div class="input-group col-sm-6" style="padding-left:15px;padding-right:15px;">
+                        <div class="input-group-addon">Rs</div>
+                        <input type="text" class="form-control" id="exampleInputAmount" placeholder="Amount">
+                        <div class="input-group-addon">.00</div>
+                    </div>
+                </div>
+                
+                
+
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">Select Quantity</label>
+                    <div class="col-sm-6">
+                        <select class="form-control" id="quantity">
+                            <option value="">Quantity</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-sm-6 control-label"></label>
+                    <div class="col-sm-5">
+                        <button type="submit" name="add_sc" value="save" class="btn btn-success">Add Item</button>
+                    </div>
+                </div>
+
           
             <div class="modal-footer">
-                <button type="submit" name="add_sc" value="save" class="btn btn-success">ADD</button>
+                <button type="submit" name="add_sc" value="save" class="btn btn-success">Create</button>
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
             </div>
         </div>
