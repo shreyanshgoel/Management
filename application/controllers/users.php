@@ -235,14 +235,9 @@ class Users extends Controller {
     		'user_id = ?' => $this->user->id
     		));
 
-    	foreach($tables as $t){
-
-    		$e = models\Entry::count(array(
-    			'table_id = ?' => $t->id
-    			));
-
-    		$e_count = $e_count + $e;
-    	}
+		$e_count = models\Entry::count(array(
+			'user_id = ?' => $this->user->id
+			));
 
     	$view->set('t_count', $t_count)->set('e_count', $e_count)->set('tables', $tables);
 
@@ -770,28 +765,21 @@ class Users extends Controller {
     	$view = $this->getActionView();
 
     	$entry = models\Entry::first(array(
-    		'id = ?' => $id
+    		'id = ?' => $id,
+    		'user_id = ?' => $this->user->id
     		));
 
     	if(!empty($entry)){
+    		
+			$data = array($entry, $table);
 
-    		$table = models\Table::first(array(
-    			'id = ?' => $entry->table_id,
-    			'user_id = ?' => $this->user->id
-    			));
+			$view->set($data);
+    		
+    	}else{
 
-    		if(!empty($table)){
-
-    			$data = array($entry, $table);
-
-    			$view->set($data);
-
-    		}else{
-
-    			$view->set(false);
-    		}
-
-    	} 
+			$view->set(false);
+		}
+ 
 
     }
   
@@ -815,32 +803,27 @@ class Users extends Controller {
     	if(RequestMethods::post('savechanges')){
 
     		$entry = models\Entry::first(array(
-    			'id = ?' => RequestMethods::post('edit_entry_number')
+    			'id = ?' => RequestMethods::post('edit_entry_number'),
+    			'user_id = ?' => $this->user->id
     			));
 
     		if(!empty($entry)){
 	    		
-	    		$t = models\Table::first(array(
-	    			'id = ?' => $entry->table_id,
-	    			'user_id = ?' => $this->user->id
-	    			));
+	    	
+    			$entry->entry1 = RequestMethods::post('edit_entry1');
+    			$entry->entry2 = RequestMethods::post('edit_entry2');
+    			$entry->entry3 = RequestMethods::post('edit_entry3');
+    			$entry->entry4 = RequestMethods::post('edit_entry4');
+    			$entry->entry5 = RequestMethods::post('edit_entry5');
+    			$entry->entry6 = RequestMethods::post('edit_entry6');
+    			$entry->entry7 = RequestMethods::post('edit_entry7');
+    			$entry->entry8 = RequestMethods::post('edit_entry8');
+    			$entry->entry9 = RequestMethods::post('edit_entry9');
+    			$entry->entry10 = RequestMethods::post('edit_entry10');
 
-	    		if(!empty($t)){
+    			$entry->save();
+    			$view->set('edit_success', 1);
 
-	    			$entry->entry1 = RequestMethods::post('edit_entry1');
-	    			$entry->entry2 = RequestMethods::post('edit_entry2');
-	    			$entry->entry3 = RequestMethods::post('edit_entry3');
-	    			$entry->entry4 = RequestMethods::post('edit_entry4');
-	    			$entry->entry5 = RequestMethods::post('edit_entry5');
-	    			$entry->entry6 = RequestMethods::post('edit_entry6');
-	    			$entry->entry7 = RequestMethods::post('edit_entry7');
-	    			$entry->entry8 = RequestMethods::post('edit_entry8');
-	    			$entry->entry9 = RequestMethods::post('edit_entry9');
-	    			$entry->entry10 = RequestMethods::post('edit_entry10');
-
-	    			$entry->save();
-	    			$view->set('edit_success', 1);
-	    		}
 	    	}
     	}
 
@@ -867,6 +850,7 @@ class Users extends Controller {
 
     						$entry = new models\Entry(array(
 	    						'table_id' => $id,
+	    						'user_id' => $this->user->id,
 	    						'entry1' => RequestMethods::post('entry' . $i . '_1'),
 	    						'entry2' => RequestMethods::post('entry' . $i . '_2'),
 	    						'entry3' => RequestMethods::post('entry' . $i . '_3'),
@@ -895,23 +879,16 @@ class Users extends Controller {
     	if(RequestMethods::post('delete')){
 
     		$entry = models\Entry::first(array(
-    			'id = ?' => RequestMethods::post('delete')
+    			'id = ?' => RequestMethods::post('delete'),
+    			'user_id = ?' => $this->user_id 
     			));
 
     		if(!empty($entry)){
+	    
+    			$entry->delete();
 
-	    		$t = models\Table::first(array(
-	    			'id = ?' => $entry->table_id,
-	    			'user_id = ?' => $this->user->id
-	    			));
+    			$view->set('delete_success', 1);
 
-
-	    		if(!empty($t)){
-
-	    			$entry->delete();
-
-	    			$view->set('delete_success', 1);
-	    		}
 	    	}
     	}
 
@@ -1387,31 +1364,19 @@ class Users extends Controller {
     	
     	$view = $this->getActionView();
 
-    	$inventory = models\Table::all(array(
-    		'id = ?' => $id,
+    	$items = models\Entry::all(array(
+    		'table_id = ?' => $id,
     		'user_id = ?' => $this->user->id
     		));
 
-    	if(!empty($inventory)){
+    	if(!empty($items)){
 
-    		$items = models\Entry::all(array(
-    		'table_id = ?' => $id
-    		));
+    		$view->set($items);
 
-	    	if(!empty($items)){
+		}else{
 
-	    		$view->set($items);
-
-			}else{
-
-				$view->set(false);
-			}
-    	
-    	}else{
-
-				$view->set(false);
+			$view->set(false);
 		}
-
     	
 
     }
@@ -1419,13 +1384,14 @@ class Users extends Controller {
     /**
 	* @before secure_user
 	*/
-    public function get_item_quantity($id = -1) {
+    public function get_item_quantity_and_price($id = -1) {
     	
     	$view = $this->getActionView();
 
 
 		$quantity = models\Entry::all(array(
-		'id = ?' => $id
+		'id = ?' => $id,
+		'user_id = ?' => $this->user->id
 		));
 
     	if(!empty($quantity)){
@@ -1452,22 +1418,55 @@ class Users extends Controller {
 
         $this->actionView = $view;
 
-        if(RequestMethods::post('add_sc')){
+        if(RequestMethods::post('create_ps')){
 
-        	$c = new models\Supplier_or_Customer(array(
-        		'user_id' => $this->user->id,
-        		'type' => '2',
-        		'name' => RequestMethods::post('name'),
-        		'phone' => RequestMethods::post('phone'),
-        		'state' => RequestMethods::post('state'),
-        		'address' => RequestMethods::post('address')
+        	$count = models\Purchase_Invoice::count(array('user_id = ?' => $this->user->id));
+
+        	$count++;
+
+        	$supplier = models\Supplier_or_Customer::first(array(
+        		'id = ?' => RequestMethods::post('supplier_id'),
+        		'user_id = ?' => $this->user->id
         		));
 
-        	if($c->validate()){
+        	if(!empty($supplier)){
+	        	
+	        	$item_ids = RequestMethods::post('item_id');
+	        	$price = RequestMethods::post('price');
+	        	$quantity = RequestMethods::post('quantity');
 
-        		$c->save();
-        		$view->set('add_success', 1);
-        	}
+	        	if(!empty($item_ids)){
+
+		        	foreach($item_ids as $key => $item_id){
+
+			        	$item = models\Entry::first(array(
+		        		'id = ?' => $item_id,
+		        		'entry3 >= ?' => (int) $quantity[$key],
+		        		'user_id = ?' => $this->user->id
+		        		));
+
+		        		if(!empty($item)){
+
+				        	$c = new models\Purchase_Invoice(array(
+				        		'invoice_id' => $count,
+				        		'user_id' => $this->user->id,
+				        		'supplier_id' => RequestMethods::post('supplier_id'),
+				        		'item_id' => $item_id,
+				        		'quantity' => $quantity[$key],
+				        		'price' => $price[$key],
+				        		));
+
+				        	if($c->validate()){
+
+				        		$c->save();
+				        		$view->set('add_success', 1);
+				        	}
+			        	}
+			        }
+			    }else{
+			    	echo "no items";
+			    }
+	        }
         }
 
         if(RequestMethods::post('edit_sc')){
@@ -1515,13 +1514,18 @@ class Users extends Controller {
         	'type = ?' => 'inventory'
         	));
 
+        $suppliers = models\Supplier_or_Customer::all(array(
+        	'user_id = ?' => $this->user->id,
+        	'type = ?' => '1'
+        	));
+
         $table = models\Purchase_Invoice::all(array(
         	'user_id = ?' => $this->user->id,
-        	));
+        	), array('DISTINCT invoice_id'));
 
         $states = models\State::all();
 
-        $view->set('outer', 'purchase')->set('table', $table)->set('states', $states)->set('inventory', $inventory);
+        $view->set('outer', 'purchase')->set('table', $table)->set('states', $states)->set('inventory', $inventory)->set('suppliers', $suppliers);
         
     } 
 

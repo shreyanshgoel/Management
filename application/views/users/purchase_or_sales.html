@@ -50,8 +50,9 @@
             <tr>
                 
                 <th>S No.</th>
+                <th>Invoice Id</th>
                 <th>{if $outer == 'purchase'} Supplier {/if}{if $outer == 'sales'} Customer {/if}</th>
-                <th>Address</th>
+                <th>No. Of Items</th>
                 <th>Total Price</th>
                 <th>Actions</th>
 
@@ -63,15 +64,34 @@
 
         {foreach $entry in $table}
 
+            {script $count = models\Purchase_Invoice::count(array('invoice_id = ?' => $entry->invoice_id))}
+                
+            {script $total = 0}
+
+            {script $price = models\Purchase_Invoice::all(array('invoice_id = ?' => $entry->invoice_id))}
+
+            {foreach $p in $price}
+                
+                {script $total+= $p->price * $p->quantity}
+
+            {/foreach}
+
+            {script $invoice = models\Purchase_Invoice::first(array('invoice_id = ?' => $entry->invoice_id, 'user_id = ?' => $user->id))}
+
+            {script $supp = models\Supplier_or_Customer::first(array('id = ?' => $invoice->supplier_id))}
+
             <tr>
                 <td>{$i}</td>                           
                 
-                <td>{$entry->name}</td>
-                <td>{$entry->phone}</td>
-                <td>{$entry->state}</td>
-                <td>{$entry->address}</td>
+                <td>{$entry->invoice_id}</td>
+                <td>{$supp->name}</td>
+                <td>{$count}</td>
+                <td>Rs {$total}</td>
             
                 <td>
+                    <button type="button" value="{$invoice->id}" data-toggle="modal" data-target="#myModal" class="edit_sc btn btn-success btn-sm btn-icon icon-left">
+                        <i class="entypo-eye"></i> View Invoice
+                    </button>&nbsp;&nbsp;
                     <button type="button" value="{$entry->id}" data-toggle="modal" data-target="#myModal" class="edit_sc btn btn-info btn-sm btn-icon icon-left">
                         <i class="entypo-pencil"></i> Edit
                     </button>&nbsp;&nbsp;
@@ -105,7 +125,7 @@
 
 </form>
 
-<form method="post" {if $outer == 'purchase'} action="/users/purchase" {/if} {if $outer == 'sales'} action="/users/sales" {/if}>
+<form method="post" {if $outer == 'purchase'} action="/users/purchase_invoice" {/if} {if $outer == 'sales'} action="/users/sales_invoice" {/if}>
 
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog" role="document">
@@ -129,7 +149,7 @@
 
 </form>
 
-<form method="post" {if $outer == 'purchase'} action="/users/purchase" {/if} {if $outer == 'sales'} action="/users/sales" {/if} class="form-horizontal">
+<form method="post" {if $outer == 'purchase'} action="/users/purchase_invoice" {/if} {if $outer == 'sales'} action="/users/sales_invoice" {/if} class="form-horizontal">
 
 <div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog" role="document">
@@ -146,15 +166,20 @@
                 <div class="form-group">
                     <label class="col-sm-3 control-label">{if $outer == 'purchase'} Supplier {/if}{if $outer == 'sales'} Customer {/if}</label>
                     <div class="col-sm-6">
-                        <input type="text" class="form-control" name="name" required="" placeholder="Enter Name">
+                        <select class="form-control" name="supplier_id" required="">
+                            <option value=""> Select Supplier</option>
+                            {foreach $s in $suppliers}
+                                <option value="{$s->id}">{$s->name}</option>
+                            {/foreach}
+                        </select>
                     </div>
                 </div>
 
                 <div class="form-group">
                     <label class="col-sm-3 control-label">Items Added</label>
-                    <div class="col-sm-6">
+                    <div class="col-sm-6" id="items_added">
 
-                        <span style="padding-top:10px; position:absolute; color:red">No Items Yet</span>
+                        <span style="padding-top:10px; position:absolute; color:red" id="no_items">No Items Yet</span>
                         
                     </div>
                 </div>
@@ -180,12 +205,16 @@
                     </div>
                 </div>
 
+                <div style="display:none">
+                    <input type="text" id="item_name" value="">
+                </div>
+
 
                 <div class="form-group">
                     <label class="col-sm-3 control-label">Price per piece</label>
                     <div class="input-group col-sm-6" style="padding-left:15px;padding-right:15px;">
                         <div class="input-group-addon">Rs</div>
-                        <input type="text" class="form-control" id="exampleInputAmount" placeholder="Amount">
+                        <input type="text" class="form-control" id="price" placeholder="Amount">
                         <div class="input-group-addon">.00</div>
                     </div>
                 </div>
@@ -202,15 +231,15 @@
                 </div>
 
                 <div class="form-group">
-                    <label class="col-sm-6 control-label"></label>
+                    <label class="col-sm-7 control-label"></label>
                     <div class="col-sm-5">
-                        <button type="submit" name="add_sc" value="save" class="btn btn-success">Add Item</button>
+                        <button type="button" id="add_item" class="btn btn-success">Add Item</button>
                     </div>
                 </div>
 
           
             <div class="modal-footer">
-                <button type="submit" name="add_sc" value="save" class="btn btn-success">Create</button>
+                <button type="submit" name="create_ps" value="save" class="btn btn-success">Create</button>
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
             </div>
         </div>

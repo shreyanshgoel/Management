@@ -23,6 +23,16 @@ class Entry extends \Shared\Model {
      * @readwrite
      * @type text
      * 
+     * @validate required
+     * @label table id
+     */
+    protected $_user_id;
+
+    /**
+     * @column
+     * @readwrite
+     * @type text
+     * 
      * @label entry
      */
     protected $_entry1;

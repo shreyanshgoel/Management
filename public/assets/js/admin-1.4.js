@@ -43,6 +43,45 @@ $(function () {
 
 $(document).ready(function () {
 
+    $('#add_item').on('click', function () {
+
+        no_items = $('#no_items');
+
+        target = $('#items_added');
+
+        target2 = $('#inventory');
+
+        inventory = target2.val();
+
+        target3 = $('#item');
+
+        item = target3.val();
+
+        target4 = $('#price');
+
+        price = target4.val();
+
+        target5 = $('#quantity');
+
+        quantity = target5.val();
+
+        target6 = $('#item_name');
+
+        name = target6.val();
+        
+        if(inventory && item && price && quantity){
+
+            no_items.css('display', 'none');
+
+            target.append('<div class="alert alert-success"><input type="text" name="item_id[]" value="' + item + '" hidden><input type="text" name="price[]" value="' + price + '" hidden><input type="text" name="quantity[]" value="' + quantity + '" hidden><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong>' + name + '!</strong> ' + quantity + ' pieces for Rs ' + price + '</div>');
+
+        }else{
+
+            alert('Select Item');
+        }
+
+    });
+
     $('#inventory').on('change', function () {
 
         var self = $(this), target = $('#item');
@@ -70,7 +109,7 @@ $(document).ready(function () {
 
         target.html('<option value="">Select Quantity</option>');
 
-        Request.post({ action: "users/get_item_quantity/" + self.val() }, function(data) {
+        Request.post({ action: "users/get_item_quantity_and_price/" + self.val() }, function(data) {
 
             $.each(data, function(index, value){
                 
@@ -82,6 +121,14 @@ $(document).ready(function () {
                         target.append('<option value="' + i + '">' + i + '</option>');
                         i = i+1;
                     }
+
+                    target2 = $('#price');
+
+                    target2.val(value._entry5);
+
+                    target3 = $('#item_name');
+
+                    target3.val(value._entry1);
                     
                 }
             });
