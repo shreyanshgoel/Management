@@ -1,4 +1,4 @@
-{script $other_tables = models\Table::all(array('user_id = ?' => $user->id, 'type = ?' => 'other'), array('*'), 'table_name')}
+{script $other_tables = models\Table::all(array('user_id = ?' => $user->id, 'type = ?' => 'Other'), array('*'), 'table_name')}
 {script $inventory_tables = models\Table::all(array('user_id = ?' => $user->id, 'type = ?' => 'inventory'), array('*'), 'table_name')}
 <!DOCTYPE html>
 <html lang="en">
@@ -57,26 +57,28 @@
                     </div>
                 </header>
                 <ul id="main-menu" class="main-menu">
-                    <li id="dashboard">
+                    <li {if isset($dashboard)} class = "active" {/if}>
                         <a href="/users/dashboard">
                             <i class="entypo-gauge"></i>
                             <span class="title">Dashboard</span>
                         </a>
                     </li>
-                    <li id="profile">
+                    <li {if isset($profile)} class = "active" {/if}>
                         <a href="/users/profile">
                             <i class="entypo-user"></i>
                             <span class="title">Profile</span>
                         </a>
                     </li>
-                    <li class="has-sub" id="inventory_tables">
+                    <li {if isset($inventory)} class = "has-sub active opened" {/if} {else} class="has-sub" {/else}>
                         <a href="">
                             <i class="entypo-menu"></i>
                             <span class="title">Inventory</span>
                         </a>
                         <ul>
+
                             {if !empty($inventory_tables)} {foreach $t in $inventory_tables}
-                            <li id="{$t->table_name}">
+
+                            <li {if isset($table_name) && $table_name == $t->table_name} class = "active" {/if}>
                                 <a href="/users/inventory/{$t->id}">
                                     <span class="title">{echo ucfirst($t->table_name)}</span>
                                 </a>
@@ -120,7 +122,7 @@
                             </li>
                         </ul>
                     </li>
-                    <li class="has-sub" id="other_tables">
+                    <li {if isset($other_tables)} class = "has-sub active opened" {/if} {else} class="has-sub" {/else}>
                         <a href="">
                             <i class="entypo-window"></i>
                             <span class="title">Other Tables</span>

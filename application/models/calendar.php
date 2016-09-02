@@ -1,30 +1,21 @@
 <?php
 
 /**
- * The User Model
+ * The Payment Model
  *
  * @author Shreyansh Goel
  */
 namespace models;
-class Purchase_Invoice extends \Shared\Model {
+class Calendar extends \Shared\Model {
 
     /**
      * @column
      * @readwrite
      * @type text
+     * @length 100
      * 
      * @validate required
-     * @label full name
-     */
-    protected $_invoice_id;
-
-    /**
-     * @column
-     * @readwrite
-     * @type text
-     * 
-     * @validate required
-     * @label full name
+     * @label short form
      */
     protected $_user_id;
 
@@ -32,39 +23,43 @@ class Purchase_Invoice extends \Shared\Model {
      * @column
      * @readwrite
      * @type text
+     * @length 100
      * 
      * @validate required
-     * @label password
+     * @label category name
      */
-    protected $_supplier_id;
+    protected $_title;
 
     /**
      * @column
      * @readwrite
-     * @type array
+     * @type text
+     * @length 100
      * 
      * @validate required
-     * @label password
+     * @label short form
      */
-    protected $_item_id = [];
+    protected $_start_date;
 
     /**
      * @column
      * @readwrite
-     * @type array
+     * @type text
+     * @length 100
      * 
-     * @label password
+     * @validate required
+     * @label short form
      */
-    protected $_quantity = [];
+    protected $_end_date = null;
 
     /**
      * @column
      * @readwrite
-     * @type array
+     * @type text
+     * @length 100
      * 
-     * @label password
+     * @validate required
+     * @label short form
      */
-    protected $_price = [];
-
-
+    protected $_color;
 }

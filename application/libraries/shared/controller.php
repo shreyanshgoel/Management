@@ -3,7 +3,7 @@
 /**
  * Subclass the Controller class within our application.
  *
- * @author Shreyansh Goel
+ * @author Faizan Ayubi, Hemant Mann
  */
 
 namespace Shared;
@@ -25,7 +25,7 @@ class Controller extends \Framework\Controller {
             $property = "set" . ucfirst($key);
             $seo->$property($value);
         }
-        $params["view"]->set("seo", $seo);
+        $this->layoutView->set("seo", $seo);
     }
 
     public function noview() {
@@ -62,6 +62,15 @@ class Controller extends \Framework\Controller {
         $database = Registry::get("database");
         $database->connect();
 
+        $mongoDB = Registry::get("MongoDB");
+            if (!$mongoDB) {
+
+                $mongo = new \MongoClient("mongodb://localhost:27017");
+                $mongoDB = $mongo->selectDB("managemant");
+                Registry::set("MongoDB", $mongoDB);
+            }
+    
+            
         // schedule: load user from session           
         Events::add("framework.router.beforehooks.before", function($name, $parameters) {
             $session = Registry::get("session");

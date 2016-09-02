@@ -40,7 +40,8 @@ class Users extends Controller {
 		            "full_name" => RequestMethods::post("full_name"),
 		            "email" => RequestMethods::post("email"),
 		            "mobile" => RequestMethods::post("mobile"),
-		            "password" => $crypt
+		            "password" => $crypt,
+		            "live" => true
 		        ));
 				$exist = models\User::all(array(
 					'email = ?' => RequestMethods::post("email")
@@ -197,19 +198,6 @@ class Users extends Controller {
 	    			'type10' => ''
 	    			));
 
-		$purchase = new models\Purchase_Invoice(array(
-			'user_id' => $this->user->id
-			));
-
-		$purchase->save();
-
-		$sales = new models\Sales_Invoice(array(
-			'user_id' => $this->user->id
-			));
-
-		$sales->save();
-		
-
 		header("Location: /users/dashboard");	
 
 
@@ -222,6 +210,8 @@ class Users extends Controller {
 
     	$layoutView = $this->getLayoutView();
     	$layoutView->set("seo", Framework\Registry::get("seo"));
+
+    	$layoutView->set('dashboard',1);
 
     	$view = $this->getActionView();
 
@@ -663,6 +653,11 @@ class Users extends Controller {
 	*/
     public function profile($success = -1){
 
+    	$layoutView = $this->getLayoutView();
+    	$layoutView->set("seo", Framework\Registry::get("seo"));
+
+    	$layoutView->set('profile',1);
+
     	$view = $this->getActionView();
 
     	if(RequestMethods::post('profile_update')){
@@ -672,7 +667,7 @@ class Users extends Controller {
     			));
 
     		$exist = models\User::first(array(
-    			'id <> ?' => $this->user->id,
+    			'id = ?' => ['$ne' => $this->user->id],
     			'email = ?' => RequestMethods::post('email')
     			));
 
@@ -787,13 +782,11 @@ class Users extends Controller {
     /**
 	* @before secure_user
 	*/
-    public function other_tables($id = -1) {
+    public function get_entries($id = -1) {
     	$layoutView = $this->getLayoutView();
     	$layoutView->set("seo", Framework\Registry::get("seo"));
     	
     	$view = $this->getActionView();
-
-    	$view->set('outer', 'other_tables');
 
     	$table = models\Table::first(array(
     		'id = ?' => $id,
@@ -880,7 +873,7 @@ class Users extends Controller {
 
     		$entry = models\Entry::first(array(
     			'id = ?' => RequestMethods::post('delete'),
-    			'user_id = ?' => $this->user_id 
+    			'user_id = ?' => $this->user->id 
     			));
 
     		if(!empty($entry)){
@@ -1159,15 +1152,56 @@ class Users extends Controller {
 	*/
     public function inventory($id = -1){
 
+    	$layoutView = $this->getLayoutView();
+    	$layoutView->set("seo", Framework\Registry::get("seo"));
+
+    	$layoutView->set('inventory',1);
+
     	$view = new Framework\View(array(
                     "file" => APP_PATH . "/application/views/users/other_tables.html"
                 ));
 
         $this->actionView = $view;
 
-    	self::other_tables($id);
+    	self::get_entries($id);
+
+    	$table = models\Table::first(array(
+    		'id = ?' => $id,
+    		'user_id = ?' => $this->user->id
+    		));
+
+    	$layoutView->set('table_name', $table->table_name);
 
         $view->set('outer', 'inventory_tables');
+        
+    }
+
+    /**
+	* @before secure_user
+	*/
+    public function other_tables($id = -1){
+
+    	$layoutView = $this->getLayoutView();
+    	$layoutView->set("seo", Framework\Registry::get("seo"));
+
+    	$layoutView->set('other_tables', 1);
+
+    	$view = new Framework\View(array(
+                    "file" => APP_PATH . "/application/views/users/other_tables.html"
+                ));
+
+        $this->actionView = $view;
+
+    	self::get_entries($id);
+
+    	$table = models\Table::first(array(
+    		'id = ?' => $id,
+    		'user_id = ?' => $this->user->id
+    		));
+
+    	$layoutView->set('table_name', $table->table_name);
+
+        $view->set('outer', 'other_tables');
         
     } 
 
@@ -1426,7 +1460,8 @@ class Users extends Controller {
 
         	$supplier = models\Supplier_or_Customer::first(array(
         		'id = ?' => RequestMethods::post('supplier_id'),
-        		'user_id = ?' => $this->user->id
+        		'user_id = ?' => $this->user->id,
+        		'type = ?' => 1
         		));
 
         	if(!empty($supplier)){
@@ -1440,29 +1475,43 @@ class Users extends Controller {
 		        	foreach($item_ids as $key => $item_id){
 
 			        	$item = models\Entry::first(array(
-		        		'id = ?' => $item_id,
-		        		'entry3 >= ?' => (int) $quantity[$key],
-		        		'user_id = ?' => $this->user->id
-		        		));
+			        		'id = ?' => $item_id,
+			        		'user_id = ?' => $this->user->id
+			        		));
+
+			        	$id_array = array();
+			        	$q_array = array();
+			        	$p_array = array();
 
 		        		if(!empty($item)){
 
-				        	$c = new models\Purchase_Invoice(array(
-				        		'invoice_id' => $count,
-				        		'user_id' => $this->user->id,
-				        		'supplier_id' => RequestMethods::post('supplier_id'),
-				        		'item_id' => $item_id,
-				        		'quantity' => $quantity[$key],
-				        		'price' => $price[$key],
-				        		));
+		        			array_push($id_array, $item_id);
+		        			array_push($q_array, $quantity[$key]);
+		        			array_push($p_array, $price[$key]);
 
-				        	if($c->validate()){
+		        			$item->quantity = $item->quantity + $quantity[$key];
+		        			$item->save();
 
-				        		$c->save();
-				        		$view->set('add_success', 1);
-				        	}
 			        	}
 			        }
+
+			        if(!empty($id_array) && !empty($q_array) && !empty($p_array)){
+				        	
+			        	$c = new models\Purchase_Invoice(array(
+			        		'invoice_id' => $count,
+			        		'user_id' => $this->user->id,
+			        		'supplier_id' => RequestMethods::post('supplier_id'),
+			        		'item_id' => $id_array,
+			        		'quantity' => $q_array,
+			        		'price' => $p_array
+			        		));
+
+			        	if($c->validate()){
+
+			        		$c->save();
+			        		$view->set('add_success', 1);
+			        	}
+				    }
 			    }else{
 			    	echo "no items";
 			    }
@@ -1514,18 +1563,16 @@ class Users extends Controller {
         	'type = ?' => 'inventory'
         	));
 
-        $suppliers = models\Supplier_or_Customer::all(array(
+        $s_or_c = models\Supplier_or_Customer::all(array(
         	'user_id = ?' => $this->user->id,
         	'type = ?' => '1'
         	));
 
         $table = models\Purchase_Invoice::all(array(
         	'user_id = ?' => $this->user->id,
-        	), array('DISTINCT invoice_id'));
+        	));
 
-        $states = models\State::all();
-
-        $view->set('outer', 'purchase')->set('table', $table)->set('states', $states)->set('inventory', $inventory)->set('suppliers', $suppliers);
+        $view->set('outer', 'purchase')->set('table', $table)->set('inventory', $inventory)->set('s_or_c', $s_or_c);
         
     } 
 
@@ -1578,14 +1625,21 @@ class Users extends Controller {
         	}
         }
 
-        $table = models\Supplier_or_Customer::all(array(
+        $inventory = models\Table::all(array(
         	'user_id = ?' => $this->user->id,
-        	'type = ?' => '2'
+        	'type = ?' => 'inventory'
         	));
 
-        $states = models\State::all();
+        $s_or_c = models\Supplier_or_Customer::all(array(
+        	'user_id = ?' => $this->user->id,
+        	'type = ?' => '1'
+        	));
 
-        $view->set('outer', 'sales')->set('table', $table)->set('states', $states);
+        $table = models\Sales_Invoice::all(array(
+        	'user_id = ?' => $this->user->id,
+        	), array('DISTINCT invoice_id'));
+
+        $view->set('outer', 'sales')->set('table', $table)->set('inventory', $inventory)->set('s_or_c', $s_or_c);
         
     } 
 

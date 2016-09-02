@@ -42,31 +42,30 @@ class Sales_Invoice extends \Shared\Model {
     /**
      * @column
      * @readwrite
-     * @type text
+     * @type array
      * 
      * @validate required
      * @label password
      */
-    protected $_item_id;
-
-
-    /**
-     * @column
-     * @readwrite
-     * @type text
-     * 
-     * @label password
-     */
-    protected $_quantity;
+    protected $_item_id = [];
 
     /**
      * @column
      * @readwrite
-     * @type text
+     * @type array
      * 
      * @label password
      */
-    protected $_price;
+    protected $_quantity = [];
+
+    /**
+     * @column
+     * @readwrite
+     * @type array
+     * 
+     * @label password
+     */
+    protected $_price = [];
 
 
 }

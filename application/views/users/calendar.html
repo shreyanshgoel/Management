@@ -51,26 +51,43 @@
 		    events: [
 		        {
 		            title  : 'event1',
-		            start  : '2016-06-06'
+		            start  : '2016-08-08',
 		        },
 		        {
 		            title  : 'event2',
-		            start  : '2016-06-08',
-		            end    : '2016-06-10',
-		            draggable_events : true
+		            start  : '2016-08-08',
+		            end    : '2016-08-10',
 		        },
 		        {
 		            title  : 'event3',
-		            start  : '2016-06-19T12:30:00',
-		            allDay : false // will make the time show
+		            start  : '2016-08-19T12:30:00',
 		        }
 		    ],
 
 		    droppable: true,
 
 		    editable: true,
+
+            drop: function( date, jsEvent, ui, resourceId ) { 
+
+                var obj = JSON.parse(this.getAttribute("data-event"));
+
+                var d = new Date(date),
+                month = '' + (d.getMonth() + 1),
+                day = '' + d.getDate(),
+                year = d.getFullYear();
+
+                if (month.length < 2) month = '0' + month;
+                if (day.length < 2) day = '0' + day;
+
+                var date2 =  [year, month, day].join('-');
+
+
+            },
 		    
 		    eventDrop: function(event, delta, revertFunc) {
+
+                alert('hello');
 
 		    }
 		});

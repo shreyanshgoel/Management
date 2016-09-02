@@ -94,7 +94,7 @@ $(document).ready(function () {
                 
                 if(value._entry1 != undefined){
                     
-                    target.append('<option value="' + value._id + '">' + value._entry1 + '</option>');
+                    target.append('<option value="' + value.__id['$id'] + '">' + value._entry1 + '</option>');
                     
                 }
             });
@@ -153,7 +153,17 @@ $(document).ready(function () {
             var i = 1;
             while(i < v){
                 var target2 = $('#data-td' + n);
-                target2.append('<td><input type="text" class="form-control" name="entry' + n + '_' + i + '"></td>');
+
+                if(i == 7){
+
+                    target2.append('<td><input type="text" class="form-control" name="entry' + n + '_' + i + '"></td>');
+
+                }else{
+                 
+                    target2.append('<td><input type="text" class="form-control" name="entry' + n + '_' + i + '" required></td>');
+                
+                }
+
                 i = i + 1;
             }
 
