@@ -53,7 +53,7 @@ class Purchase_Invoice extends \Shared\Model {
      * @readwrite
      * @type array
      * 
-     * @label password
+     * @label 
      */
     protected $_quantity = [];
 

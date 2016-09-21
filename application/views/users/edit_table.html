@@ -65,17 +65,6 @@
                             {script $c9 = $edit_table->column9_name}
                             {script $c10 = $edit_table->column10_name}
 
-                            {script $t1 = $type->type1}
-                            {script $t2 = $type->type2}
-                            {script $t3 = $type->type3}
-                            {script $t4 = $type->type4}
-                            {script $t5 = $type->type5}
-                            {script $t6 = $type->type6}
-                            {script $t7 = $type->type7}
-                            {script $t8 = $type->type8}
-                            {script $t9 = $type->type9}
-                            {script $t10 = $type->type10}
-
                         {/if}{else}
                             
                             {script $c1 = ''}
@@ -88,35 +77,16 @@
                             {script $c8 = ''}
                             {script $c9 = ''}
                             {script $c10 = ''}
-
-                            {script $t1 = ''}
-                            {script $t2 = ''}
-                            {script $t3 = ''}
-                            {script $t4 = ''}
-                            {script $t5 = ''}
-                            {script $t6 = ''}
-                            {script $t7 = ''}
-                            {script $t8 = ''}
-                            {script $t9 = ''}
-                            {script $t10 = ''}
     
                         {/else}
 
                         {foreach $i in $numbers}
                         {script $c = 'c' . $i}
-                        {script $t = 't' . $i}
                         <div class="form-group">
                             <label class="col-sm-2 control-label">{if $i == 1}
                                 <sup style="color:red;">*</sup>{/if}Column Name {$i}</label>
                             <div class="col-sm-3">
                                 <input type="text" class="form-control" name="name{$i}" value="{$$c}" placeholder="Column Name {$i}" {if !empty($$c) } required {/if}>
-                            </div>
-                            <div class="col-sm-2">
-                                <select class="form-control m-b" name="type{$i}">
-                                    <option value="1" {if $$t == 1} selected {/if}>Text</option>
-                                    <option value="2" {if $$t == 2} selected {/if}>Number</option>
-                                    <option value="3" {if $$t == 3} selected {/if}>Date/Time</option>
-                                </select>
                             </div>
                         </div>
                         <div class="hr-line-dashed"></div>

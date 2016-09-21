@@ -1,3 +1,6 @@
+
+<input type="text" id="type" {if $outer == 'inventory_tables'} value="inventory" {/if}{if $outer == 'other_tables'} value="other" {/if} hidden="">
+
 <!-- Imported styles on this page -->
 <link rel="stylesheet" href="{echo CDN}js/datatables/datatables.css" id="style-resource-1">
 <link rel="stylesheet" href="{echo CDN}js/select2/select2-bootstrap.css" id="style-resource-2">
@@ -187,9 +190,9 @@
                             {/if}
                             {else}
                             
-                                {if $outer == 'inventory_tables' && $n == 9} 
+                                {if $outer == 'inventory_tables' && $n == 8} 
 
-                                    <td>{script $total = $e3 * $e5} {$total}</td>
+                                    <td>{script $total = $e2 * $e4} {$total}</td>
 
                                 {/if}
                                 {else}
@@ -202,11 +205,11 @@
                         
                 {/foreach}
                 <td>
-                    <button type="button" value="{$entry->id}" data-toggle="modal" data-target="#myModal" class="edit btn btn-info btn-sm btn-icon icon-left">
-                        <i class="entypo-pencil"></i> Edit
+                    <button type="button" value="{$entry->id}" data-toggle="modal" data-target="#myModal" class="edit btn btn-info btn-sm">
+                        <i class="entypo-pencil"></i> 
                     </button>&nbsp;&nbsp;
-                    <button type="submit" name="delete" value="{$entry->id}" class="btn btn-danger btn-sm btn-icon icon-left">
-                        <i class="entypo-cancel"></i> Delete
+                    <button type="submit" name="delete" value="{$entry->id}" class="btn btn-danger btn-sm">
+                        <i class="entypo-trash"></i>
                     </button>
                 </td>
             </tr>

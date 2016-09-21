@@ -27,7 +27,7 @@ class Users extends Controller {
 		;
 		if(!$this->user){
 			if(RequestMethods::post('register')){
-				echo "string";
+
 				$pass = RequestMethods::post("password");
 				$cpass = RequestMethods::post("confirm");
 
@@ -47,7 +47,6 @@ class Users extends Controller {
 					'email = ?' => RequestMethods::post("email")
 					));
 
-				echo "string";
 				if (empty($exist)){
 				
 					if($pass == $cpass){
@@ -169,34 +168,18 @@ class Users extends Controller {
 	    			'table_number' => '1',
 	    			'table_name' => 'sample',
 	    			'column1_name' => 'name',
-	    			'column2_name' => 'unit',
-	    			'column3_name' => 'stock quantity',
-	    			'column4_name' => 'stock sold',
-	    			'column5_name' => 'sales price',
-	    			'column6_name' => 'bulk quantity',
-	    			'column7_name' => 'sales discount',
-	    			'column8_name' => 'item description',
-	    			'column9_name' => 'item valuation(stock * sales price)',
-	    			'column10_name' => ''
+	    			'column2_name' => 'stock quantity',
+	    			'column3_name' => 'stock sold',
+	    			'column4_name' => 'sales price',
+	    			'column5_name' => 'bulk quantity',
+	    			'column6_name' => 'sales discount',
+	    			'column7_name' => 'item description',
+	    			'column8_name' => 'item valuation(stock * sales price)',
+	    			'column9_name' => NULL,
+	    			'column10_name' => NULL
 	    			));
 
 		$table->save();
-
-		$count = models\Table::count();
-
-		$type = new models\Table_Type(array(
-	    			'table_id' => $count,
-	    			'type1' => '1',
-	    			'type2' => '1',
-	    			'type3' => '2',
-	    			'type4' => '2',
-	    			'type5' => '1',
-	    			'type6' => '2',
-	    			'type7' => '1',
-	    			'type8' => '1',
-	    			'type9' => '2',
-	    			'type10' => ''
-	    			));
 
 		header("Location: /users/dashboard");	
 
@@ -271,38 +254,21 @@ class Users extends Controller {
 		    			'table_number' => $count,
 		    			'table_name' => RequestMethods::post('table_name'),
 		    			'column1_name' => 'name',
-		    			'column2_name' => 'unit',
-		    			'column3_name' => 'stock quantity',
-		    			'column4_name' => 'stock sold',
-		    			'column5_name' => 'sales price',
-		    			'column6_name' => 'bulk quantity',
-		    			'column7_name' => 'sales discount',
-		    			'column8_name' => 'item description',
-		    			'column9_name' => 'item valuation(stock * sales price)',
-		    			'column10_name' => ''
+		    			'column2_name' => 'stock quantity',
+		    			'column3_name' => 'stock sold',
+		    			'column4_name' => 'sales price',
+		    			'column5_name' => 'bulk quantity',
+		    			'column6_name' => 'sales discount',
+		    			'column7_name' => 'item description',
+		    			'column8_name' => 'item valuation(stock * sales price)',
+		    			'column9_name' => NULL,
+		    			'column10_name' => NULL
 		    			));
 
 		    		$table->save();
 
 		    		$view->set('success', 1);
 		    		
-		    		$count = models\Table::count();
-
-		    		$type = new models\Table_Type(array(
-		    			'table_id' => $count,
-		    			'type1' => '1',
-		    			'type2' => '1',
-		    			'type3' => '2',
-		    			'type4' => '2',
-		    			'type5' => '1',
-		    			'type6' => '2',
-		    			'type7' => '1',
-		    			'type8' => '1',
-		    			'type9' => '2',
-		    			'type10' => ''
-		    			));
-
-		    		$type->save();
 		    	}
 
     		}
@@ -363,46 +329,11 @@ class Users extends Controller {
 		    			'column10_name' => $c[10]
 		    			));
 
-		    		$count = models\Table::count();
-			    	$count++;
-
-			    	$i = 1;
-
-			    	while($i < 11){
-
-			    		$name = 'type' . $i;
-
-			    		if(RequestMethods::post($name) == 1 || RequestMethods::post($name) == 2 || RequestMethods::post($name) == 3){
-
-			    			$c[$i] = RequestMethods::post($name);
-			 
-			    		}else{
-			    			$c[$i] = 1;
-			    		}
-
-			    		$i++;
-
-			    	}
-
-		    		$type = new models\Table_Type(array(
-		    			'table_id' => $count,
-		    			'type1' => $c[1],
-		    			'type2' => $c[2],
-		    			'type3' => $c[3],
-		    			'type4' => $c[4],
-		    			'type5' => $c[5],
-		    			'type6' => $c[6],
-		    			'type7' => $c[7],
-		    			'type8' => $c[8],
-		    			'type9' => $c[9],
-		    			'type10' => $c[10]
-		    			));
-
+		    		
 		    		if($table->validate()){
 
 		    			$table->save();
 
-		    			$type->save();
 		    			$view->set('success', 1);
 
 		    		}else{
@@ -438,11 +369,7 @@ class Users extends Controller {
 
     		$numbers = array(1,2,3,4,5,6,7,8,9,10);
 
-    		$type = models\Table_Type::first(array(
-    			'table_id = ?' => $id
-    			));
-
-	    	$view->set('numbers', $numbers)->set('edit_table', $edit_table)->set('type', $type);
+	    	$view->set('numbers', $numbers)->set('edit_table', $edit_table);
 
     	}
     	
@@ -537,41 +464,10 @@ class Users extends Controller {
 	    		$edit_table->column9_name = $c[9];
 	    		$edit_table->column10_name = $c[10];
 
-		    	$i = 1;
-
-		    	while($i < 11){
-
-		    		$name = 'type' . $i;
-
-		    		if(RequestMethods::post($name) == 1 || RequestMethods::post($name) == 2 || RequestMethods::post($name) == 3){
-
-		    			$c[$i] = RequestMethods::post($name);
-		 
-		    		}else{
-		    			$c[$i] = 1;
-		    		}
-
-		    		$i++;
-
-		    	}
-
-	    		$type->type1 = $c[1];
-				$type->type2 = $c[2];
-	    		$type->type3 = $c[3];
-	    		$type->type4 = $c[4];
-	    		$type->type5 = $c[5];
-	    		$type->type6 = $c[6];
-	    		$type->type7 = $c[7];
-	    		$type->type8 = $c[8];
-	    		$type->type9 = $c[9];
-	    		$type->type10 = $c[10];
-
 
 	    		if($edit_table->validate()){
 
 	    			$edit_table->save();
-
-	    			$type->save();
 
 	    			self::redirect('/users/other_tables/' . $edit_table->id . '?edit_table_success=1');
 
@@ -765,6 +661,10 @@ class Users extends Controller {
     		));
 
     	if(!empty($entry)){
+
+    		$table = models\Table::first(array(
+    			'id = ?' => $entry->table_id
+    			));
     		
 			$data = array($entry, $table);
 
@@ -1184,7 +1084,7 @@ class Users extends Controller {
     	$layoutView = $this->getLayoutView();
     	$layoutView->set("seo", Framework\Registry::get("seo"));
 
-    	$layoutView->set('other_tables', 1);
+    	$layoutView->set('other_tables_nav', 1);
 
     	$view = new Framework\View(array(
                     "file" => APP_PATH . "/application/views/users/other_tables.html"
@@ -1245,6 +1145,11 @@ class Users extends Controller {
 	* @before secure_user
 	*/
     public function suppliers($id = -1){
+
+    	$layoutView = $this->getLayoutView();
+    	$layoutView->set("seo", Framework\Registry::get("seo"));
+
+    	$layoutView->set('suppliers_nav', 1);
 
     	$view = new Framework\View(array(
                     "file" => APP_PATH . "/application/views/users/supplier_or_customer.html"
@@ -1320,6 +1225,11 @@ class Users extends Controller {
 	* @before secure_user
 	*/
     public function customers($id = -1){
+
+    	$layoutView = $this->getLayoutView();
+    	$layoutView->set("seo", Framework\Registry::get("seo"));
+
+    	$layoutView->set('customers_nav', 1);
 
     	$view = new Framework\View(array(
                     "file" => APP_PATH . "/application/views/users/supplier_or_customer.html"
@@ -1446,6 +1356,12 @@ class Users extends Controller {
 	*/
     public function purchase_invoice($id = -1){
 
+    	$layoutView = $this->getLayoutView();
+    	$layoutView->set("seo", Framework\Registry::get("seo"));
+
+    	$layoutView->set('invoice_nav', 1);
+    	$layoutView->set('purchase_nav', 1);
+
     	$view = new Framework\View(array(
                     "file" => APP_PATH . "/application/views/users/purchase_or_sales.html"
                 ));
@@ -1453,10 +1369,6 @@ class Users extends Controller {
         $this->actionView = $view;
 
         if(RequestMethods::post('create_ps')){
-
-        	$count = models\Purchase_Invoice::count(array('user_id = ?' => $this->user->id));
-
-        	$count++;
 
         	$supplier = models\Supplier_or_Customer::first(array(
         		'id = ?' => RequestMethods::post('supplier_id'),
@@ -1472,6 +1384,10 @@ class Users extends Controller {
 
 	        	if(!empty($item_ids)){
 
+	        		$id_array = array();
+			        $q_array = array();
+			        $p_array = array();
+
 		        	foreach($item_ids as $key => $item_id){
 
 			        	$item = models\Entry::first(array(
@@ -1479,26 +1395,27 @@ class Users extends Controller {
 			        		'user_id = ?' => $this->user->id
 			        		));
 
-			        	$id_array = array();
-			        	$q_array = array();
-			        	$p_array = array();
-
 		        		if(!empty($item)){
 
 		        			array_push($id_array, $item_id);
 		        			array_push($q_array, $quantity[$key]);
 		        			array_push($p_array, $price[$key]);
 
-		        			$item->quantity = $item->quantity + $quantity[$key];
+		        			$item->entry2 = $item->entry2 + $quantity[$key];
 		        			$item->save();
 
 			        	}
 			        }
 
 			        if(!empty($id_array) && !empty($q_array) && !empty($p_array)){
-				        	
+				        
+				        $u = models\User::first(array(
+			        			'id = ?' => $this->user->id
+			        			));
+
+
 			        	$c = new models\Purchase_Invoice(array(
-			        		'invoice_id' => $count,
+			        		'invoice_id' => ++$u->last_purchase_invoice_id,
 			        		'user_id' => $this->user->id,
 			        		'supplier_id' => RequestMethods::post('supplier_id'),
 			        		'item_id' => $id_array,
@@ -1510,6 +1427,8 @@ class Users extends Controller {
 
 			        		$c->save();
 			        		$view->set('add_success', 1);
+
+			        		$u->save();
 			        	}
 				    }
 			    }else{
@@ -1518,43 +1437,39 @@ class Users extends Controller {
 	        }
         }
 
-        if(RequestMethods::post('edit_sc')){
+        if(RequestMethods::post('edit_ps')){
 
-        	$c = models\Supplier_or_Customer::first(array(
-        		'id = ?' => RequestMethods::post('edit_sc_id'),
-        		'user_id' => $this->user->id,
-        		'type' => '2',
-        		));
-
-        	$c->name = RequestMethods::post('name');
-        	$c->phone = RequestMethods::post('phone');
-        	$c->state = RequestMethods::post('state');
-        	$c->address = RequestMethods::post('address');
-
-        	if($c->validate()){
-
-        		$c->save();
-        		$view->set('edit_success', 1);
-        	}
+        	
         }
 
         if(RequestMethods::post('delete')){
 
-        	$c = models\Supplier_or_Customer::first(array(
+        	$c = models\Purchase_Invoice::first(array(
         		'id = ?' => RequestMethods::post('delete'),
         		'user_id' => $this->user->id,
-        		'type' => '2',
         		));
 
-        	$c->name = RequestMethods::post('name');
-        	$c->phone = RequestMethods::post('phone');
-        	$c->state = RequestMethods::post('state');
-        	$c->address = RequestMethods::post('address');
+        	$items = $c->item_id;
+        	$q = $c->quantity;
+
+        	foreach($items as $key => $ids){
+
+        		$item = models\Entry::first(array(
+        			'id = ?' => $ids,
+        			'user_id = ?' => $this->user->id
+        			));
+
+        		if(!empty($item)){
+        		
+        			$item->entry2 = $item->entry2 - $q[$key];
+        			$item->save();
+        		}
+        	}
 
         	if($c->validate()){
 
-        		$c->save();
-        		$view->set('edit_success', 1);
+        		$c->delete();
+        		$view->set('delete_success', 1);
         	}
         }
 
@@ -1581,13 +1496,20 @@ class Users extends Controller {
 	*/
     public function sales_invoice($id = -1){
 
+    	$layoutView = $this->getLayoutView();
+    	$layoutView->set("seo", Framework\Registry::get("seo"));
+
+    	$layoutView->set('invoice_nav', 1);
+    	$layoutView->set('sales_nav', 1);
+
+
     	$view = new Framework\View(array(
                     "file" => APP_PATH . "/application/views/users/purchase_or_sales.html"
                 ));
 
         $this->actionView = $view;
 
-        if(RequestMethods::post('add_sc')){
+        if(RequestMethods::post('add_ps')){
 
         	$c = new models\Supplier_or_Customer(array(
         		'user_id' => $this->user->id,
@@ -1605,7 +1527,27 @@ class Users extends Controller {
         	}
         }
 
-        if(RequestMethods::post('edit_sc')){
+        if(RequestMethods::post('edit_ps')){
+
+        	$c = models\Supplier_or_Customer::first(array(
+        		'id = ?' => RequestMethods::post('edit_sc_id'),
+        		'user_id' => $this->user->id,
+        		'type' => '2',
+        		));
+
+        	$c->name = RequestMethods::post('name');
+        	$c->phone = RequestMethods::post('phone');
+        	$c->state = RequestMethods::post('state');
+        	$c->address = RequestMethods::post('address');
+
+        	if($c->validate()){
+
+        		$c->save();
+        		$view->set('edit_success', 1);
+        	}
+        }
+
+        if(RequestMethods::post('delete_ps')){
 
         	$c = models\Supplier_or_Customer::first(array(
         		'id = ?' => RequestMethods::post('edit_sc_id'),

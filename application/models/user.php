@@ -103,6 +103,24 @@ class User extends \Shared\Model {
      */
     protected $_email_confirm_string;
 
+     /**
+     * @column
+     * @readwrite
+     * @type text
+     * 
+     * @label mobile number
+     */
+    protected $_last_purchase_invoice_id = 0;
+
+     /**
+     * @column
+     * @readwrite
+     * @type text
+     * 
+     * @label mobile number
+     */
+    protected $_last_sales_invoice_id = 0;
+
     /**
      * @column
      * @readwrite

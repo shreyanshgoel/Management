@@ -6,6 +6,7 @@ define("DEBUG", TRUE);
 define("APP_PATH", str_replace(DIRECTORY_SEPARATOR, "/", dirname(__FILE__)));
 define("URL", "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]");
 define("CDN", "/public/assets/");
+define("CDN2", "/public/uploads/");
 
 date_default_timezone_set('Asia/Kolkata');
 

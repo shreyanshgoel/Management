@@ -59,8 +59,6 @@
 
         {foreach $entry in $table}
 
-            string
-
             {if $outer == 'purchase'} 
                 
                 {script $c = models\Purchase_Invoice::all(array('invoice_id = ?' => $entry->invoice_id))}
@@ -279,7 +277,7 @@
                     </div>
                 </div>
 
-                {if $outer == 'purchase'}
+                {if $outer == 'sales'}
                 <div class="form-group">
                     <label class="col-sm-3 control-label">Select Quantity</label>
                     <div class="col-sm-6">
@@ -290,7 +288,7 @@
                 </div>
                 {/if}
                 
-                {if $outer == 'sales'}
+                {if $outer == 'purchase'}
                 <div class="form-group">
                     <label class="col-sm-3 control-label">Select Quantity</label>
                     <div class="col-sm-6">

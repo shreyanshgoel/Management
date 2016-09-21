@@ -26,6 +26,13 @@ namespace Shared {
         /**
          * @column
          * @readwrite
+         * @type text
+         */
+        protected $_s_id = null;
+
+        /**
+         * @column
+         * @readwrite
          * @type boolean
          * @index
          */

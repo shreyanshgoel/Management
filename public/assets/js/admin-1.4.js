@@ -124,7 +124,7 @@ $(document).ready(function () {
 
                     target2 = $('#price');
 
-                    target2.val(value._entry5);
+                    target2.val(value._entry4);
 
                     target3 = $('#item_name');
 
@@ -139,6 +139,9 @@ $(document).ready(function () {
     $('.add').on('click', function () {
 
         var self = $(this), target = $('#data-body');
+
+        var type = $('#type').val();
+
         var v = parseInt(self.val()) + 1;
 
         var n = parseInt($('.row-number').val());
@@ -154,7 +157,7 @@ $(document).ready(function () {
             while(i < v){
                 var target2 = $('#data-td' + n);
 
-                if(i == 7){
+                if(i == 5 || i == 6 || i == 7 || i == 8 || type == 'other'){
 
                     target2.append('<td><input type="text" class="form-control" name="entry' + n + '_' + i + '"></td>');
 
@@ -219,12 +222,12 @@ $(document).ready(function () {
             
             $.each(data, function(index, value){
 
-
                 if(value._column1_name != null && value._column1_name != undefined){
 
                     column1 = value._column1_name;
                     i = i+1;
                 }
+
                 if(value._column2_name != null){
 
                     column2 = value._column2_name;
