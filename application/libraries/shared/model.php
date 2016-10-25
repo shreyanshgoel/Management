@@ -8,6 +8,7 @@
 
 namespace Shared {
     use Framework\Registry as Registry;
+    use \Shared\Services\Db as Db;
 
     class Model extends \Framework\Model {
         /**
@@ -22,13 +23,6 @@ namespace Shared {
          * @type autonumber
          */
         protected $__id = null;
-
-        /**
-         * @column
-         * @readwrite
-         * @type text
-         */
-        protected $_s_id = null;
 
         /**
          * @column
@@ -52,42 +46,44 @@ namespace Shared {
          */
         protected $_modified = null;
 
-        public function getMongoID($field = null) {
-            if ($field) {
-                $id = $field->{'$id'};
-            } else {
-                $id = $this->_id->{'$id'};
-            }
-            return $id;
+        public static function hourly() {
+            // override this method to do cron tasks
         }
 
-        /**
-         * Renders the form fields for different properties of a model
-         * with validations and type which can be looped through in the views
-         */
-        public function render($f = []) {
-            $fields = array(); $count = count($f);
-            foreach ($this->columns as $column) {
-                if (!$column["label"]) {
-                    continue;
-                }
-                if ($count != 0 && !in_array($column["name"], $f)) {
-                    continue;
+        public function &getMeta() {
+            if (property_exists($this, '_meta')) {
+                return $this->_meta;
+            } else if (property_exists($this, 'meta')) {
+                return $this->meta;
+            }
+            return [];
+        }
+
+        public static function objectArr($arr = [], $fields = []) {
+            $results = [];
+            foreach ($arr as $key => $a) {
+                $data = [];
+                foreach ($fields as $f) {
+                    $data[$f] = $a->$f;
                 }
 
-                $r = Utils::particularFields($column["name"]);
-                $arr = array(
-                    "name" => $column["name"],
-                    "placeholder" => $column["label"],
-                    "type" => $r["type"]
-                );
-                if ($column["validate"]) {
-                    $v = Utils::parseValidations($column["validate"]);
-                    $arr = array_merge($arr, $v);
+                $obj = (object) $data;
+                if ($a->_id === $key) {
+                    $results[$key] = $obj;
+                } else {
+                    $results[] = $obj;
                 }
-                $fields[$arr['name']] = $arr;
             }
-            return $fields;
+            return $results;
+        }
+
+        public function getMongoID($field = null) {
+            if ($field) {
+                $id = sprintf('%s', $field);
+            } else {
+                $id = sprintf('%s', $this->__id);
+            }
+            return $id;
         }
 
         /**
@@ -100,8 +96,18 @@ namespace Shared {
 
             $doc = []; $columns = $this->getColumns();
             foreach ($columns as $key => $value) {
-                if (isset($this->$value['raw'])) {
-                    $doc[$key] = $this->_convertToType($this->$value['raw'], $value['type']);
+                $field = $value['raw'];
+                $current = $this->$field;
+                
+                if ((!is_array($current) && !isset($current)) || is_null($current)) {
+                    continue;
+                }
+                $v = $this->_convertToType($current, $value['type']);
+                $v = $this->_preventEmpty($v, $value['type']);
+                if (is_null($v)) {
+                    continue;
+                } else {
+                    $doc[$key] = $v;
                 }
             }
             if (isset($doc['_id'])) {
@@ -110,15 +116,61 @@ namespace Shared {
 
             if (empty($this->$raw)) {
                 if (!array_key_exists('created', $doc)) {
-                    $doc['created'] = new \MongoDate();   
+                    $doc['created'] = Db::time();
                 }
 
-                $collection->insert($doc);
-                $this->__id = $doc['_id'];
+                $result = $collection->insertOne($doc);
+                $this->__id = $result->getInsertedId();
             } else {
-                $doc['modified'] = new \MongoDate();
-                $collection->update(['_id' => $this->__id], ['$set' => $doc]);
+                $doc['modified'] = Db::time();
+
+                $this->__id = Utils::mongoObjectId($this->__id);
+                $result = $collection->updateOne(['_id' => $this->__id], ['$set' => $doc]);
             }
+
+            // remove BSON Types from class because they prevent it from
+            // being serialized and store into the session
+            foreach ($columns as $key => $value) {
+                $raw = "_{$key}"; $val = $this->$raw;
+
+                if (Db::isType($val, 'id')) {
+                    $this->$raw = Utils::getMongoID($val);
+                } else if (Db::isType($val, 'date')) {
+                    $tz = new \DateTimeZone('Asia/Kolkata');
+                    $v = $val->toDateTime();
+                    $v->settimezone($tz);
+                    $this->$raw = $v;
+                }
+            }
+        }
+
+        protected function _preventEmpty($value, $type) {
+            switch ($type) {
+                case 'integer':
+                    if ($value === 0) {
+                        $value = null;
+                    }
+                    break;
+                
+                case 'array':
+                    if (count($value) === 0) {
+                        $value = null;
+                    }
+                    break;
+
+                case 'decimal':
+                    if ($value === 0.0) {
+                        $value = null;
+                    }
+                    break;
+
+                case 'text':
+                    if ($value === '') {
+                        $value = null;
+                    }
+                    break;
+            }
+            return $value;
         }
 
         /**
@@ -127,8 +179,8 @@ namespace Shared {
          * @param misc $value
          * @param string $type
          */
-        protected function _convertToType($value, $type) {
-            if (is_object($value) && is_a($value, 'MongoRegex')) {
+        public function _convertToType($value, $type) {
+            if (Db::isType($value, 'regex')) {
                 return $value;
             }
 
@@ -151,18 +203,32 @@ namespace Shared {
 
                 case 'datetime':
                 case 'date':
-                    if ((is_object($value) && is_a($value, 'MongoDate')) || is_array($value)) {
+                    if (is_array($value)) {
                         break;
+                    } else if (is_object($value)) {
+                        $date = $value;
+                        if (Db::isType($value, 'date')) {
+                           break;
+                        } else if (is_a($value, 'DateTime')) {
+                            $date = $value->format('Y-m-d');
+                        }
+                        $value = Db::time($date);
+                    } else {
+                        $value = Db::time($value);
                     }
-                    $value = new \MongoDate(strtotime($value));
                     break;
 
                 case 'autonumber':
                 case 'mongoid':
-                    if ((is_object($value) && is_a($value, 'MongoId')) || is_array($value)) {
+                    if (Db::isType($value, 'id')) {
                         break;
+                    } else if (is_array($value)) {
+                        $copy = $value; $value = [];
+                        foreach ($copy as $key => $val) {
+                            $value[$key] = Utils::mongoObjectId($val);
+                        }
                     } else {
-                        $value = new \MongoId($value);
+                        $value = Utils::mongoObjectId($value);
                     }
                     break;
 
@@ -204,7 +270,7 @@ namespace Shared {
         /**
          * Updates the MongoDB query
          */
-        protected function _updateQuery($where) {
+        public function _updateQuery($where) {
             $columns = $this->getColumns();
 
             $query = [];
@@ -227,17 +293,17 @@ namespace Shared {
          * Checks for correct property "id" and "_id"
          * Also accounts for "*" in MySql
          */
-        protected function _updateFields($fields) {
+        public function _updateFields($fields) {
             $f = [];
             foreach ($fields as $key => $value) {
-                if ($value == "*") {
+                if ($value == "*" || !is_string($value)) {
                     continue;
                 }
 
                 if ($value == "id" && !property_exists($this, '_id')) {
-                    $f[] = "_id";
+                    $f["_id"] = 1;
                 } else {
-                    $f[] = $value;
+                    $f[$value] = 1;
                 }
             }
             return $f;
@@ -261,37 +327,9 @@ namespace Shared {
         protected function _all($where = array(), $fields = array(), $order = null, $direction = null, $limit = null, $page = null) {
             $collection = $this->getTable();
 
-            if (empty($fields)) {
-                $cursor = $collection->find($where);
-            } else {
-                $cursor = $collection->find($where, $fields);
-            }
-            
-            if ($order && $direction) {
-                if ($direction) {
-                    switch ($direction) {
-                        case 'desc':
-                        case 'DESC':
-                            $direction = -1;
-                            break;
-                        
-                        case 'asc':
-                        case 'ASC':
-                            $direction = 1;
-                            break;
-                    }
-                }
-                $cursor->sort([$order => $direction]);
-            }
+            $opts = Db::opts($fields, $order, $direction, $limit, $page);
 
-            if ($page) {
-                $cursor->skip($limit * ($page - 1));
-            }
-
-            if ($limit) {
-                $cursor->limit($limit);
-            }
-
+            $cursor = $collection->find($where, $opts);
             $results = [];
             foreach ($cursor as $c) {
                 $converted = $this->_convert($c);
@@ -320,40 +358,27 @@ namespace Shared {
             return $model->_first($where, $fields, $order, $direction);
         }
 
-        protected function _first($where = array(), $fields = array(), $order, $direction) {
+        protected function _first($where = array(), $fields = array(), $order = null, $direction = null) {
             $collection = $this->getTable();
+            $record = null;
 
             if ($order && $direction) {
-                switch ($direction) {
-                    case 'desc':
-                    case 'DESC':
-                        $direction = -1;
-                        break;
-                    
-                    case 'asc':
-                    case 'ASC':
-                        $direction = 1;
-                        break;
-
-                    default:
-                        $direction = 1;
-                        break;
-                }
-                $cursor = $collection->find($where, $fields)->sort([$order => $direction])->limit(1);
-
-                $record = [];
-                foreach ($cursor as $c) {
-                    $record = $c;
+                $results = self::_all($where, $fields, $order, $direction, 1);
+                
+                if (count($results) === 1) {
+                    $record = array_shift($results);   
                 }
             } else {
-                if (empty($fields)) {
-                    $record = $collection->findOne($where); 
+                if (count($fields) === 0) {
+                    $record = $collection->findOne($where);
                 } else {
-                    $record = $collection->findOne($where, $fields);
+                    $record = $collection->findOne($where, ['projection' => $fields]);
                 }
+
+                $record = $this->_convert($record);    
             }
 
-            return $this->_convert($record);
+            return $record;
         }
 
         /**
@@ -363,24 +388,64 @@ namespace Shared {
         protected function _convert($record) {
             if (!$record) return null;
             $columns = $this->getColumns();
+            $record = (array) $record;
 
             $class = get_class($this);
             $c = new $class();
-            foreach ($columns as $key => $value) {
-                if (!isset($record[$key])) {
+
+            foreach ($record as $key => $value) {
+                if (!property_exists($this, "_{$key}")) {
                     continue;
+                }
+                $raw = "_{$key}";
+
+                if (is_object($value)) {
+                    if (Db::isType($value, 'id')) {
+                        $c->$raw = $this->getMongoID($value);
+                    } else if (Db::isType($value, 'date')) {
+                        $v = $value->toDateTime();
+                        $v->settimezone((new \DateTimeZone('Asia/Kolkata')));
+                        $c->$raw = $v;
+                    } else if (Db::isType($value, 'document')) {
+                        $c->$raw = Utils::toArray($value);
+                    } else {    // fallback case
+                        $c->$raw = (object) $value;
+                    }
                 } else {
-                    $c->$value['raw'] = $record[$key];
+                    $c->$raw = $value;
                 }
             }
+            
             return $c;
+        }
+
+        /**
+         * Find the records of the table and if none found then sets a
+         * flash message to the session and redirects if $opts['redirect']
+         * is set else returns the records
+         */
+        public static function isEmpty($query = [], $fields = [], $opts = []) {
+            $records = self::all($query, $fields);
+            $session = Registry::get("session");
+
+            if (count($records) === 0) {
+                if (isset($opts['msg'])) {
+                    $session->set('$flashMessage', $opts['msg']);
+                }
+
+                if (isset($opts['redirect'])) {
+                    $controller = $opts['controller'];
+                    $controller->redirect($opts['redirect']);
+                }
+            }
+            return $records;
         }
 
         public function delete() {
             $collection = $this->getTable();
 
             $query = $this->_updateQuery(['_id' => $this->__id]);
-            $return = $collection->remove($query, ['justOne' => true]);
+            $return = $collection->deleteOne($query);
         }
 
         public static function deleteAll($query = []) {
@@ -388,7 +453,7 @@ namespace Shared {
             $query = $instance->_updateQuery($query);
             $collection = $instance->getTable();
 
-            $return = $collection->remove($query);
+            $return = $collection->deleteMany($query);
         }
 
         public static function count($query = []) {

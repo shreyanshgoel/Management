@@ -44,6 +44,16 @@ class Supplier_or_Customer extends \Shared\Model {
      * @type text
      * 
      * @validate required
+     * @label email
+     */
+    protected $_email;
+
+    /**
+     * @column
+     * @readwrite
+     * @type text
+     * 
+     * @validate required
      * @label password
      */
     protected $_phone;

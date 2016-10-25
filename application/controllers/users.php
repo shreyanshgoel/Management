@@ -31,16 +31,11 @@ class Users extends Controller {
 				$pass = RequestMethods::post("password");
 				$cpass = RequestMethods::post("confirm");
 
-				$salt = strtr(base64_encode(mcrypt_create_iv(16, MCRYPT_DEV_URANDOM)), '+', '.');
-		        $cost=10;
-				$salt = sprintf("$2a$%02d\$", $cost) . $salt;
-				$crypt = crypt($pass, $salt);
-
 				$user = new models\User(array(
 		            "full_name" => RequestMethods::post("full_name"),
 		            "email" => RequestMethods::post("email"),
 		            "mobile" => RequestMethods::post("mobile"),
-		            "password" => $crypt,
+		            "password" => sha1($pass),
 		            "live" => true
 		        ));
 				$exist = models\User::all(array(
@@ -98,7 +93,7 @@ class Users extends Controller {
 			if(RequestMethods::post('login')){
 
 				$email = RequestMethods::post("email");
-		        $pass = RequestMethods::post("password");
+		        $pass = sha1(RequestMethods::post("password"));
 		        
 		        $login_e = false;
 		        
@@ -119,14 +114,21 @@ class Users extends Controller {
 		                "live = ?" => true
 		            ));
 
-		            if (!empty($user) && strcmp($user->password, crypt($pass, $user->password)) == 0){
+		            if (!empty($user)){
+
+		            	if($user->password == $pass){
 		            	
 			                $this->user = $user;
 			                header('Location: /users/dashboard');
+			            
+			            }else{
+
+			        		echo "<script>alert('email and password do not match')</script>";    	
+			            }
 			            	            
 		            }else{
 		            
-		                echo "<script>alert('email and password do not match')</script>";
+		                echo "<script>alert('email does not exist')</script>";
 		            } 
 		        
 		        }else{
@@ -190,30 +192,32 @@ class Users extends Controller {
 	* @before secure_user
 	*/
     public function dashboard() {
-
-    	$layoutView = $this->getLayoutView();
+		
+		$layoutView = $this->getLayoutView();
+    	
     	$layoutView->set("seo", Framework\Registry::get("seo"));
-
+    	
     	$layoutView->set('dashboard',1);
-
+    	
     	$view = $this->getActionView();
-
+    	
     	$t_count = models\Table::count(array(
     		'user_id = ?' => $this->user->id
     		));
-
+    	
     	$e_count = 0;
-
+    	
     	$tables = models\Table::all(array(
     		'user_id = ?' => $this->user->id
     		));
-
+		
 		$e_count = models\Entry::count(array(
 			'user_id = ?' => $this->user->id
 			));
-
+    	
     	$view->set('t_count', $t_count)->set('e_count', $e_count)->set('tables', $tables);
 
+    	
     }
 
 
@@ -1164,6 +1168,7 @@ class Users extends Controller {
         		'type' => '1',
         		'name' => RequestMethods::post('name'),
         		'phone' => RequestMethods::post('phone'),
+        		'email' => RequestMethods::post('email'),
         		'state' => RequestMethods::post('state'),
         		'address' => RequestMethods::post('address')
         		));
@@ -1187,6 +1192,7 @@ class Users extends Controller {
         	$c->phone = RequestMethods::post('phone');
         	$c->state = RequestMethods::post('state');
         	$c->address = RequestMethods::post('address');
+        	$c->email = RequestMethods::post('email');
 
         	if($c->validate()){
 
@@ -1244,6 +1250,7 @@ class Users extends Controller {
         		'type' => '2',
         		'name' => RequestMethods::post('name'),
         		'phone' => RequestMethods::post('phone'),
+        		'email' => RequestMethods::post('email'),
         		'state' => RequestMethods::post('state'),
         		'address' => RequestMethods::post('address')
         		));
@@ -1267,6 +1274,7 @@ class Users extends Controller {
         	$c->phone = RequestMethods::post('phone');
         	$c->state = RequestMethods::post('state');
         	$c->address = RequestMethods::post('address');
+        	$c->email = RequestMethods::post('email');
 
         	if($c->validate()){
 

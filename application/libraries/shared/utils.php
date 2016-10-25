@@ -7,17 +7,36 @@ use Framework\ArrayMethods as ArrayMethods;
 
 class Utils {
 	public static function getMongoID($field) {
-		$id = $field->{'$id'};
+		if (is_object($field)) {
+			$id = sprintf('%s', $field);
+		} else {
+			$id = $field;
+		}
 		return $id;
 	}
 
-	public static function downloadImage($url) {
+	public static function mongoObjectId($id) {
+		$result = "";
+		if (is_array($id)) {
+			$result = [];
+			foreach ($id as $i) {
+				$result[] = self::mongoObjectId($i);
+			}
+		} else if (!Services\Db::isType($id, 'id')) {
+            $result = new \MongoDB\BSON\ObjectID($id);
+        } else {
+        	$result = $id;
+        }
+        return $result;
+	}
+
+	public static function downloadImage($url = null) {
 		if (!$url) { return false; }
 		try {
 			$bot = new Bot(['image' => $url], ['logging' => false]);
 			$bot->execute();
-
-			$doc = array_shift($bot->getDocuments());
+			$documents = $bot->getDocuments();
+			$doc = array_shift($documents);
 
 			$contentType = $doc->type;
 			preg_match('/image\/(.*)/i', $contentType, $matches);
@@ -102,7 +121,8 @@ class Utils {
         try {
     		$bot = new Bot(['cloud' => $url], ['logging' => false]);
     	    $bot->execute();
-    	    $doc = array_shift($bot->getDocuments());
+    	    $documents = $bot->getDocuments();	// because only variables can be passed as reference
+    	    $doc = array_shift($documents);
 
     	    $type = $doc->type;
     	    if (preg_match("/image/i", $type)) {
@@ -160,116 +180,71 @@ class Utils {
 
 	/**
 	 * Converts dates to be passed for mongodb query
-	 * @param  array  $opts start and end date
 	 * @return array       mongodb start and end date
 	 */
-	public static function dateQuery($opts = []) {
+	public static function dateQuery($dateQ, $endDate = null) {
+		if (!is_array($dateQ)) {
+			$opts = ['start' => $dateQ, 'end' => $endDate];
+		} else {
+			$opts = $dateQ;
+		}
 		$start = strtotime("-1 day");
 		$end = strtotime("+1 day");
 
 		if (isset($opts['start'])) {
-			$start = strtotime($opts['start'] . ' 00:00:00');
+			$start = (int) strtotime($opts['start'] . ' 00:00:00');	// this returns in seconds
 		}
-		$start = new \MongoDate($start);
+		$start = $start * 1000;	// we need time in milliseconds
 
 		if (isset($opts['end'])) {
-			$end = strtotime($opts['end'] . ' 23:59:59');
+			$end = (int) strtotime($opts['end'] . ' 23:59:59');
 		}
-		$end = new \MongoDate($end, 999);
+		$end = ($end * 1000) + 999;
 
 		return [
-			'start' => $start,
-			'end' => $end
+			'start' => new \MongoDB\BSON\UTCDateTime($start),
+			'end' => new \MongoDB\BSON\UTCDateTime($end)
 		];
 	}
 
-	public function categories() {
-		$categoryCol = Registry::get("MongoDB")->categories;
-		$records = $categoryCol->find([], ['id', 'name']);
-
-		$categories = [];
-		foreach ($records as $r) {
-			$r = ArrayMethods::toObject($r);
-			$cid = $r->id;
-
-			if (!array_key_exists($cid, $categories)) {
-				$categories[$cid] = $r;
-			}
-		}
-		return $categories;
-	}
-
-	public static function getObjectKeys($value) {
-		$keys = [];
-		if (is_a($value, 'Framework\Model')) {
-			$d = $value->getAllProperties();
-
-			foreach ($d as $k => $v) {
-				$keys[] = substr($k, 1);
-			}
-		} else if (is_a($value, 'stdClass')) {
-			foreach ($value as $k => $v) {
-				$keys[] = $k;
-			}
-		}
-		return $keys;
-	}
-
-	protected static function _objToCsv($value) {
-		$keys = self::getObjectKeys($value);
-
-		$ans = [];
-		foreach ($keys as $k) {
-			switch (gettype($value->$k)) {
-				case 'array':
-					$second = implode(",", $value->$k);
-					break;
-
-				case 'object':
-					$second = sprintf('%s', $value->$k);
-					break;
-				
-				default:
-					$second = $value->$k;
-					break;
-			}
-			$ans[$k] = $second;
-		}
-		return $ans;
-	}
-
-	public static function dataToCsv($data) {
+	public static function toArray($object) {
 		$arr = [];
-
-		foreach ($data as $key => $value) {
-			if (is_array($value)) {
-				$arr[] = [$key];
-
-				$first = array_values($value)[0];
-				if (is_object($first)) {
-					$arr[] = self::getObjectKeys($first);
-				}
-
-				foreach ($value as $k => $val) {
-					if (is_object($val)) {
-						$arr[] = array_values(self::_objToCsv($val));
-					} else {
-						$arr[] = $val;
-					}
-				}
-			} else if (is_object($value)) {
-				$arr[] = [$key];
-
-				$keys = self::getObjectKeys($value);
-				$ans = self::_objToCsv($value);
-				foreach ($keys as $k) {
-					$arr[] = [$k, $ans[$k]];
-				}
+		$obj = (array) $object;
+		foreach ($obj as $key => $value) {
+			if (Services\Db::isType($value, 'document')) {
+				$arr[$key] = self::toArray($value);
 			} else {
-				$arr[] = [$key, $value];
+				$arr[$key] = $value;
 			}
-			$arr[] = ["\n"];
 		}
 		return $arr;
+	}
+
+	public static function mongoRegex($val) {
+		return new \MongoDB\BSON\Regex($val, 'i');
+	}
+
+	public static function dateArray($arr) {
+		$result = [];
+		foreach ($arr as $key => $value) {
+			$date = \Framework\StringMethods::only_date($key);
+			$result[$date] = $value;
+		}
+		return $result;
+	}
+
+	public static function encrypt($data, $key) {
+		$e = new Services\Encrypt(MCRYPT_BLOWFISH, MCRYPT_MODE_CBC);
+		$hashed = $e->encrypt($data, $key);
+
+		return utf8_encode($hashed);
+	}
+
+	public static function decrypt($data, $key) {
+		$data = utf8_decode($data);
+		$e = new Services\Encrypt(MCRYPT_BLOWFISH, MCRYPT_MODE_CBC);
+		$normal = $e->decrypt($data, $key);
+
+		return $normal;
 	}
 }

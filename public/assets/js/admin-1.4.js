@@ -94,7 +94,7 @@ $(document).ready(function () {
                 
                 if(value._entry1 != undefined){
                     
-                    target.append('<option value="' + value.__id['$id'] + '">' + value._entry1 + '</option>');
+                    target.append('<option value="' + value.__id + '">' + value._entry1 + '</option>');
                     
                 }
             });
@@ -117,7 +117,9 @@ $(document).ready(function () {
                     
                     var i =1;
 
-                    while(i <= value._entry3){
+                    var q = value._entry2 - value._entry3;
+
+                    while(i <= q){
                         target.append('<option value="' + i + '">' + i + '</option>');
                         i = i+1;
                     }
@@ -360,6 +362,7 @@ $(document).ready(function () {
                 
                 if(value._name != undefined){
                     target.append('<div class="form-group"><label class="col-sm-2 control-label">Name</label><div class="col-sm-10"><input type="text" class="form-control" name="name" value="' + value._name + '" required></div></div><br><br>');
+                    target.append('<div class="form-group"><label class="col-sm-2 control-label">Email</label><div class="col-sm-10"><input type="email" class="form-control" name="email" value="' + value._email + '" required></div></div><br><br>');
                     target.append('<div class="form-group"><label class="col-sm-2 control-label">Phone</label><div class="col-sm-10"><input type="text" class="form-control" name="phone" value="' + value._phone + '" required></div></div><br><br>');
                     target.append('<div class="form-group"><label class="col-sm-2 control-label">States</label><div class="col-sm-10"><select name="state" class="form-control" id="edit_state" required></select></div></div><br><br>');
 
