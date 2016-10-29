@@ -1,0 +1,172 @@
+        <!-- Imported styles on this page -->
+<link rel="stylesheet" href="{echo CDN}js/datatables/datatables.css" id="style-resource-1">
+<link rel="stylesheet" href="{echo CDN}js/select2/select2-bootstrap.css" id="style-resource-2">
+<link rel="stylesheet" href="{echo CDN}js/select2/select2.css" id="style-resource-3">
+<script src="{echo CDN}js/datatables/datatables.js" id="script-resource-8"></script>
+<script src="{echo CDN}js/select2/select2.min.js" id="script-resource-9"></script>
+<ol class="breadcrumb bc-3">
+    <li>
+        <a href="/users/dashboard">
+            <i class="fa fa-home"></i>Home</a>
+    </li>
+    <li>
+        <a href="#">{if $outer == 'customers'} Customers {/if}{if $outer == 'suppliers'} Suppliers {/if}</a>
+    </li>
+</ol>
+<h2>{if $outer == 'customers'} Customers {/if}{if $outer == 'suppliers'} Suppliers {/if}</h2>
+<br /> {if isset($delete_success)}
+<div class="alert alert-success">
+    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+    <strong>Success!</strong>{if $outer == 'customers'} Customer {/if}{if $outer == 'suppliers'} Supplier {/if} is deleted
+</div>
+{/if} {if isset($add_success)}
+<div class="alert alert-success">
+    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+    <strong>Success!</strong>{if $outer == 'customers'} Customer {/if}{if $outer == 'suppliers'} Supplier {/if} is Added
+</div>
+{/if} {if isset($edit_success)}
+<div class="alert alert-success">
+    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+    <strong>Success!</strong>{if $outer == 'customers'} Customer {/if}{if $outer == 'suppliers'} Supplier {/if} details are edited
+</div>
+{/if}
+<script type="text/javascript" src="{echo CDN}js/tables/tables1.js"></script>
+<!--Action important-->
+<form method="post" {if $outer=='customers' } action="/users/customers" {/if} {if $outer=='suppliers' } action="/users/suppliers" {/if}>
+    <table class="table table-bordered datatable" id="table-1">
+        <thead>
+            <tr>
+                <th>S No.</th>
+                <th>Name</th>
+                <th>Phone</th>
+                <th>State</th>
+                <th>Address</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody id="data-body">
+            {script $i = 1} {foreach $entry in $table}
+            <tr>
+                <td>{$i}</td>
+                <td>{$entry->name}</td>
+                <td>{$entry->phone}</td>
+                <td>{$entry->state}</td>
+                <td>{$entry->address}</td>
+                <td>
+                    <button type="button" value="{$entry->id}" data-toggle="modal" data-target="#myModal" class="edit_sc btn btn-info btn-sm btn-icon icon-left">
+                        <i class="entypo-pencil"></i> Edit
+                    </button>&nbsp;&nbsp;
+                    <button type="submit" name="delete" value="{$entry->id}" class="btn btn-danger btn-sm btn-icon icon-left">
+                        <i class="entypo-cancel"></i> Delete
+                    </button>
+                </td>
+            </tr>
+            {script $i++} {/foreach}
+        </tbody>
+    </table>
+    <br />
+    <div>
+        <button type="button" data-toggle="modal" data-target="#myModal2" class="btn btn-primary">
+            <i class="entypo-plus"></i> Add {if $outer == 'customers'} Customer {/if}{if $outer == 'suppliers'} Supplier {/if}
+        </button>
+        <div id="row-id" style="display:none">
+            <input type="text" class="row-number" name="row-number" value="1" hidden="">
+        </div>
+    </div>
+    <br>
+    <div>
+        <div class="pull-left">
+            <input type="file" name="sheet">
+        </div>
+        <button type="submit" style="margin-left:-50px" name="excel_add" value="add" class="btn btn-primary pull-left">
+            <i class="entypo-plus"></i> Import From Excel
+        </button>
+    </div>
+    <br />
+    <br />
+</form>
+<form method="post" {if $outer=='customers' } action="/users/customers" {/if} {if $outer=='suppliers' } action="/users/suppliers" {/if}>
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel">Edit {if $outer == 'customers'} Customer {/if}{if $outer == 'suppliers'} Supplier {/if}</h4>
+                </div>
+                <div class="modal-body">
+                    ...
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" name="edit_sc" value="save" class="btn btn-success">Save changes</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+<form method="post" {if $outer=='customers' } action="/users/customers" {/if} {if $outer=='suppliers' } action="/users/suppliers" {/if}>
+    <div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel">Add {if $outer == 'customers'} Customer {/if}{if $outer == 'suppliers'} Supplier {/if}</h4>
+                </div>
+                <div class="modal-body2">
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">Name</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" name="name" required="" placeholder="Enter Name">
+                        </div>
+                    </div>
+                    <br>
+                    <br>
+                    <br>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">Phone</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" name="phone" required="" placeholder="Enter Phone Number">
+                        </div>
+                    </div>
+                    <br>
+                    <br>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">Email</label>
+                        <div class="col-sm-10">
+                            <input type="email" class="form-control" name="email" required="" placeholder="Enter email">
+                        </div>
+                    </div>
+                    <br>
+                    <br>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">State</label>
+                        <div class="col-sm-10">
+                            <select class="form-control" name="state">
+                                {foreach $state in $states}
+                                <option>{$state->name}</option>
+                                {/foreach}
+                            </select>
+                        </div>
+                    </div>
+                    <br>
+                    <br>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">Address</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" name="address" required="" placeholder="Enter Address">
+                        </div>
+                    </div>
+                    <br>
+                    <br>
+                    <div class="modal-footer">
+                        <button type="submit" name="add_sc" value="save" class="btn btn-success">ADD</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+</form>

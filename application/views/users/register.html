@@ -27,6 +27,8 @@
             <div class="col-md-6">
                 <div class="ibox-content">
                     <form class="m-t" role="form" method="post">
+                        <input type="hidden" name="token" value="{echo $__token}">
+                        
                         <div class="form-group">
                             <input type="text" class="form-control" placeholder="Full Name" name="full_name" required="">
                         </div>
