@@ -15,42 +15,55 @@
 {if isset($delete_success)}
 <div class="alert alert-success">
     <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-    <strong>Success!</strong> Customer is deleted
+    <strong>Success!</strong> Supplier is deleted
 </div>
 {/if} {if isset($add_success)}
 <div class="alert alert-success">
     <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-    <strong>Success!</strong> Customer is Added
+    <strong>Success!</strong> Supplier is Added
 </div>
 {/if} {if isset($edit_success)}
 <div class="alert alert-success">
     <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-    <strong>Success!</strong> Customer details are edited
+    <strong>Success!</strong> Supplier details are edited
 </div>
-{/if}
-<div class="member-entry">
-    <a href="../timeline/index" class="member-img"> <img src="../../assets/images/member-1.jpg" class="img-rounded" /> <i class="entypo-forward"></i> </a>
-    <div class="member-details">
-        <h4> <a href="../timeline/index">Johnnie Linton</a> </h4>
-        <div class="row info-list">
-            <div class="col-sm-4"> <i class="entypo-briefcase"></i> Co-Founder at <a href="index#">Complete Tech</a> </div>
-            <div class="col-sm-4"> <i class="entypo-twitter"></i> <a href="index#">@johnnie</a> </div>
-            <div class="col-sm-4"> <i class="entypo-facebook"></i> <a href="index#">fb.me/johnnie</a> </div>
-            <div class="clear"></div>
-            <div class="col-sm-4"> <i class="entypo-location"></i> <a href="index#">Prishtina</a> </div>
-            <div class="col-sm-4"> <i class="entypo-mail"></i> <a href="index#">john@gmail.com</a> </div>
-            <div class="col-sm-4"> <i class="entypo-linkedin"></i> <a href="index#">johnkennedy</a> </div>
+{/if} 
+<form method="post">
+
+{if !empty($table)}
+
+    {foreach $supplier in $table}
+
+    <div class="member-entry">
+        <a href="../timeline/index" class="member-img"> <img src="../../assets/images/member-1.jpg" class="img-rounded" /> <i class="entypo-forward"></i> </a>
+        <div class="member-details">
+            <h4>{$supplier->name}</h4>
+            <div class="row info-list">
+                <div class="col-sm-3"> <i class="entypo-mail"></i> <a href="index#">{$supplier->email}</a> </div>
+                <div class="col-sm-3"> <i class="entypo-location"></i> <a href="index#">{$supplier->state}</a> </div>
+                <div class="clear"></div>
+                <div class="clear"></div>
+                <div class="col-sm-4" style="float:right">
+                    <button type="button" value="{$supplier->id}" data-toggle="modal" data-target="#myModal" class="edit_sc btn btn-info btn-sm btn-icon icon-left">
+                        <i class="entypo-pencil"></i> Edit
+                    </button>&nbsp;&nbsp;
+                    <button type="submit" name="delete" value="{$supplier->id}" class="btn btn-danger btn-sm btn-icon icon-left">
+                        <i class="entypo-cancel"></i> Delete
+                    </button>
+                    
+                </div>
+            </div>
         </div>
     </div>
-</div>
-<div class="row">
-    <div class="col-md-12">
-        <ul class="pager">
-            <li><a href="index#"><i class="entypo-left-thin"></i> Previous</a></li>
-            <li><a href="index#">Next <i class="entypo-right-thin"></i></a></li>
-        </ul>
-    </div>
-</div>
+    {/foreach}
+
+{/if}
+
+{else}
+    <br><br><br><br>No suppliers Yet<br><br><br><br><br>
+{/else}
+
+</form>
 <!-- TS1465795342312: Xenon - Boostrap Admin Template created by Laborator / Please buy this theme and support the updates -->
 <!-- Footer -->
 <button type="button" data-toggle="modal" data-target="#myModal2" class="btn btn-primary">
@@ -78,7 +91,6 @@
         </div>
     </div>
 </form>
-
 <form method="post">
     <div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
         <div class="modal-dialog" role="document">
@@ -91,6 +103,15 @@
                 </div>
                 <div class="modal-body2">
                     <div class="form-group">
+                        <label class="col-sm-2 control-label">Email</label>
+                        <div class="col-sm-10">
+                            <input type="email" class="form-control" name="email" required="" placeholder="Enter email">
+                        </div>
+                    </div>
+                    <br>
+                    <br>
+                    <br>
+                    <div class="form-group">
                         <label class="col-sm-2 control-label">Name</label>
                         <div class="col-sm-10">
                             <input type="text" class="form-control" name="name" required="" placeholder="Enter Name">
@@ -98,19 +119,10 @@
                     </div>
                     <br>
                     <br>
-                    <br>
                     <div class="form-group">
                         <label class="col-sm-2 control-label">Phone</label>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control" name="phone" required="" placeholder="Enter Phone Number">
-                        </div>
-                    </div>
-                    <br>
-                    <br>
-                    <div class="form-group">
-                        <label class="col-sm-2 control-label">Email</label>
-                        <div class="col-sm-10">
-                            <input type="email" class="form-control" name="email" required="" placeholder="Enter email">
+                            <input type="number" class="form-control" name="phone" required="" placeholder="Enter Phone Number">
                         </div>
                     </div>
                     <br>
@@ -130,9 +142,11 @@
                     <div class="form-group">
                         <label class="col-sm-2 control-label">Address</label>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control" name="address" required="" placeholder="Enter Address">
+                            <textarea class="form-control" name="address" required="" placeholder="Enter Address" rows="3" style="resize: none"></textarea>
                         </div>
                     </div>
+                    <br>
+                    <br>
                     <br>
                     <br>
                     <div class="modal-footer">

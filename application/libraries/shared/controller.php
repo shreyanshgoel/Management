@@ -206,8 +206,8 @@ namespace Shared {
 
         public function _csrfToken() {
             $session = Registry::get("session");
-            
-            $csrf_token = Framework\StringMethods::uniqRandString(44);
+        
+            $csrf_token = \Framework\StringMethods::uniqueRandomString(44);
             $session->set('Auth\Request:$token', $csrf_token);
 
             if ($this->actionView) {

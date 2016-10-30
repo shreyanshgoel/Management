@@ -12,31 +12,6 @@ use Framework\Registry as Registry;
 class Users extends Controller {
 
 	/**
-     * @protected
-     */
-
-    public function _csrfToken() {
-        $session = Registry::get("session");
-        
-        $csrf_token = Framework\StringMethods::uniqRandString(44);
-        $session->set('Auth\Request:$token', $csrf_token);
-
-        if ($this->actionView) {
-            $this->actionView->set('__token', $csrf_token);
-        }
-    }
-
-    public function verifyToken($token = null) {
-        $session = Registry::get("session");
-        $csrf = $session->get('Auth\Request:$token');
-
-        if ($csrf && $csrf === $token) {
-            return true;
-        }
-        return false;
-    }
-
-	/**
      * @before _session
      * @after _csrfToken
      */
