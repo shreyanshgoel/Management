@@ -8,8 +8,4 @@ jQuery(document).ready(function($) {
                     ],
                     "bStateSave": true
                 });
-                // Initalize Select Dropdown after DataTables is created
-                $table1.closest('.dataTables_wrapper').find('select').select2({
-                    minimumResultsForSearch: -1
-                });
             });

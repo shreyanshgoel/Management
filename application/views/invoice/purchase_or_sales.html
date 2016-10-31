@@ -1,9 +1,6 @@
 <!-- Imported styles on this page -->
 <link rel="stylesheet" href="{echo CDN}js/datatables/datatables.css" id="style-resource-1">
-<link rel="stylesheet" href="{echo CDN}js/select2/select2-bootstrap.css" id="style-resource-2">
-<link rel="stylesheet" href="{echo CDN}js/select2/select2.css" id="style-resource-3">
 <script src="{echo CDN}js/datatables/datatables.js" id="script-resource-8"></script>
-<script src="{echo CDN}js/select2/select2.min.js" id="script-resource-9"></script>
 
 <ol class="breadcrumb bc-3">
     <li>
@@ -39,7 +36,7 @@
 <script type="text/javascript" src="{echo CDN}js/tables/tables1.js"></script>
 
 <!--Action important-->
-<form method="post" {if $outer == 'purchase'} action="/invoice/purchase_invoice" {/if} {if $outer == 'sales'} action="/users/sales_invoice" {/if}>
+<form method="post" {if $outer == 'purchase'} action="/invoice/purchase_invoice" {/if} {if $outer == 'sales'} action="/invoice/sales_invoice" {/if}>
     <table class="table table-bordered datatable" id="table-1">
         <thead>
             <tr>
@@ -177,7 +174,7 @@
 
 </form>
 
-<form method="post" {if $outer == 'purchase'} action="/users/purchase_invoice" {/if} {if $outer == 'sales'} action="/users/sales_invoice" {/if}>
+<form method="post" {if $outer == 'purchase'} action="/invoice/purchase_invoice" {/if} {if $outer == 'sales'} action="/invoice/sales_invoice" {/if}>
 
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog" role="document">
@@ -201,7 +198,7 @@
 
 </form>
 
-<form method="post" {if $outer == 'purchase'} action="/users/purchase_invoice" {/if} {if $outer == 'sales'} action="/users/sales_invoice" {/if} class="form-horizontal">
+<form method="post" {if $outer == 'purchase'} action="/invoice/purchase_invoice" {/if} {if $outer == 'sales'} action="/invoice/sales_invoice" {/if} class="form-horizontal">
 
 <div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog" role="document">

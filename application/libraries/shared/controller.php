@@ -89,7 +89,7 @@ namespace Shared {
         public function logout() {
             $this->setUser(false);
             session_destroy();
-            self::redirect("/index.html");
+            self::redirect("/");
         }
         
         public function noview() {

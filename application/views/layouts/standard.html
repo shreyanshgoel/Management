@@ -79,7 +79,7 @@
                             {if !empty($inventory_tables)} {foreach $t in $inventory_tables}
 
                             <li {if isset($table_name) && $table_name == $t->table_name} class = "active" {/if}>
-                                <a href="/users/inventory/{$t->id}">
+                                <a href="/table/inventory/{$t->id}">
                                     <span class="title">{echo ucfirst($t->table_name)}</span>
                                 </a>
                             </li>
@@ -111,12 +111,12 @@
                         </a>
                         <ul>
                             <li {if isset($purchase_nav)} class = "active" {/if}>
-                                <a href="/users/purchase_invoice">
+                                <a href="/invoice/purchase">
                                     <span class="title">Purchase Invoice</span>
                                 </a>
                             </li>
                             <li {if isset($sales_nav)} class = "active" {/if}>
-                                <a href="/users/sales_invoice">
+                                <a href="/invoice/sales">
                                     <span class="title">Sales Invoice</span>
                                 </a>
                             </li>
@@ -130,7 +130,7 @@
                         <ul>
                             {if !empty($other_tables)} {foreach $t in $other_tables}
                             <li {if isset($table_name) && $table_name == $t->table_name} class = "active" {/if}>
-                                <a href="/users/other_tables/{$t->id}">
+                                <a href="/table/other_tables/{$t->id}">
                                     <span class="title">{echo ucfirst($t->table_name)}</span>
                                 </a>
                             </li>
@@ -150,7 +150,7 @@
                         </a>
                         <ul>
                             <li id="">
-                                <a href="/users/mailbox">
+                                <a href="/mail/mailbox">
                                     <span class="title">Add Mail</span>
                                 </a>
                             </li>
@@ -163,7 +163,7 @@
                         </a>
                     </li>
                     <li id="create_table">
-                        <a href="/users/create_table">
+                        <a href="/table/create_table">
                             <i class="entypo-plus"></i>
                             <span class="title">Create Table</span>
                         </a>
