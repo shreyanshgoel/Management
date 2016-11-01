@@ -132,6 +132,15 @@ class User extends \Shared\Model {
     protected $_password;
 
     /**
+     * @column
+     * @readwrite
+     * @type text
+     * 
+     * @label 
+     */
+    protected $_logo_ext;
+
+    /**
     * @column
     * @readwrite
     * @type boolean

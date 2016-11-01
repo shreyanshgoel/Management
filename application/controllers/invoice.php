@@ -249,7 +249,23 @@ class Invoice extends Controller {
     * @before _secure
     */
     
-    public function show($id = -1){
+    public function purchase_show($id = -1){
+
+        $view = $this->getActionView();
+
+        $invoice = models\Purchase_Invoice::first(array(
+            'id = ?' => $id,
+            'user_id = ?' => $this->user->id
+            ));
+
+        if(!empty($invoice)){
+
+            $view->set('invoice', $invoice);
+
+        }else{
+
+            $this->redirect('/404');
+        }
 
         
     }

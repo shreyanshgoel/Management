@@ -120,6 +120,10 @@ class Users extends Controller {
 
     	$view = $this->getActionView();
 
+        $cp = 1;
+
+        $view->set('update_success', $success);
+
     	if(RequestMethods::post('profile_update')){
 
     		$user = models\User::first(array(
@@ -149,7 +153,7 @@ class Users extends Controller {
 	    		if($user->validate()){
 
 	    			$user->save();
-	    			self::redirect('/users/profile/1');
+	    			$this->redirect('/users/profile/1');
 	    		}else{
 
 	    			$view->set('validation', 1);
@@ -161,51 +165,65 @@ class Users extends Controller {
 
     	}
 
-    	$view->set('update_success', $success);
-
-
-    	$cp = -1;
-
 		if(RequestMethods::post('change_password')){
 
-			$cp = 0;
+            $cp = 2;
 
-			$old = RequestMethods::post('old');
+			$old = sha1(RequestMethods::post('old'));
 
-			$c = strcmp($this->user->password, crypt($old, $this->user->password));
-
-			if($c == 0){
+			if($this->user->password == $old){
 
 				$pass = RequestMethods::post('new');
 				$confirm = RequestMethods::post('confirm');
 
 				if($pass == $confirm){
 
-					$salt = strtr(base64_encode(mcrypt_create_iv(16, MCRYPT_DEV_URANDOM)), '+', '.');
-			        $cost=10;
-					$salt = sprintf("$2a$%02d\$", $cost) . $salt;
-					$crypt = crypt($pass, $salt);
-
 					$user = models\User::first(array('id = ?' => $this->user->id));
 
-					$user->password = $crypt;
+					$user->password = sha1($pass);
 
 					$user->save();
 
-					$cp = 1;
+					$message = "Password Changed<strong>Successfully!</strong>";
+
+                    $view->set('cp_success', 1);
 
 				}else{
 
-					$cp = 3;
+                    $message = "New passwords do not match!";
 				}
 
 			}else{
 
-				$cp = 2;
+                $message = "Wrong Old Password!";
 			}
+
+            $view->set('message', $message);
 
 
 		}
+
+        if(RequestMethods::post('update_invoice_setting')){
+
+            $cp = 3;
+
+            if ($_FILES['logo']['name']) {
+             
+                $img = $this->_upload('logo', 'logo', ['extension' => 'jpe?g|png', 'name' => $this->user->id, 'size' => '6000000']);
+
+                if($img){
+
+                    $user = models\User::first(array('id = ?' => $this->user->id));
+
+                    $user->logo_ext = $img;
+
+                    $user->save();
+                }
+
+
+            }
+
+        }
 
 		$view->set('cp', $cp);
        
@@ -381,6 +399,14 @@ class Users extends Controller {
 	* @before _secure
 	*/
     public function calendar(){
+        
+        
+    }
+
+    /**
+    * @before _secure
+    */
+    public function notes(){
         
         
     }

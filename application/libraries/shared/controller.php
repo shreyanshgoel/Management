@@ -112,6 +112,7 @@ namespace Shared {
                 $file = $_FILES[$name];
                 $path = APP_PATH . "/public/assets/uploads/{$type}/";
                 $extension = pathinfo($file["name"], PATHINFO_EXTENSION);
+                $size = $file["size"];
 
                 if (isset($opts['extension'])) {
                     $ex = $opts['extension'];
@@ -121,13 +122,21 @@ namespace Shared {
                     }
                 }
 
+                 if (isset($opts['size'])) {
+                    $s = $opts['size'];
+
+                    if ($size > $s) {
+                        return false;
+                    }
+                }
+
                 if (isset($opts['name'])) {
-                    $filename = $opts['name'];
+                    $filename = $opts['name'] . ".{$extension}";
                 } else {
                     $filename = uniqid() . ".{$extension}";
                 }
                 if (move_uploaded_file($file["tmp_name"], $path . $filename)) {
-                    return $filename;
+                    return $extension;
                 }
             }
             return FALSE;

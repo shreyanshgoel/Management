@@ -37,18 +37,21 @@
                 </ul>
                 <!-- tabs for the profile links -->
                 <ul class="nav nav-tabs" role="tablist">
-                    <li role="presentation" {if $cp==- 1} class="active" {/if}>
-                        <a href="#profile2" aria-controls="profile2" role="tab" data-toggle="tab">Profile</a>
+                    <li role="presentation" {if $cp== 1} class="active" {/if}>
+                        <a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">Profile</a>
                     </li>
-                    <li role="presentation" {if $cp !=- 1} class="active" {/if}>
+                    <li role="presentation" {if $cp == 2} class="active" {/if}>
                         <a href="#changepassword" aria-controls="changepassword" role="tab" data-toggle="tab">Change Password</a>
+                    </li>
+                    <li role="presentation" {if $cp == 3} class="active" {/if}>
+                        <a href="#invoice" aria-controls="invoice" role="tab" data-toggle="tab">Invoice settings</a>
                     </li>
                 </ul>
             </div>
         </div>
     </section>
     <div class="tab-content">
-        <div role="tabpanel" class="tab-pane {if $cp == -1} active {/if}" id="profile2">
+        <div role="tabpanel" class="tab-pane {if $cp == 1} active {/if}" id="profile">
             {if isset($update_success) && $update_success == 1}
             <div class="alert alert-success alert-dismissible fade in" role="alert">
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
@@ -130,28 +133,14 @@
                 </div>
             </form>
         </div>
-        <div role="tabpanel" class="tab-pane {if $cp != -1} active {/if}" id="changepassword">
-            {if $cp == 1}
-            <div class="alert alert-success alert-dismissible fade in" role="alert">
+        <div role="tabpanel" class="tab-pane {if $cp == 2} active {/if}" id="changepassword">
+            {if isset($message)}
+            <div class="alert {if isset($cp_success)} alert-success {/if}{else} alert-danger {/else} alert-dismissible fade in" role="alert">
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                     <span aria-hidden="true">×</span>
                 </button>
-                Password Changed
-                <strong>Successfully!</strong>
-            </div>
-            {/if} {if $cp == 2}
-            <div class="alert alert-danger alert-dismissible fade in" role="alert">
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">×</span>
-                </button>
-                Wrong Old Password!
-            </div>
-            {/if} {if $cp == 3}
-            <div class="alert alert-danger alert-dismissible fade in" role="alert">
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">×</span>
-                </button>
-                New passwords do not match!
+                {$message}
+                
             </div>
             {/if}
             <form class="form-horizontal" method="post">
@@ -176,6 +165,29 @@
                 <div class="form-group">
                     <div class="col-sm-offset-2 col-sm-10">
                         <button type="submit" name="change_password" value="change" class="btn btn-success">Update</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div role="tabpanel" class="tab-pane {if $cp == 3} active {/if}" id="invoice">
+            <form class="form-horizontal" method="post">
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">Comapny Logo</label>
+                    <div class="col-sm-5">
+                        <input type="file" name="logo" class="form-control" required="" disabled="">
+                        (Allowed extensions are jpg, jpeg, png and allowed size is 5MB)
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">Invoice theme</label>
+                    <div class="col-sm-5">
+                        <button class="btn btn-info">Select</button>
+                    </div>
+                </div>
+                <br><br>
+                <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-10">
+                        <button type="submit" name="update_invoice_setting" value="update" class="btn btn-success">Update</button>
                     </div>
                 </div>
             </form>

@@ -36,7 +36,7 @@
 <script type="text/javascript" src="{echo CDN}js/tables/tables1.js"></script>
 
 <!--Action important-->
-<form method="post" {if $outer == 'purchase'} action="/invoice/purchase_invoice" {/if} {if $outer == 'sales'} action="/invoice/sales_invoice" {/if}>
+<form method="post" {if $outer == 'purchase'} action="/invoice/purchase" {/if} {if $outer == 'sales'} action="/invoice/sales" {/if}>
     <table class="table table-bordered datatable" id="table-1">
         <thead>
             <tr>
@@ -138,10 +138,10 @@
                 <td>Rs {$total}</td>
             
                 <td>
-                    <button type="button" value="{$invoice->id}" data-toggle="modal" data-target="#myModal" class="btn btn-success btn-sm btn-icon icon-left">
+                    <a {if $outer == 'purchase'} href="/invoice/purchase_show/{$invoice->id}" {/if}{if $outer == 'sales'} href="/invoice/sales_show/{$invoice->id}" {/if} class="btn btn-success btn-sm btn-icon icon-left">
                         <i class="entypo-eye"></i> View Invoice
-                    </button>&nbsp;&nbsp;
-                    <button type="button" value="{$entry->id}" data-toggle="modal" data-target="#myModal" class="edit_sc btn btn-info btn-sm btn-icon icon-left">
+                    </a>&nbsp;&nbsp;
+                    <button type="button" value="{$entry->id}" data-toggle="modal" data-target="#myModal" class="edit_ps btn btn-info btn-sm btn-icon icon-left">
                         <i class="entypo-pencil"></i> Edit
                     </button>&nbsp;&nbsp;
                     <button type="submit" name="delete" value="{$entry->id}" class="btn btn-danger btn-sm btn-icon icon-left">
@@ -174,7 +174,7 @@
 
 </form>
 
-<form method="post" {if $outer == 'purchase'} action="/invoice/purchase_invoice" {/if} {if $outer == 'sales'} action="/invoice/sales_invoice" {/if}>
+<form method="post" {if $outer == 'purchase'} action="/invoice/purchase" {/if} {if $outer == 'sales'} action="/invoice/sales" {/if}>
 
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog" role="document">
@@ -198,7 +198,7 @@
 
 </form>
 
-<form method="post" {if $outer == 'purchase'} action="/invoice/purchase_invoice" {/if} {if $outer == 'sales'} action="/invoice/sales_invoice" {/if} class="form-horizontal">
+<form method="post" {if $outer == 'purchase'} action="/invoice/purchase" {/if} {if $outer == 'sales'} action="/invoice/sales" {/if} class="form-horizontal">
 
 <div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog" role="document">
