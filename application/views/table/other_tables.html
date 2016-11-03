@@ -23,7 +23,7 @@
     
             <ol class="breadcrumb bc-3">
                 <li>
-                    <a href="/users/edit_table/{$table->id}" class="btn btn-link">Edit Table</a>
+                    <a href="/table/edit_table/{$table->id}" class="btn btn-link">Edit Table</a>
                 </li>
                 <li>
                     <a href="" data-toggle="modal" data-target="#myModal2" class="btn btn-link">Delete Table</a>
@@ -84,7 +84,7 @@
 <script type="text/javascript" src="{echo CDN}js/tables/tables1.js"></script>
 
 <!--Action important-->
-<form method="post" {if $outer == 'inventory_tables'} action="/users/inventory/{$table->id}" {/if} {if $outer == 'other_tables'} action="/users/other_tables/{$table->id}" {/if} enctype="multipart/form-data">
+<form method="post" {if $outer == 'inventory_tables'} action="/table/inventory/{$table->id}" {/if} {if $outer == 'other_tables'} action="/table/other_tables/{$table->id}" {/if} enctype="multipart/form-data">
     <table class="table table-bordered datatable" id="table-1">
         <thead>
             <tr>

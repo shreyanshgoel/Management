@@ -22,7 +22,7 @@ class Table extends Controller {
     	$layoutView->set('inventory',1);
 
     	$view = new Framework\View(array(
-                    "file" => APP_PATH . "/application/views/users/other_tables.html"
+                    "file" => APP_PATH . "/application/views/table/other_tables.html"
                 ));
 
         $this->actionView = $view;
@@ -51,7 +51,7 @@ class Table extends Controller {
     	$layoutView->set('other_tables_nav', 1);
 
     	$view = new Framework\View(array(
-                    "file" => APP_PATH . "/application/views/users/other_tables.html"
+                    "file" => APP_PATH . "/application/views/table/other_tables.html"
                 ));
 
         $this->actionView = $view;

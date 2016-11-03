@@ -23,6 +23,15 @@ class Supplier_or_Customer extends \Shared\Model {
      * @readwrite
      * @type text
      * 
+     * @label full name
+     */
+    protected $_platform_id;
+
+    /**
+     * @column
+     * @readwrite
+     * @type text
+     * 
      * @validate required
      * @label supplier = 1/customer = 2
      */

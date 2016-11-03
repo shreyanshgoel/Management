@@ -11,12 +11,8 @@ use Framework\Registry as Registry;
 
 class Account extends Controller {
 
-	/**
-     * @before _session
-     * @after _csrfToken
-     */
-
-	public function register(){
+	
+/*	public function register(){
 		$this->setLayout("layouts/empty");
 		
 		$token = RequestMethods::post('token', '');
@@ -70,6 +66,8 @@ class Account extends Controller {
 		}
 
 	}
+
+	*/
 
 
 	/**

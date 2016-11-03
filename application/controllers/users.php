@@ -49,7 +49,7 @@ class Users extends Controller {
     public function search_in_tables(){
         
     	$view = $this->getActionView();
-
+        
         if(RequestMethods::get('search')){
 
         	$search = RequestMethods::get('search');
@@ -73,6 +73,7 @@ class Users extends Controller {
 		        		));
 
 		        	foreach ($result as $r){
+                        echo "string";
 
 		        		$t = models\Table::first(array(
 		        			'id = ?' => $r->table_id,
@@ -394,6 +395,14 @@ class Users extends Controller {
         $view->set('outer', 'customers')->set('table', $table)->set('states', $states);
         
     } 
+
+    /**
+    * @before _secure
+    */
+    public function contact_book(){
+        
+        
+    }
  
     /**
 	* @before _secure

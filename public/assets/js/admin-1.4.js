@@ -364,5 +364,19 @@ $(document).ready(function() {
 
         });
     });
+
+    $('.edit_ps').on('click', function() {
+
+        var self = $(this),
+            target = $('.modal-body');
+        target.html('');
+
+        var v = self.val();
+
+        Request.post({ action: "ajax/edit_sc/" + v }, function(data) {
+
+
+        });
+    });
 });
 
