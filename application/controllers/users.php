@@ -214,6 +214,8 @@ class Users extends Controller {
 
                 if($img){
 
+                    echo "string";
+
                     $user = models\User::first(array('id = ?' => $this->user->id));
 
                     $user->logo_ext = $img;

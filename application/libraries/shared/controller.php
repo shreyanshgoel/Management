@@ -109,8 +109,9 @@ namespace Shared {
          */
         protected function _upload($name, $type = "images", $opts = []) {
             if (isset($_FILES[$name])) {
+
                 $file = $_FILES[$name];
-                $path = APP_PATH . "/public/assets/uploads/{$type}/";
+                echo $path = APP_PATH . "/public/assets/uploads/{$type}/";
                 $extension = pathinfo($file["name"], PATHINFO_EXTENSION);
                 $size = $file["size"];
 
@@ -118,6 +119,7 @@ namespace Shared {
                     $ex = $opts['extension'];
 
                     if (!preg_match("/^".$ex."$/", $extension)) {
+                        echo "extension doesnt match";
                         return false;
                     }
                 }
@@ -126,6 +128,7 @@ namespace Shared {
                     $s = $opts['size'];
 
                     if ($size > $s) {
+                        echo "size is big";
                         return false;
                     }
                 }
@@ -135,10 +138,15 @@ namespace Shared {
                 } else {
                     $filename = uniqid() . ".{$extension}";
                 }
+
+                echo $filename;
                 if (move_uploaded_file($file["tmp_name"], $path . $filename)) {
                     return $extension;
+                }else{
+                    echo "this went wrong";
                 }
             }
+            echo "something went wrong";
             return FALSE;
         }
 

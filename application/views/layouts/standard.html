@@ -19,7 +19,11 @@
     <link rel="stylesheet" href="{echo CDN}css/neon-theme.css" id="style-resource-6">
     <link rel="stylesheet" href="{echo CDN}css/neon-forms.css" id="style-resource-7">
     <link rel="stylesheet" href="{echo CDN}css/custom.css" id="style-resource-8">
-
+    
+    {if $user->theme_color != 'default'}
+    <link rel="stylesheet" href="{echo CDN}css/skins/{echo $user->theme_color}.css" id="style-resource-9">
+    {/if}
+    
     <link rel="stylesheet" href="{echo CDN}css/font-icons/font-awesome/css/font-awesome.min.css" id="style-resource-4">
     
     <script src="{echo CDN}js/jquery-1.11.3.min.js"></script>
@@ -27,6 +31,16 @@
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]> <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script> <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script> <![endif]-->
     <!-- TS1465795316: Neon - Responsive Admin Template created by Laborator -->
+    <style type="text/css">
+        .circle{
+            width: 15px;
+            height: 15px;
+            -moz-border-radius: 150px;
+            -webkit-border-radius: 150px;
+            border-radius: 150px; 
+            float:left;
+        }
+    </style>
 </head>
 
 <body class="page-body" data-url="http://demo.neontheme.com">
@@ -464,6 +478,74 @@
                 <!-- Raw Links -->
                 <div class="col-md-6 col-sm-4 clearfix hidden-xs">
                     <ul class="list-inline links-list pull-right">
+                        <li class="dropdown language-selector">
+                            Theme: &nbsp;
+                            <a href="" class="dropdown-toggle" data-toggle="dropdown" data-close-others="true">
+                                <div style="background: black; position: absolute; margin-left: -5px; margin-top: -5px" class="circle"></div> </a>
+                            <ul class="dropdown-menu pull-right">
+                                <li>
+                                    <a href="">
+                                        <div style="background: #303641;" class="circle"></div>
+                                        &nbsp;&nbsp;<span>Default</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="">
+                                        <div style="background: black;" class="circle"></div>
+                                        &nbsp;&nbsp;<span>Black</span>
+                                    </a>
+                                </li>
+                                <li >
+                                    <a href="">
+                                        <div style="background: blue;" class="circle"></div>
+                                        &nbsp;&nbsp;<span>Blue</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="">
+                                        <div style="background: brown;" class="circle"></div>
+                                        &nbsp;&nbsp;<span>Cafe</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="">
+                                        <div style="background: #3B5998;" class="circle"></div>
+                                        &nbsp;&nbsp;<span>Facebook</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="">
+                                        <div style="background: green;" class="circle"></div>
+                                        &nbsp;&nbsp;<span>Green</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="">
+                                        <div style="background: purple;" class="circle"></div>
+                                        &nbsp;&nbsp;<span>Purple</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="">
+                                        <div style="background: red;" class="circle"></div>
+                                        &nbsp;&nbsp;<span>Red</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="">
+                                        <div style="background: white;" class="circle"></div>
+                                        &nbsp;&nbsp;<span>White</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="">
+                                        <div style="background: yellow;" class="circle"></div>
+                                        &nbsp;&nbsp;<span>Yellow</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="sep"></li>
                         <li>
                             <a href="index.html#" data-toggle="chat" data-collapse-sidebar="1"> <i class="entypo-chat"></i> Chat
                                 <span class="badge badge-success chat-notifications-badge is-hidden">0</span> </a>

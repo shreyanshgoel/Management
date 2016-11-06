@@ -170,13 +170,16 @@
             </form>
         </div>
         <div role="tabpanel" class="tab-pane {if $cp == 3} active {/if}" id="invoice">
-            <form class="form-horizontal" method="post">
+            <form class="form-horizontal" method="post" enctype= multipart/form-data>
                 <div class="form-group">
                     <label class="col-sm-2 control-label">Comapny Logo</label>
                     <div class="col-sm-5">
-                        <input type="file" name="logo" class="form-control" required="" disabled="">
+                        <input type="file" name="logo" class="form-control" required>
                         (Allowed extensions are jpg, jpeg, png and allowed size is 5MB)
                     </div>
+                    {if !empty($user->logo_ext)}
+                        <img src="{echo CDN}uploads/logo/{$user->id}.{$user->logo_ext}">
+                    {/if}
                 </div>
                 <div class="form-group">
                     <label class="col-sm-2 control-label">Invoice theme</label>

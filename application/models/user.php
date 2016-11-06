@@ -141,6 +141,15 @@ class User extends \Shared\Model {
     protected $_logo_ext;
 
     /**
+     * @column
+     * @readwrite
+     * @type text
+     * 
+     * @label 
+     */
+    protected $_theme_color = "default";
+
+    /**
     * @column
     * @readwrite
     * @type boolean
