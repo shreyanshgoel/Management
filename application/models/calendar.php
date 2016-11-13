@@ -45,9 +45,7 @@ class Calendar extends \Shared\Model {
      * @column
      * @readwrite
      * @type text
-     * @length 100
-     * 
-     * @validate required
+     *
      * @label short form
      */
     protected $_end_date = null;
@@ -61,5 +59,5 @@ class Calendar extends \Shared\Model {
      * @validate required
      * @label short form
      */
-    protected $_color;
+    protected $_color = null;
 }

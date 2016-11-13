@@ -183,6 +183,12 @@
                         </a>
                     </li>
                     <li>
+                        <a href="/users/notes">
+                            <i class="entypo-pencil"></i>
+                            <span class="title">Personal Notes</span>
+                        </a>
+                    </li>
+                    <li>
                         <a href="/table/create_table">
                             <i class="entypo-plus"></i>
                             <span class="title">Create Table</span>
@@ -481,64 +487,73 @@
                         <li class="dropdown language-selector">
                             Theme: &nbsp;
                             <a href="" class="dropdown-toggle" data-toggle="dropdown" data-close-others="true">
-                                <div style="background: black; position: absolute; margin-left: -5px; margin-top: -5px" class="circle"></div> </a>
+                            
+                            {script $color = $user->theme_color}
+                            {if $color == 'default'}
+                                {script $color = '#303641'}
+                            {/if}
+                            {if $color == 'facebook'}
+                                {script $color = '#3B5998'}
+                            {/if}
+
+                                <div style="background: {$color}; position: absolute; margin-left: -5px; margin-top: -5px; {if $color == 'white'}border-color: black; border-style: solid; border-width: 1px {/if}" class="circle"></div> </a>
                             <ul class="dropdown-menu pull-right">
                                 <li>
-                                    <a href="">
+                                    <a href="/users/dashboard?theme=default">
                                         <div style="background: #303641;" class="circle"></div>
                                         &nbsp;&nbsp;<span>Default</span>
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="">
+                                    <a href="/users/dashboard?theme=black">
                                         <div style="background: black;" class="circle"></div>
                                         &nbsp;&nbsp;<span>Black</span>
                                     </a>
                                 </li>
                                 <li >
-                                    <a href="">
+                                    <a href="/users/dashboard?theme=blue">
                                         <div style="background: blue;" class="circle"></div>
                                         &nbsp;&nbsp;<span>Blue</span>
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="">
+                                    <a href="/users/dashboard?theme=cafe">
                                         <div style="background: brown;" class="circle"></div>
                                         &nbsp;&nbsp;<span>Cafe</span>
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="">
+                                    <a href="/users/dashboard?theme=facebook">
                                         <div style="background: #3B5998;" class="circle"></div>
                                         &nbsp;&nbsp;<span>Facebook</span>
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="">
+                                    <a href="/users/dashboard?theme=green">
                                         <div style="background: green;" class="circle"></div>
                                         &nbsp;&nbsp;<span>Green</span>
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="">
+                                    <a href="/users/dashboard?theme=purple">
                                         <div style="background: purple;" class="circle"></div>
                                         &nbsp;&nbsp;<span>Purple</span>
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="">
+                                    <a href="/users/dashboard?theme=red">
                                         <div style="background: red;" class="circle"></div>
                                         &nbsp;&nbsp;<span>Red</span>
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="">
+                                    <a href="/users/dashboard?theme=white">
                                         <div style="background: white;" class="circle"></div>
                                         &nbsp;&nbsp;<span>White</span>
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="">
+                                    <a href="/users/dashboard?theme=yellow">
                                         <div style="background: yellow;" class="circle"></div>
                                         &nbsp;&nbsp;<span>Yellow</span>
                                     </a>

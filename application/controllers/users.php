@@ -21,6 +21,21 @@ class Users extends Controller {
     	$layoutView->set("seo", Framework\Registry::get("seo"));
     	
     	$layoutView->set('dashboard',1);
+
+        if(RequestMethods::get('theme')){
+
+            $user = models\User::first(array(
+                'id = ?' => $this->user->id
+                ));
+
+            if($user){
+
+                $user->theme_color = RequestMethods::get('theme');
+                $user->save();
+            }
+
+            $this->redirect('/users/dashboard');
+        }
     	
     	$view = $this->getActionView();
     	

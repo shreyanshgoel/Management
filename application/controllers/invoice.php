@@ -169,64 +169,7 @@ class Invoice extends Controller {
 
         $this->actionView = $view;
 
-        if(RequestMethods::post('add_ps')){
-
-        	$c = new models\Supplier_or_Customer(array(
-        		'user_id' => $this->user->id,
-        		'type' => '2',
-        		'name' => RequestMethods::post('name'),
-        		'phone' => RequestMethods::post('phone'),
-        		'state' => RequestMethods::post('state'),
-        		'address' => RequestMethods::post('address')
-        		));
-
-        	if($c->validate()){
-
-        		$c->save();
-        		$view->set('add_success', 1);
-        	}
-        }
-
-        if(RequestMethods::post('edit_ps')){
-
-        	$c = models\Supplier_or_Customer::first(array(
-        		'id = ?' => RequestMethods::post('edit_sc_id'),
-        		'user_id' => $this->user->id,
-        		'type' => '2',
-        		));
-
-        	$c->name = RequestMethods::post('name');
-        	$c->phone = RequestMethods::post('phone');
-        	$c->state = RequestMethods::post('state');
-        	$c->address = RequestMethods::post('address');
-
-        	if($c->validate()){
-
-        		$c->save();
-        		$view->set('edit_success', 1);
-        	}
-        }
-
-        if(RequestMethods::post('delete_ps')){
-
-        	$c = models\Supplier_or_Customer::first(array(
-        		'id = ?' => RequestMethods::post('edit_sc_id'),
-        		'user_id' => $this->user->id,
-        		'type' => '2',
-        		));
-
-        	$c->name = RequestMethods::post('name');
-        	$c->phone = RequestMethods::post('phone');
-        	$c->state = RequestMethods::post('state');
-        	$c->address = RequestMethods::post('address');
-
-        	if($c->validate()){
-
-        		$c->save();
-        		$view->set('edit_success', 1);
-        	}
-        }
-
+       
         $inventory = models\Table::all(array(
         	'user_id = ?' => $this->user->id,
         	'type = ?' => 'inventory'
@@ -234,7 +177,7 @@ class Invoice extends Controller {
 
         $s_or_c = models\Supplier_or_Customer::all(array(
         	'user_id = ?' => $this->user->id,
-        	'type = ?' => '1'
+        	'type = ?' => '2'
         	));
 
         $table = models\Sales_Invoice::all(array(

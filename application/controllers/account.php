@@ -49,7 +49,7 @@ class Account extends Controller {
 
 						self::enroll();
 
-						header("Location: /users/dashboard");
+						$this->redirect("/users/dashboard");
 
 					}else{
 
@@ -109,7 +109,7 @@ class Account extends Controller {
 	            	if($user->password == $pass){
 	            	
 		                $this->user = $user;
-		                header('Location: /users/dashboard');
+		                $this->redirect('/users/dashboard');
 		            
 		            }else{
 
@@ -157,7 +157,7 @@ class Account extends Controller {
 
 		$table->save();
 
-		header("Location: /users/dashboard");	
+		$this->redirect("/users/dashboard");	
 
 
 	}

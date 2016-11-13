@@ -14,6 +14,8 @@ class Home extends Controller {
 
         $this->setLayout("layouts/empty");
 
+        $view = $this->getActionView();
+
         /*
 
         $i = 0;
@@ -68,6 +70,7 @@ class Home extends Controller {
         }
         
         */
+
 
     }
 

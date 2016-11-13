@@ -8,6 +8,9 @@
             <i class="fa fa-home"></i>Home</a>
     </li>
     <li>
+        <a href="/users/dashboard">Invoice</a>
+    </li>
+    <li>
         <a href="#">{if $outer == 'purchase'} Purchase {/if}{if $outer == 'sales'} Sales {/if} Invoice</a>
     </li>
 </ol>
@@ -169,147 +172,148 @@
 
     </div>
     
-<br />
-<br />
+    <br />
+    <br />
 
 </form>
 
 <form method="post" {if $outer == 'purchase'} action="/invoice/purchase" {/if} {if $outer == 'sales'} action="/invoice/sales" {/if}>
 
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-                <h4 class="modal-title" id="myModalLabel">Edit {if $outer == 'purchase'} Purchase {/if}{if $outer == 'sales'} Sales {/if} Invoice</h4>
-            </div>
-            <div class="modal-body">
-                ...
-            </div>
-            <div class="modal-footer">
-                <button type="submit" name="edit_sc" value="save" class="btn btn-success">Save changes</button>
-                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel">Edit {if $outer == 'purchase'} Purchase {/if}{if $outer == 'sales'} Sales {/if} Invoice</h4>
+                </div>
+                <div class="modal-body">
+                    ...
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" name="edit_sc" value="save" class="btn btn-success">Save changes</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
 </form>
 
 <form method="post" {if $outer == 'purchase'} action="/invoice/purchase" {/if} {if $outer == 'sales'} action="/invoice/sales" {/if} class="form-horizontal">
 
-<div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-                <h4 class="modal-title" id="myModalLabel">Create {if $outer == 'purchase'} Purchase {/if}{if $outer == 'sales'} Sales {/if} Invoice</h4>
-            </div>
-            <div class="modal-body2" style="margin-left:0px">
-                
-                <br><br>
-                <div class="form-group">
-                    <label class="col-sm-3 control-label">{if $outer == 'purchase'} Supplier {/if}{if $outer == 'sales'} Customer {/if}</label>
-                    <div class="col-sm-6">
-                        <select class="form-control" name="supplier_id" required="">
-                            <option value=""> Select{if $outer == 'purchase'} Supplier {/if}{if $outer == 'sales'} Customer {/if}</option>
-                            {foreach $s in $s_or_c}
-                                {if $s->type == 1 && $outer == 'purchase'}
-                                <option value="{$s->id}">{$s->name}</option>
-                                {/if}
+    <div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel">Create {if $outer == 'purchase'} Purchase {/if}{if $outer == 'sales'} Sales {/if} Invoice</h4>
+                </div>
+                <div class="modal-body2" style="margin-left:0px">
+                    
+                    <br><br>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">{if $outer == 'purchase'} Supplier {/if}{if $outer == 'sales'} Customer {/if}</label>
+                        <div class="col-sm-6">
+                            <select class="form-control" name="supplier_id" required="">
+                                <option value=""> Select{if $outer == 'purchase'} Supplier {/if}{if $outer == 'sales'} Customer {/if}</option>
+                                {foreach $s in $s_or_c}
+                                    {if $s->type == 1 && $outer == 'purchase'}
+                                    <option value="{$s->id}">{$s->name}</option>
+                                    {/if}
 
-                                {if $s->type == 2 && $outer == 'sales'}
-                                <option value="{$s->id}">{$s->name}</option>
-                                {/if}
-                            {/foreach}
-                        </select>
+                                    {if $s->type == 2 && $outer == 'sales'}
+                                    <option value="{$s->id}">{$s->name}</option>
+                                    {/if}
+                                {/foreach}
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">Items Added</label>
+                        <div class="col-sm-6" id="items_added">
+
+                            <span style="padding-top:10px; position:absolute; color:red" id="no_items">No Items Yet</span>
+                            
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">Select Inventory</label>
+                        <div class="col-sm-6">
+                            <select class="form-control" id="inventory">
+                                <option value=""> Select Inventory</option>
+                                {foreach $i in $inventory}
+                                    <option value="{$i->id}">{$i->table_name}</option>
+                                {/foreach}
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">Select Item</label>
+                        <div class="col-sm-6">
+                            <select class="form-control" id="item">
+                                <option value="">Item</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div style="display:none">
+                        <input type="text" id="item_name" value="">
+                    </div>
+
+
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">Price per piece</label>
+                        <div class="input-group col-sm-6" style="padding-left:15px;padding-right:15px;">
+                            <div class="input-group-addon">Rs</div>
+                            <input type="text" class="form-control" id="price" placeholder="Amount">
+                            <div class="input-group-addon">.00</div>
+                        </div>
+                    </div>
+
+                    {if $outer == 'sales'}
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">Select Quantity</label>
+                        <div class="col-sm-6">
+                            <select class="form-control" id="quantity">
+                                <option value="">Quantity</option>
+                            </select>
+                        </div>
+                    </div>
+                    {/if}
+                    
+                    {if $outer == 'purchase'}
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">Select Quantity</label>
+                        <div class="col-sm-6">
+                            <input type="number" class="form-control" id="quantity" value="0">
+                        </div>
+                    </div>
+                    {/if}
+
+
+                    <div class="form-group">
+                        <label class="col-sm-7 control-label"></label>
+                        <div class="col-sm-5">
+                            <button type="button" id="add_item" class="btn btn-success">Add Item</button>
+                        </div>
+                    </div>
+
+              
+                    <div class="modal-footer">
+                        <button type="submit" name="create_ps" value="save" class="btn btn-success">Create</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
                     </div>
                 </div>
-
-                <div class="form-group">
-                    <label class="col-sm-3 control-label">Items Added</label>
-                    <div class="col-sm-6" id="items_added">
-
-                        <span style="padding-top:10px; position:absolute; color:red" id="no_items">No Items Yet</span>
-                        
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label class="col-sm-3 control-label">Select Inventory</label>
-                    <div class="col-sm-6">
-                        <select class="form-control" id="inventory">
-                            <option value=""> Select Inventory</option>
-                            {foreach $i in $inventory}
-                                <option value="{$i->id}">{$i->table_name}</option>
-                            {/foreach}
-                        </select>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label class="col-sm-3 control-label">Select Item</label>
-                    <div class="col-sm-6">
-                        <select class="form-control" id="item">
-                            <option value="">Item</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div style="display:none">
-                    <input type="text" id="item_name" value="">
-                </div>
-
-
-                <div class="form-group">
-                    <label class="col-sm-3 control-label">Price per piece</label>
-                    <div class="input-group col-sm-6" style="padding-left:15px;padding-right:15px;">
-                        <div class="input-group-addon">Rs</div>
-                        <input type="text" class="form-control" id="price" placeholder="Amount">
-                        <div class="input-group-addon">.00</div>
-                    </div>
-                </div>
-
-                {if $outer == 'sales'}
-                <div class="form-group">
-                    <label class="col-sm-3 control-label">Select Quantity</label>
-                    <div class="col-sm-6">
-                        <select class="form-control" id="quantity">
-                            <option value="">Quantity</option>
-                        </select>
-                    </div>
-                </div>
-                {/if}
-                
-                {if $outer == 'purchase'}
-                <div class="form-group">
-                    <label class="col-sm-3 control-label">Select Quantity</label>
-                    <div class="col-sm-6">
-                        <input type="number" class="form-control" id="quantity" value="0">
-                    </div>
-                </div>
-                {/if}
-
-
-                <div class="form-group">
-                    <label class="col-sm-7 control-label"></label>
-                    <div class="col-sm-5">
-                        <button type="button" id="add_item" class="btn btn-success">Add Item</button>
-                    </div>
-                </div>
-
-          
-            <div class="modal-footer">
-                <button type="submit" name="create_ps" value="save" class="btn btn-success">Create</button>
-                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
             </div>
         </div>
     </div>
-</div>
 
 
 </form>

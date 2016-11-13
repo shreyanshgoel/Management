@@ -139,12 +139,7 @@ namespace Shared {
                     $filename = uniqid() . ".{$extension}";
                 }
 
-                echo $filename;
-                if (move_uploaded_file($file["tmp_name"], $path . $filename)) {
-                    return $extension;
-                }else{
-                    echo "this went wrong";
-                }
+                move_uploaded_file($file["tmp_name"], $path . $filename);
             }
             echo "something went wrong";
             return FALSE;
