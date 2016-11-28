@@ -53,7 +53,8 @@
                     <!-- logo -->
                     <div class="logo">
                         <a href="index">
-                            <img src="{echo CDN}images/logo@2x.png" width="120" alt="" /> </a>
+                            <img src="{echo CDN}images/logo@2x.png" width="120" alt="" />
+                        </a>
                     </div>
                     <!-- logo collapse icon -->
                     <div class="sidebar-collapse">
@@ -124,7 +125,7 @@
                             <span class="title">Invoice</span>
                         </a>
                         <ul>
-                            <li {if isset($purchase_nav)} class = "active" {/if}>
+                            <li {if isset($purchase_nav)} class = "active root-level" {/if}>
                                 <a href="/invoice/purchase">
                                     <span class="title">Purchase Invoice</span>
                                 </a>
@@ -189,6 +190,12 @@
                         </a>
                     </li>
                     <li>
+                        <a href="/users/search_in_tables">
+                            <i class="entypo-search"></i>
+                            <span class="title">Wallet</span>
+                        </a>
+                    </li>
+                    <li>
                         <a href="/table/create_table">
                             <i class="entypo-plus"></i>
                             <span class="title">Create Table</span>
@@ -215,7 +222,13 @@
                             <!-- add class "pull-right" if you want to place this from right -->
                             <a href="index#">
                             {script $name = ucfirst($user->full_name)}
-                                <img src="{echo CDN}images/thumb-1@2x.png" alt="" class="img-circle" width="44" /> {$name}
+                                {if empty($user->logo_ext)}
+                                    <img src="{echo CDN}uploads/logo/{$user->id}.{$user->logo_ext}" class="img-circle" style="height: 44px; width: 44px" alt="" /> 
+                                {/if}
+                                {else}
+                                    <img src="{echo CDN}images/thumb-1@2x.png" alt="" class="img-circle" width="44">
+                                {/else}
+                            {$name}
                             </a>
                             
                         </li>
@@ -731,8 +744,8 @@
     <script src="{echo CDN}js/neon-skins.js" id="script-resource-19"></script>
 
     <!--Admin-->
-    <script src="{echo CDN}js/request.js"></script>
-    <script src="{echo CDN}js/admin-1.4.js"></script>
+    <script src="{echo CDN}js2/request.js"></script>
+    <script src="{echo CDN}js2/admin-1.4.js"></script>
     <script src="{echo CDN}js/metisMenu.min.js"></script>  
     <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
           

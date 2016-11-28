@@ -2,7 +2,13 @@
     <header class="row">
         <div class="col-sm-2">
             <a href="index#" class="profile-picture">
-                <img src="{echo CDN}images/profile-picture.png" class="img-responsive img-circle" /> </a>
+                {if empty($user->logo_ext)}
+                    <img src="{echo CDN}uploads/logo/{$user->id}.{$user->logo_ext}" class="img-responsive img-circle" style="width:130px; height: 130px" alt="" /> 
+                {/if}
+                {else}
+                    <img src="{echo CDN}images/logo@2x.png" width="120" alt="" />
+                {/else}
+             </a>
         </div>
         <div class="col-sm-7">
             <ul class="profile-info-sections">
@@ -24,14 +30,20 @@
                 <ul class="user-details">
                     <li>
                         <a href="index#">
-                            <i class="entypo-location"></i> {if !empty($user->location)} {$user->location} {/if}{else} No location{/if}
+                            <i class="entypo-location"></i>
+                            {if $user->location}
+                                {$user->location}
+                            {/if}
+                            {else}
+                                No location
+                            {/else}
                         </a>
                     </li>
                     <li>
                         <a href="index#">
                             <i class="entypo-suitcase"></i>
-                            {if !empty($user->designation)} Works as
-                            <span>{$user->designation}</span> {/if}{else} Employee{/if}
+                            {if $user->designation} Works as
+                            <span>{$user->designation}</span> {/if}{else} Employee{/else}
                         </a>
                     </li>
                 </ul>
@@ -78,29 +90,42 @@
             <form action="/users/profile" class="form-horizontal" method="post">
                 <div class="form-group">
                     <label class="col-sm-2 control-label">
-                        <sup style="color:red">*</sup>Full Name</label>
+                        <sup style="color:red">*</sup> Full Name</label>
                     <div class="col-sm-5">
                         <input type="text" class="form-control" name="full_name" value="{$user->full_name}" placeholder="Full Name" required="">
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="col-sm-2 control-label">
-                        <sup style="color:red">*</sup>Email</label>
-                    {if $user->email_confirm == 0}
+                        <sup style="color:red">*</sup> Email</label>
                     <div class="col-sm-5">
                         <input type="email" name="email" class="form-control" value="{$user->email}" placeholder="Email" required="">
+                    </div>
+                </div>
+                
+                {if $user->tmp_email}
+                <div class="form-group">
+                    <label class="col-sm-2 control-label"> Change Email</label>
+                    <div class="col-sm-5" style="margin-top:5px">
+                        {$user->tmp_email}
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox" name="change_email"> <span style="color:red">Delete Request</span>
+                            </label>
+                        </div>
                     </div>
                     <div class="col-sm-3" style="margin-top:5px">
                         <i class="entypo-cancel" style="color:red"></i> Not Confirmed
                     </div>
-                    {/if} {if $user->email_confirm == 1}
-                    <div class="col-sm-5" style="margin-top:5px; margin-left:5px;">
-                        {$user->email}
+                </div>
+                {/if}
+
+                 <div class="form-group">
+                    <label class="col-sm-2 control-label">
+                        <sup style="color:red">*</sup> Mobile Number</label>
+                    <div class="col-sm-5">
+                        <input type="number" class="form-control" name="mobile" value="{$user->mobile}" placeholder="Mobile Number">
                     </div>
-                    <div class="col-sm-3" style="margin-top:5px">
-                        <i class="entypo-check" style="color:green"></i> Confirmed
-                    </div>
-                    {/if}
                 </div>
                 <div class="form-group">
                     <label class="col-sm-2 control-label">Designation</label>
@@ -123,7 +148,7 @@
                 <div class="form-group">
                     <label class="col-sm-2 control-label">Location</label>
                     <div class="col-sm-5">
-                        <input type="text" class="form-control" name="location" value="{$user->location}" placeholder="Location">
+                        <textarea rows="3" style="resize: none" class="form-control" name="location" placeholder="Location">{$user->location}</textarea>
                     </div>
                 </div>
                 <div class="form-group">
@@ -170,6 +195,15 @@
             </form>
         </div>
         <div role="tabpanel" class="tab-pane {if $cp == 3} active {/if}" id="invoice">
+            {if isset($invoice_success)}
+            <div class="alert alert-success alert-dismissible fade in" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+                Settings Saved
+                <strong>Successfully!</strong>
+            </div>
+            {/if}
             <form class="form-horizontal" method="post" enctype= multipart/form-data>
                 <div class="form-group">
                     <label class="col-sm-2 control-label">Comapny Logo</label>

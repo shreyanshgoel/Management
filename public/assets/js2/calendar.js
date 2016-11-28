@@ -28,7 +28,24 @@ $('#calendar').fullCalendar({
 
     eventClick: function(event, jsEvent, view) {
        var title = prompt('Event Title:', event.title, { buttons: { Ok: true, Cancel: false} });
-       
+       if (title){
+           
+           event.title = title;
+           
+           $.ajax({
+             url: 'process.php',
+             data: 'type=changetitle&title='+title+'&eventid='+event.id,
+             type: 'POST',
+             dataType: 'json',
+             success: function(response){
+               if(response.status == 'success')
+               $('#calendar').fullCalendar('updateEvent',event);
+             },
+             error: function(e){
+               alert('Error processing your request: '+e.responseText);
+             }
+           });
+       }
     },
     
     eventDrop: function(event, delta, revertFunc) {

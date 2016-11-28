@@ -11,22 +11,25 @@ use Framework\Registry as Registry;
 
 class Account extends Controller {
 
-	
-/*	public function register(){
+	public function register_success(){
+
+
+	}
+
+	/* public function register(){
 		$this->setLayout("layouts/empty");
 		
 		$token = RequestMethods::post('token', '');
 
 		if(RequestMethods::post('register') && $this->verifyToken($token)){
-
-			$pass = RequestMethods::post("password");
-			$cpass = RequestMethods::post("confirm");
-
+			
+			$pass = \Framework\StringMethods::uniqueRandomString(10);
 			$user = new models\User(array(
 	            "full_name" => RequestMethods::post("full_name"),
 	            "email" => RequestMethods::post("email"),
 	            "mobile" => RequestMethods::post("mobile"),
-	            "password" => sha1($pass),
+	            "password" => $pass,
+	            "email_confirm" => true,
 	            "live" => true
 	        ));
 			$exist = models\User::all(array(
@@ -34,12 +37,12 @@ class Account extends Controller {
 				));
 
 			if (empty($exist)){
-			
-				if($pass == $cpass){
 
 					if($user->validate()){
 						
 						$user->save();
+
+						//mail te password to the user
 
 						$login = models\User::first(array(
 							'email = ?' => RequestMethods::post("email")
@@ -49,17 +52,13 @@ class Account extends Controller {
 
 						self::enroll();
 
-						$this->redirect("/users/dashboard");
+						$this->redirect("/account/register_success");
 
 					}else{
 
 						echo "<script>alert('validation not good')</script>";
 					}
 
-				}else{
-					echo "<script>alert('Passwords do not match')</script>";
-				}
-			
 			}else{
 				echo "<script>alert('User exists')</script>";
 			}
@@ -68,7 +67,6 @@ class Account extends Controller {
 	}
 
 	*/
-
 
 	/**
 	* @before _session

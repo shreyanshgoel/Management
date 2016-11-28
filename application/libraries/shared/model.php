@@ -99,16 +99,17 @@ namespace Shared {
                 $field = $value['raw'];
                 $current = $this->$field;
                 
-                if ((!is_array($current) && !isset($current)) || is_null($current)) {
-                    continue;
-                }
+                // if ((!is_array($current) && !isset($current)) || is_null($current)) {
+                //     continue;
+                // }
+                
                 $v = $this->_convertToType($current, $value['type']);
                 $v = $this->_preventEmpty($v, $value['type']);
-                if (is_null($v)) {
-                    continue;
-                } else {
+                // if (is_null($v)) {
+                //     continue;
+                // } else {
                     $doc[$key] = $v;
-                }
+                // }
             }
             if (isset($doc['_id'])) {
                 unset($doc['_id']);

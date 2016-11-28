@@ -23,9 +23,9 @@ class Supplier_or_Customer extends \Shared\Model {
      * @readwrite
      * @type text
      * 
-     * @label full name
+     * @label user id of the contact person
      */
-    protected $_platform_id;
+    protected $_contact_id;
 
     /**
      * @column

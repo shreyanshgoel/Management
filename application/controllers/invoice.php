@@ -169,6 +169,76 @@ class Invoice extends Controller {
 
         $this->actionView = $view;
 
+        if(RequestMethods::post('create_ps')){
+
+            $supplier = models\Supplier_or_Customer::first(array(
+                'id = ?' => RequestMethods::post('supplier_id'),
+                'user_id = ?' => $this->user->id,
+                'type = ?' => 1
+                ));
+
+            if(!empty($supplier)){
+                
+                $item_ids = RequestMethods::post('item_id');
+                $price = RequestMethods::post('price');
+                $quantity = RequestMethods::post('quantity');
+
+                if(!empty($item_ids)){
+
+                    $id_array = array();
+                    $q_array = array();
+                    $p_array = array();
+
+                    foreach($item_ids as $key => $item_id){
+
+                        $item = models\Entry::first(array(
+                            'id = ?' => $item_id,
+                            'user_id = ?' => $this->user->id
+                            ));
+
+                        if(!empty($item)){
+
+                            array_push($id_array, $item_id);
+                            array_push($q_array, $quantity[$key]);
+                            array_push($p_array, $price[$key]);
+
+                            $item->entry2 = $item->entry2 + $quantity[$key];
+                            $item->save();
+
+                        }
+                    }
+
+                    if(!empty($id_array) && !empty($q_array) && !empty($p_array)){
+                        
+                        $u = models\User::first(array(
+                                'id = ?' => $this->user->id
+                                ));
+
+
+                        $c = new models\Sales_Invoice(array(
+                            'invoice_id' => ++$u->last_purchase_invoice_id,
+                            'user_id' => $this->user->id,
+                            'customer_id' => RequestMethods::post('supplier_id'),
+                            'item_id' => $id_array,
+                            'quantity' => $q_array,
+                            'price' => $p_array
+                            ));
+
+                        if($c->validate()){
+
+                            $c->save();
+                            $view->set('add_success', 1);
+
+                            $u->save();
+                        }
+                    }
+                }else{
+                    echo "no items";
+                }
+            }
+        }
+
+
        
         $inventory = models\Table::all(array(
         	'user_id = ?' => $this->user->id,

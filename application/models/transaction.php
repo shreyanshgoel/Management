@@ -7,7 +7,7 @@
  */
 namespace models;
 
-class Calendar extends \Shared\Model {
+class Transaction extends \Shared\Model {
 
     /**
      * @column
@@ -18,18 +18,7 @@ class Calendar extends \Shared\Model {
      * @validate required
      * @label short form
      */
-    protected $_user_id;
-
-    /**
-     * @column
-     * @readwrite
-     * @type text
-     * @length 100
-     * 
-     * @validate required
-     * @label category name
-     */
-    protected $_title;
+    protected $_from_id;
 
     /**
      * @column
@@ -40,16 +29,7 @@ class Calendar extends \Shared\Model {
      * @validate required
      * @label short form
      */
-    protected $_start_date;
-
-    /**
-     * @column
-     * @readwrite
-     * @type text
-     *
-     * @label short form
-     */
-    protected $_end_date = null;
+    protected $_to_id;
 
     /**
      * @column
@@ -60,5 +40,17 @@ class Calendar extends \Shared\Model {
      * @validate required
      * @label short form
      */
-    protected $_color = null;
+    protected $_amount;
+
+    /**
+     * @column
+     * @readwrite
+     * @type text
+     * @length 100
+     * 
+     * @validate required
+     * @label short form
+     */
+    protected $_wallet_id;
+
 }

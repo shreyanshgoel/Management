@@ -84,11 +84,10 @@ class Users extends Controller {
         		while ($j < $len) {
         			
 		        	$result = models\Entry::all(array(
-		        		'entry' . $i . ' Like ?' => '%' . $search_words[$j] . '%'
+		        		'entry' . $i . ' = ?' => new \MongoDB\BSON\Regex($search_words[$j], 'i')
 		        		));
 
 		        	foreach ($result as $r){
-                        echo "string";
 
 		        		$t = models\Table::first(array(
 		        			'id = ?' => $r->table_id,
@@ -155,10 +154,17 @@ class Users extends Controller {
 
 	    		$user->full_name = RequestMethods::post('full_name');
 
-	    		if(RequestMethods::post('email')){
+                if(RequestMethods::post('change_email')){
 
-	    			$user->email = RequestMethods::post('email');
-	    			$user->email_confirm = 0;
+                    $user->tmp_email = null;
+                }
+
+	    		if(RequestMethods::post('email') != $user->email){
+
+	    			$user->tmp_email = RequestMethods::post('email');
+
+                    $string = \Framework\StringMethods::uniqueRandomString(44);
+                    $user->email_confirm_string = $string;
 
 	    		}
 
@@ -169,7 +175,12 @@ class Users extends Controller {
 	    		if($user->validate()){
 
 	    			$user->save();
-	    			$this->redirect('/users/profile/1');
+
+                    //mail the url to confirm the email
+
+                    $this->redirect('/users/profile/1');
+
+
 	    		}else{
 
 	    			$view->set('validation', 1);
@@ -229,18 +240,23 @@ class Users extends Controller {
 
                 if($img){
 
-                    echo "string";
-
                     $user = models\User::first(array('id = ?' => $this->user->id));
 
                     $user->logo_ext = $img;
 
                     $user->save();
+
+                    $this->redirect('/users/profile/2');
                 }
 
 
             }
 
+        }
+
+        if($success == 2){
+
+            $cp = 3;
         }
 
 		$view->set('cp', $cp);
@@ -271,21 +287,45 @@ class Users extends Controller {
 
         if(RequestMethods::post('add_sc')){
 
-        	$c = new models\Supplier_or_Customer(array(
-        		'user_id' => $this->user->id,
-        		'type' => '1',
-        		'name' => RequestMethods::post('name'),
-        		'phone' => RequestMethods::post('phone'),
-        		'email' => RequestMethods::post('email'),
-        		'state' => RequestMethods::post('state'),
-        		'address' => RequestMethods::post('address')
-        		));
+            $c = models\User::first(array(
+                'email = ?' => RequestMethods::post('email')
+                ));
 
-        	if($c->validate()){
+            if(!empty($c)){
 
-        		$c->save();
-        		$view->set('add_success', 1);
-        	}
+                $exist = models\Supplier_or_Customer::first(array(
+                    'contact_id = ?' => $c->id
+                    ));
+
+                if(empty($exist)){
+
+                    $c = new models\Supplier_or_Customer(array(
+                        'user_id' => $this->user->id,
+                        'contact_id' => $c->id,
+                        'type' => '1'
+                        ));
+                    $c->save();
+                    $view->set('add_success', 1);
+                }
+
+            }else{
+
+            	$c = new models\Supplier_or_Customer(array(
+            		'user_id' => $this->user->id,
+            		'type' => '1',
+            		'name' => RequestMethods::post('name'),
+            		'phone' => RequestMethods::post('phone'),
+            		'email' => RequestMethods::post('email'),
+            		'state' => RequestMethods::post('state'),
+            		'address' => RequestMethods::post('address')
+            		));
+
+            	if($c->validate()){
+
+            		$c->save();
+            		$view->set('add_success', 1);
+            	}
+            }
         }
 
         if(RequestMethods::post('edit_sc')){
@@ -432,8 +472,91 @@ class Users extends Controller {
     /**
     * @before _secure
     */
-    public function notes(){
-        
+    public function notes($id = '-1'){
+
+        $view = $this->getActionView();
+
+        $all_notes = models\Note::all(array(
+            'user_id = ?' => $this->user->id
+            ));
+
+        $view->set('all_notes', $all_notes);
+
+        switch ($id) {
+            case 'new':
+                if(RequestMethods::post('action') == 'save'){
+
+                    $note = new models\Note(array(
+                        'note_id' => uniqid(),
+                        'title' => RequestMethods::post('title'),
+                        'text' => RequestMethods::post('text'),
+                        'user_id' => $this->user->id
+                        ));
+
+                    if($note->validate()){
+
+                        $note->save();
+
+                        $this->redirect('/users/notes/' . $note->note_id);
+
+                    }
+
+                }
+
+                $view->set('new', 1);
+                break;
+            
+            case '-1':
+                $note = models\Note::first(array(
+                    'user_id = ?' => $this->user->id
+                    ));
+
+                if($note){
+
+                    $this->redirect('/users/notes/' . $note->note_id);
+
+                }else{
+
+                    $this->redirect('/users/notes/new');
+                }
+                break;
+            
+            default:
+                $note = models\Note::first(array(
+                    'note_id = ?' => $id,
+                    'user_id = ?' => $this->user->id
+                    ));
+
+                if($note){
+
+                    if(RequestMethods::post('action') == 'save'){
+
+                        $note->title = RequestMethods::post('title');
+                        $note->text = RequestMethods::post('text');
+
+                        if($note->validate()){
+                            $note->save();
+                        }
+
+                    }
+
+                    if(RequestMethods::post('action') == 'delete'){
+
+                        $note->delete();
+                        $this->redirect('/users/notes');
+                        
+                    }
+
+                    $view->set('note', $note);
+
+                }else{
+
+                    $this->redirect('/404');
+
+                }
+                break;                
+                
+        }
         
     }
 

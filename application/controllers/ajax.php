@@ -200,4 +200,28 @@ class Ajax extends Controller {
 
 
     }
+
+    /**
+    * @before _secure
+    */
+    public function check_email() {
+
+        $view = $this->getActionView();
+
+        $check = models\User::all(array(
+            'email = ?' => RequestMethods::post('email')
+            ));
+
+        if(!empty($check)){
+
+            $view->set(array(1));
+
+        }else{
+
+            $view->set(array(0));
+        }
+        
+
+
+    }
 }

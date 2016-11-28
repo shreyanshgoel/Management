@@ -73,6 +73,24 @@ class User extends \Shared\Model {
      * 
      * @label mobile number
      */
+    protected $_country;
+
+    /**
+     * @column
+     * @readwrite
+     * @type text
+     * 
+     * @label mobile number
+     */
+    protected $_state;
+
+    /**
+     * @column
+     * @readwrite
+     * @type text
+     * 
+     * @label mobile number
+     */
     protected $_location;
 
     /**
@@ -90,9 +108,11 @@ class User extends \Shared\Model {
     /**
      * @column
      * @readwrite
-     * @type boolean
+     * @type text
+     * 
+     * @label change email
      */
-    protected $_email_confirm = false;
+    protected $_tmp_email;
 
     /**
      * @column

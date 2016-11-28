@@ -71,7 +71,6 @@ class Home extends Controller {
         
         */
 
-
     }
 
     public function install(){

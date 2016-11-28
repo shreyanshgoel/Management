@@ -111,7 +111,7 @@ namespace Shared {
             if (isset($_FILES[$name])) {
 
                 $file = $_FILES[$name];
-                echo $path = APP_PATH . "/public/assets/uploads/{$type}/";
+                $path = APP_PATH . "/public/assets/uploads/{$type}/";
                 $extension = pathinfo($file["name"], PATHINFO_EXTENSION);
                 $size = $file["size"];
 
@@ -139,7 +139,10 @@ namespace Shared {
                     $filename = uniqid() . ".{$extension}";
                 }
 
-                move_uploaded_file($file["tmp_name"], $path . $filename);
+                if(move_uploaded_file($file["tmp_name"], $path . $filename)){
+
+                    return $extension;
+                }
             }
             echo "something went wrong";
             return FALSE;
