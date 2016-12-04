@@ -305,6 +305,15 @@ class Users extends Controller {
                         'type' => '1'
                         ));
                     $c->save();
+
+                    $c = new models\Contact(array(
+                        'first_id' => $this->user->id,
+                        'second_id' => $c->id,
+                        'first_id_status' => true
+                        ));
+
+                    $c->save();
+                    
                     $view->set('add_success', 1);
                 }
 
@@ -457,6 +466,10 @@ class Users extends Controller {
     * @before _secure
     */
     public function contact_book(){
+
+        $contact1 = models\Contact::all(array(
+            'first_id = ?' => $this->user->id
+            ));
         
         
     }
@@ -468,6 +481,15 @@ class Users extends Controller {
         
         
     }
+
+    /**
+    * @before _secure
+    */
+    public function wallet(){
+
+
+    }
+
 
     /**
     * @before _secure

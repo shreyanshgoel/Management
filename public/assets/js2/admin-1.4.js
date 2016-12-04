@@ -121,13 +121,18 @@ $(document).ready(function() {
             while (i < v) {
                 var target2 = $('#data-td' + n);
 
-                if (i == 5 || i == 6 || i == 7 || i == 8 || type == 'other') {
+                if (i ==2 || i==3 || i == 5 || i == 6 || i == 7 || type == 'other') {
 
                     target2.append('<td><input type="text" class="form-control" name="entry' + n + '_' + i + '"></td>');
 
                 } else {
 
-                    target2.append('<td><input type="text" class="form-control" name="entry' + n + '_' + i + '" required></td>');
+                    if(i == 8){
+
+                    }else{
+
+                        target2.append('<td><input type="text" class="form-control" name="entry' + n + '_' + i + '" required></td>');
+                    }
 
                 }
 
@@ -243,61 +248,61 @@ $(document).ready(function() {
 
             $.each(data, function(index, value) {
 
-                if (i > 0 && value._entry1 != undefined) {
+                if (i > 0) {
 
                     target.append('<div class="form-group"><label class="col-sm-2 control-label">' + column1 + '</label><div class="col-sm-10"><input type="text" class="form-control" name="edit_entry1" value="' + value._entry1 + '"></div></div><br><br>');
                     i = i - 1;
                 }
 
-                if (i > 0 && value._entry2 != undefined) {
+                if (i > 0) {
 
                     target.append('<div class="form-group"><label class="col-sm-2 control-label">' + column2 + '</label><div class="col-sm-10"><input type="text" class="form-control" name="edit_entry2" value="' + value._entry2 + '"></div></div><br><br>');
                     i = i - 1;
                 }
 
-                if (i > 0 && value._entry3 != undefined) {
+                if (i > 0) {
 
                     target.append('<div class="form-group"><label class="col-sm-2 control-label">' + column3 + '</label><div class="col-sm-10"><input type="text" class="form-control" name="edit_entry3" value="' + value._entry3 + '"></div></div><br><br>');
                     i = i - 1;
                 }
 
-                if (i > 0 && value._entry4 != undefined) {
+                if (i > 0) {
 
                     target.append('<div class="form-group"><label class="col-sm-2 control-label">' + column4 + '</label><div class="col-sm-10"><input type="text" class="form-control" name="edit_entry4" value="' + value._entry4 + '"></div></div><br><br>');
                     i = i - 1;
                 }
 
-                if (i > 0 && value._entry5 != undefined) {
+                if (i > 0) {
 
                     target.append('<div class="form-group"><label class="col-sm-2 control-label">' + column5 + '</label><div class="col-sm-10"><input type="text" class="form-control" name="edit_entry5" value="' + value._entry5 + '"></div></div><br><br>');
                     i = i - 1;
                 }
 
-                if (i > 0 && value._entry6 != undefined) {
+                if (i > 0) {
 
                     target.append('<div class="form-group"><label class="col-sm-2 control-label">' + column6 + '</label><div class="col-sm-10"><input type="text" class="form-control" name="edit_entry6" value="' + value._entry6 + '"></div></div><br><br>');
                     i = i - 1;
                 }
 
-                if (i > 0 && value._entry7 != undefined) {
+                if (i > 0) {
 
                     target.append('<div class="form-group"><label class="col-sm-2 control-label">' + column7 + '</label><div class="col-sm-10"><input type="text" class="form-control" name="edit_entry7" value="' + value._entry7 + '"></div></div><br><br>');
                     i = i - 1;
                 }
 
-                if (i > 0 && value._entry8 != undefined) {
+                if (i > 0) {
 
                     target.append('<div class="form-group"><label class="col-sm-2 control-label">' + column8 + '</label><div class="col-sm-10"><input type="text" class="form-control" name="edit_entry8" value="' + value._entry8 + '"></div></div><br><br>');
                     i = i - 1;
                 }
 
-                if (i > 0 && value._entry9 != undefined) {
+                if (i > 0) {
 
                     target.append('<div class="form-group"><label class="col-sm-2 control-label">' + column9 + '</label><div class="col-sm-10"><input type="text" class="form-control" name="edit_entry9" value="' + value._entry9 + '"></div></div><br><br>');
                     i = i - 1;
                 }
 
-                if (i > 0 && value._entry10 != undefined) {
+                if (i > 0) {
 
                     target.append('<div class="form-group"><label class="col-sm-2 control-label">' + column10 + '</label><div class="col-sm-10"><input type="text" class="form-control" name="edit_entry10" value="' + value._entry10 + '"></div></div><br><br>');
                     i = i - 1;
@@ -397,6 +402,10 @@ $(document).ready(function() {
                     document.getElementById('cross_sign').style.display = 'none';
                     document.getElementById('check_sign').style.display = 'block';
 
+                    document.getElementById('details').style.display = 'none';
+
+                    $('.required').attr('required', false);
+
                 }
 
                 if(value == 0){
@@ -404,6 +413,10 @@ $(document).ready(function() {
                     document.getElementById('loading').style.display = 'none';
                     document.getElementById('cross_sign').style.display = 'block';
                     document.getElementById('check_sign').style.display = 'none';
+
+                    document.getElementById('details').style.display = 'block';
+
+                    $('.required').attr('required', true);
 
                 }
             });

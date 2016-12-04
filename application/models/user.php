@@ -170,6 +170,15 @@ class User extends \Shared\Model {
     protected $_theme_color = "default";
 
     /**
+     * @column
+     * @readwrite
+     * @type text
+     * 
+     * @label 
+     */
+    protected $_wallet_balance = 0;
+
+    /**
     * @column
     * @readwrite
     * @type boolean

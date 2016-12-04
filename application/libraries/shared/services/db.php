@@ -1,6 +1,7 @@
 <?php
 namespace Shared\Services;
 use Framework\Registry;
+use Shared\Utils as Utils;
 
 class Db {
 	public static function connect() {
@@ -11,10 +12,11 @@ class Db {
 
 		    try {
 		        $dbconf = $configuration->parse("configuration/database")->database->mongodb;
+		        //$mongo = new \MongoDB\Client("mongodb://" . $dbconf->dbuser . ":" . $dbconf->password . "@" . $dbconf->url."/" . $dbconf->dbname . "?replicaSet=" . $dbconf->replica . "&ssl=true");
+
 		        $mongo = new \MongoDB\Client("mongodb://" .$dbconf->url.":27017/" . $dbconf->dbname);
 
 		        $mongoDB = $mongo->selectDatabase($dbconf->dbname);
-
 		    } catch (\Exception $e) {
 		        throw new \Framework\Database\Exception("DB Error");   
 		    }
@@ -24,6 +26,33 @@ class Db {
 		return $mongoDB;
 	}
 
+	public static function convertType($value, $type = 'id') {
+		switch ($type) {
+			case 'id':
+				return Utils::mongoObjectId($value);
+
+			case 'regex':
+				return Utils::mongoRegex($value);
+			
+			case 'date':
+			case 'datetime':
+			case 'time':
+				return self::time($value);
+		}
+		return '';
+	}
+
+	public static function updateRaw($table, $find, $set, $opts = []) {
+		$collection = Registry::get("MongoDB")->$table;
+		
+		$many = $opts['many'] ?? false;
+		if ($many) {
+			$collection->updateMany($find, $set);
+		} else {
+			$collection->updateOne($find, $set);
+		}
+	}
+
 	public static function time($date = null) {
 		if ($date) {
 			$time = strtotime($date);
@@ -31,7 +60,7 @@ class Db {
 			$time = strtotime('now');
 		}
 
-		return new \MongoDB\BSON\UTCDateTime($time * 1000);		
+		return new \MongoDB\BSON\UTCDateTime($time * 1000);
 	}
 
 	/**
@@ -68,7 +97,7 @@ class Db {
 	public static function dateQuery($start = null, $end = null) {
 		$changed = false;
 		if ($start && $end) {
-			if (is_object($start) && is_object($end) && is_a($start, 'MongoDB\BSON\UTCDateTime') && is_a($end, 'MongoDB\BSON\UTCDateTime')) {
+			if (self::isType($start, 'date') && self::isType($end, 'date')) {
 				$dq = ['start' => $start, 'end' => $end];
 				$changed = true;
 			}
@@ -123,6 +152,13 @@ class Db {
 		    $opts['limit'] = (int) $limit;
 		}
 		return $opts;
+	}
+
+	public static function collection($model) {
+		$model = "\\$model";
+		$m = new $model;
+
+		return $m->getTable();
 	}
 
 	// query method
