@@ -170,7 +170,8 @@ class Users extends Controller {
 
 	    		$user->designation = RequestMethods::post('designation');
 	    		$user->company_name = RequestMethods::post('company_name');
-	    		$user->location = RequestMethods::post('location');
+	    		$user->state = RequestMethods::post('state');
+                $user->address = RequestMethods::post('address');
 
 	    		if($user->validate()){
 
@@ -259,7 +260,9 @@ class Users extends Controller {
             $cp = 3;
         }
 
-		$view->set('cp', $cp);
+        $state = models\State::all();
+
+		$view->set('cp', $cp)->set('state', $state);
        
         
     }
@@ -285,92 +288,20 @@ class Users extends Controller {
 
     	$view = $this->getActionView();
 
-        if(RequestMethods::post('add_sc')){
+        switch (RequestMethods::post('action')) {
+            case 'add_sc':
+                $this->operate_sc(1, 'add');
+                break;
+            
+            case 'edit_sc':
+                $this->operate_sc(1, 'edit');
+                break;
+            default:
+                if(RequestMethods::post('delete')){
 
-            $c = models\User::first(array(
-                'email = ?' => RequestMethods::post('email')
-                ));
-
-            if(!empty($c)){
-
-                $exist = models\Supplier_or_Customer::first(array(
-                    'contact_id = ?' => $c->id
-                    ));
-
-                if(empty($exist)){
-
-                    $c = new models\Supplier_or_Customer(array(
-                        'user_id' => $this->user->id,
-                        'contact_id' => $c->id,
-                        'type' => '1'
-                        ));
-                    $c->save();
-
-                    $c = new models\Contact(array(
-                        'first_id' => $this->user->id,
-                        'second_id' => $c->id,
-                        'first_id_status' => true
-                        ));
-
-                    $c->save();
-                    
-                    $view->set('add_success', 1);
+                    $this->operate_sc(1, 'delete');
                 }
-
-            }else{
-
-            	$c = new models\Supplier_or_Customer(array(
-            		'user_id' => $this->user->id,
-            		'type' => '1',
-            		'name' => RequestMethods::post('name'),
-            		'phone' => RequestMethods::post('phone'),
-            		'email' => RequestMethods::post('email'),
-            		'state' => RequestMethods::post('state'),
-            		'address' => RequestMethods::post('address')
-            		));
-
-            	if($c->validate()){
-
-            		$c->save();
-            		$view->set('add_success', 1);
-            	}
-            }
-        }
-
-        if(RequestMethods::post('edit_sc')){
-
-        	$c = models\Supplier_or_Customer::first(array(
-        		'id = ?' => RequestMethods::post('edit_sc_id'),
-        		'user_id' => $this->user->id,
-        		'type' => '1',
-        		));
-
-        	$c->name = RequestMethods::post('name');
-        	$c->phone = RequestMethods::post('phone');
-        	$c->state = RequestMethods::post('state');
-        	$c->address = RequestMethods::post('address');
-        	$c->email = RequestMethods::post('email');
-
-        	if($c->validate()){
-
-        		$c->save();
-        		$view->set('edit_success', 1);
-        	}
-        }
-
-        if(RequestMethods::post('delete')){
-
-        	$c = models\Supplier_or_Customer::first(array(
-        		'id = ?' => RequestMethods::post('delete'),
-        		'user_id' => $this->user->id,
-        		'type' => '1',
-        		));
-
-        	if(!empty($c)){
-
-        		$c->delete();
-        		$view->set('delete_success', 1);
-        	}
+                break;
         }
 
         $table = models\Supplier_or_Customer::all(array(
@@ -380,7 +311,7 @@ class Users extends Controller {
 
         $states = models\State::all();
 
-        $view->set('outer', 'suppliers')->set('table', $table)->set('states', $states);
+        $view->set('table', $table)->set('states', $states);
         
     } 
 
@@ -396,59 +327,20 @@ class Users extends Controller {
 
     	$view = $this->getActionView();
 
-        if(RequestMethods::post('add_sc')){
+        switch (RequestMethods::post('action')) {
+            case 'add_sc':
+                $this->operate_sc(2, 'add');
+                break;
+            
+            case 'edit_sc':
+                $this->operate_sc(2, 'edit');
+                break;
+            default:
+                if(RequestMethods::post('delete')){
 
-        	$c = new models\Supplier_or_Customer(array(
-        		'user_id' => $this->user->id,
-        		'type' => '2',
-        		'name' => RequestMethods::post('name'),
-        		'phone' => RequestMethods::post('phone'),
-        		'email' => RequestMethods::post('email'),
-        		'state' => RequestMethods::post('state'),
-        		'address' => RequestMethods::post('address')
-        		));
-
-        	if($c->validate()){
-
-        		$c->save();
-        		$view->set('add_success', 1);
-        	}
-        }
-
-        if(RequestMethods::post('edit_sc')){
-
-        	$c = models\Supplier_or_Customer::first(array(
-        		'id = ?' => RequestMethods::post('edit_sc_id'),
-        		'user_id' => $this->user->id,
-        		'type' => '2',
-        		));
-
-        	$c->name = RequestMethods::post('name');
-        	$c->phone = RequestMethods::post('phone');
-        	$c->state = RequestMethods::post('state');
-        	$c->address = RequestMethods::post('address');
-        	$c->email = RequestMethods::post('email');
-
-        	if($c->validate()){
-
-        		$c->save();
-        		$view->set('edit_success', 1);
-        	}
-        }
-
-        if(RequestMethods::post('delete')){
-
-        	$c = models\Supplier_or_Customer::first(array(
-        		'id = ?' => RequestMethods::post('delete'),
-        		'user_id' => $this->user->id,
-        		'type' => '2',
-        		));
-
-        	if(!empty($c)){
-
-        		$c->delete();
-        		$view->set('delete_success', 1);
-        	}
+                    $this->operate_sc(2, 'delete');
+                }
+                break;
         }
 
         $table = models\Supplier_or_Customer::all(array(
@@ -458,18 +350,136 @@ class Users extends Controller {
 
         $states = models\State::all();
 
-        $view->set('outer', 'customers')->set('table', $table)->set('states', $states);
+        $view->set('table', $table)->set('states', $states);
         
     } 
 
     /**
     * @before _secure
     */
+    protected function operate_sc($type = null, $op = null){
+
+        $view = $this->getActionView();
+
+        switch ($op) {
+            case 'add':
+                $c = models\User::first(array(
+                    'email = ?' => RequestMethods::post('email')
+                    ));
+
+                if(!empty($c)){
+
+                    $exist = models\Supplier_or_Customer::first(array(
+                        'contact_id = ?' => $c->id,
+                        'type = ?' => $type
+                        ));
+
+                    if(empty($exist)){
+
+                        $c2 = new models\Supplier_or_Customer(array(
+                            'user_id' => $this->user->id,
+                            'contact_id' => $c->id,
+                            'type' => $type
+                            ));
+                        $c2->save();
+
+                        $contact = models\Contact::first(array(
+                            'second_id = ?' => $c->id
+                            ));
+
+                        if(empty($contact)){
+
+                            $c2 = new models\Contact(array(
+                            'first_id' => $this->user->id,
+                            'second_id' => $c->id,
+                            'first_id_status' => true
+                            ));
+
+                            $c2->save();
+
+                        }
+                        
+                        $view->set('add_success', 1);
+                    }
+
+                }else{
+
+                    $c = new models\Supplier_or_Customer(array(
+                        'user_id' => $this->user->id,
+                        'type' => $type,
+                        'name' => RequestMethods::post('name'),
+                        'phone' => RequestMethods::post('phone'),
+                        'email' => RequestMethods::post('email'),
+                        'state' => RequestMethods::post('state'),
+                        'address' => RequestMethods::post('address')
+                        ));
+
+                    if($c->validate()){
+
+                        $c->save();
+                        $view->set('add_success', 1);
+                    }
+                }
+                break;
+            case 'edit':
+                $c = models\Supplier_or_Customer::first(array(
+                    'id = ?' => RequestMethods::post('edit_sc_id'),
+                    'user_id' => $this->user->id,
+                    'type' => $type,
+                    ));
+
+                $c->name = RequestMethods::post('name');
+                $c->phone = RequestMethods::post('phone');
+                $c->state = RequestMethods::post('state');
+                $c->address = RequestMethods::post('address');
+                $c->email = RequestMethods::post('email');
+
+                if($c->validate()){
+
+                    $c->save();
+                    $view->set('edit_success', 1);
+                }
+                break;
+            case 'delete':
+                $c = models\Supplier_or_Customer::first(array(
+                    'id = ?' => RequestMethods::post('delete'),
+                    'user_id' => $this->user->id,
+                    'type' => $type,
+                    ));
+
+                if(!empty($c)){
+
+                    $c->delete();
+                    $view->set('delete_success', 1);
+                }
+                break;
+        }
+    }
+
+    /**
+    * @before _secure
+    */
     public function contact_book(){
 
-        $contact1 = models\Contact::all(array(
+        $view = $this->getActionView();
+
+        if(RequestMethods::post('delete')){
+
+            $c = models\Contact::first(array(
+                'first_id = ?' => $this->user->id,
+                'second_id = ?' => RequestMethods::post('delete')
+                ));
+
+            if(!empty($c)){
+                $c->delete();
+            }
+        }
+
+        $contacts = models\Contact::all(array(
             'first_id = ?' => $this->user->id
             ));
+
+        $view->set('contacts', $contacts);
         
         
     }

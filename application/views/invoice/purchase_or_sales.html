@@ -1,7 +1,3 @@
-<!-- Imported styles on this page -->
-<link rel="stylesheet" href="{echo CDN}js/datatables/datatables.css" id="style-resource-1">
-<script src="{echo CDN}js/datatables/datatables.js" id="script-resource-8"></script>
-
 <ol class="breadcrumb bc-3">
     <li>
         <a href="/users/dashboard">
@@ -36,11 +32,11 @@
     <strong>Success!</strong>{if $outer == 'purchase'} Purchase {/if}{if $outer == 'sales'} Sales {/if} details are edited
 </div>
 {/if}
-<script type="text/javascript" src="{echo CDN}js/tables/tables1.js"></script>
+
 
 <!--Action important-->
 <form method="post" {if $outer == 'purchase'} action="/invoice/purchase" {/if} {if $outer == 'sales'} action="/invoice/sales" {/if}>
-    <table class="table table-bordered datatable" id="table-1">
+    <table class="table table-bordered" id="table-1">
         <thead>
             <tr>
                 
@@ -122,12 +118,26 @@
             {if $outer == 'purchase'} 
                 
                 {script $sc = models\Supplier_or_Customer::first(array('id = ?' => $invoice->supplier_id))}
+
+                {if $sc->contact_id}
+
+                    {script $u = models\User::first(array('id = ?' => $sc->contact_id))}
+                    {script $sc->name = $u->full_name}
+
+                {/if}
     
             {/if}
 
             {if $outer == 'sales'} 
 
                 {script $sc = models\Supplier_or_Customer::first(array('id = ?' => $invoice->customer_id))}
+
+                {if $sc->contact_id}
+
+                    {script $u = models\User::first(array('id = ?' => $sc->contact_id))}
+                    {script $sc->name = $u->full_name}
+
+                {/if}
 
             {/if}
 
@@ -177,30 +187,6 @@
 
 </form>
 
-<form method="post" {if $outer == 'purchase'} action="/invoice/purchase" {/if} {if $outer == 'sales'} action="/invoice/sales" {/if}>
-
-    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                    <h4 class="modal-title" id="myModalLabel">Edit {if $outer == 'purchase'} Purchase {/if}{if $outer == 'sales'} Sales {/if} Invoice</h4>
-                </div>
-                <div class="modal-body">
-                    ...
-                </div>
-                <div class="modal-footer">
-                    <button type="submit" name="edit_sc" value="save" class="btn btn-success">Save changes</button>
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-</form>
-
 <form method="post" {if $outer == 'purchase'} action="/invoice/purchase" {/if} {if $outer == 'sales'} action="/invoice/sales" {/if} class="form-horizontal">
 
     <div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
@@ -221,6 +207,10 @@
                             <select class="form-control" name="supplier_id" required="">
                                 <option value=""> Select{if $outer == 'purchase'} Supplier {/if}{if $outer == 'sales'} Customer {/if}</option>
                                 {foreach $s in $s_or_c}
+                                    {if $s->contact_id}
+                                        {script $u = models\User::first(array('id = ?' => $s->contact_id))}
+                                        {script $s->name = $u->full_name}
+                                    {/if}
                                     {if $s->type == 1 && $outer == 'purchase'}
                                     <option value="{$s->id}">{$s->name}</option>
                                     {/if}

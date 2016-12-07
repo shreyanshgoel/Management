@@ -38,29 +38,55 @@
                 <th>S No.</th>
                 <th>Name</th>
                 <th>Phone</th>
+                <th>Email</th>
                 <th>State</th>
                 <th>Address</th>
                 <th>Actions</th>
             </tr>
         </thead>
         <tbody id="data-body">
-            {script $i = 1} {foreach $entry in $table}
-            <tr>
-                <td>{$i}</td>
-                <td>{$entry->name}</td>
-                <td>{$entry->phone}</td>
-                <td>{$entry->state}</td>
-                <td>{$entry->address}</td>
-                <td>
-                    <button type="button" value="{$entry->id}" data-toggle="modal" data-target="#myModal" class="edit_sc btn btn-info btn-sm btn-icon icon-left">
-                        <i class="entypo-pencil"></i> Edit
-                    </button>&nbsp;&nbsp;
-                    <button type="submit" name="delete" value="{$entry->id}" class="btn btn-danger btn-sm btn-icon icon-left">
-                        <i class="entypo-cancel"></i> Delete
-                    </button>
-                </td>
-            </tr>
-            {script $i++} {/foreach}
+            {script $i = 1} 
+
+            {foreach $entry in $table}
+
+                {if $entry->contact_id}
+
+                    {script $u = models\User::first(array('id = ?' => $entry->contact_id))}
+                    <tr>
+                        <td>{$i}</td>
+                        <td>{$u->full_name}</td>
+                        <td>{$u->mobile}</td>
+                        <td>{$u->email}</td>
+                        <td>{$u->state}</td>
+                        <td>{$u->address}</td>
+                        <td>
+                            <button type="submit" name="delete" value="{$entry->id}" class="btn btn-danger btn-sm btn-icon icon-left">
+                                <i class="entypo-cancel"></i> Delete
+                            </button>
+                        </td>
+                    </tr>
+                {/if}
+                {else}
+                    <tr>
+                        <td>{$i}</td>
+                        <td>{$entry->name}</td>
+                        <td>{$entry->phone}</td>
+                        <td>{$entry->email}</td>
+                        <td>{$entry->state}</td>
+                        <td>{$entry->address}</td>
+                        <td>
+                            <button type="button" value="{$entry->id}" data-toggle="modal" data-target="#myModal" class="edit_sc btn btn-info btn-sm btn-icon icon-left">
+                                <i class="entypo-pencil"></i> Edit
+                            </button>&nbsp;&nbsp;
+                            <button type="submit" name="delete" value="{$entry->id}" class="btn btn-danger btn-sm btn-icon icon-left">
+                                <i class="entypo-cancel"></i> Delete
+                            </button>
+                        </td>
+                    </tr>
+                {/else}
+            {script $i++} 
+
+            {/foreach}
         </tbody>
     </table>
     <br />
@@ -98,7 +124,7 @@
                     ...
                 </div>
                 <div class="modal-footer">
-                    <button type="submit" name="edit_sc" value="save" class="btn btn-success">Save changes</button>
+                    <button type="submit" name="action" value="edit_sc" class="btn btn-success">Save changes</button>
                     <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
                 </div>
             </div>
@@ -108,7 +134,7 @@
 <form method="post">
     <div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
         <div class="modal-dialog" role="document">
-            <div class="modal-content">
+            <div class="modal-content" style="margin-top: 200px">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
@@ -117,54 +143,71 @@
                 </div>
                 <div class="modal-body2">
                     <div class="form-group">
-                        <label class="col-sm-2 control-label">Name</label>
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control" name="name" required="" placeholder="Enter Name">
-                        </div>
-                    </div>
-                    <br>
-                    <br>
-                    <br>
-                    <div class="form-group">
-                        <label class="col-sm-2 control-label">Phone</label>
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control" name="phone" required="" placeholder="Enter Phone Number">
-                        </div>
-                    </div>
-                    <br>
-                    <br>
-                    <div class="form-group">
                         <label class="col-sm-2 control-label">Email</label>
-                        <div class="col-sm-10">
-                            <input type="email" class="form-control" name="email" required="" placeholder="Enter email">
+                        <div class="col-sm-6">
+                            <input type="email" id="check_email" class="form-control" name="email" required="" placeholder="Enter email">
+                        </div>
+                        <div class="col-sm-2">
+                            <button type="button" class="btn btn-default" id="check_email_btn">Check</button>
+                        </div>
+                        <div class="col-sm-2" style="display: none" id="check_sign">
+                            <i class="entypo-check" style="color: green; font-size: 22px;"></i>
+                        </div>
+                        <div class="col-sm-2" style="display: none" id="cross_sign">
+                            <i class="entypo-cancel" style="color: red; font-size: 22px;"></i>
+                        </div>
+                        <div class="col-sm-2" style="display: none" id="loading">
+                            <i class="fa fa-circle-o-notch fa-spin fa-3x fa-fw margin-bottom" style="color: blue; font-size: 22px;"></i>
                         </div>
                     </div>
                     <br>
                     <br>
-                    <div class="form-group">
-                        <label class="col-sm-2 control-label">State</label>
-                        <div class="col-sm-10">
-                            <select class="form-control" name="state">
-                                {foreach $state in $states}
-                                <option>{$state->name}</option>
-                                {/foreach}
-                            </select>
+                    <div id="details" style="display: none">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Name</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control required" name="name" placeholder="Enter Name">
+                            </div>
                         </div>
-                    </div>
-                    <br>
-                    <br>
-                    <div class="form-group">
-                        <label class="col-sm-2 control-label">Address</label>
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control" name="address" required="" placeholder="Enter Address">
+                        <br>
+                        <br>
+                        <br>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Phone</label>
+                            <div class="col-sm-10">
+                                <input type="number" class="form-control required" name="phone" placeholder="Enter Phone Number">
+                            </div>
                         </div>
+                        <br>
+                        <br>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">State</label>
+                            <div class="col-sm-10">
+                                <select class="form-control required" name="state">
+                                    {foreach $state in $states}
+                                    <option>{$state->name}</option>
+                                    {/foreach}
+                                </select>
+                            </div>
+                        </div>
+                        <br>
+                        <br>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label"><sup style="color:red">*</sup> Address</label>
+                            <div class="col-sm-10">
+                                <textarea class="form-control required" name="address" placeholder="Enter Address" rows="3" style="resize: none"></textarea>
+                            </div>
+                        </div>
+                    
+                        <br>
+                        <br>
+                        <br>
                     </div>
                     <br>
-                    <br>
-                    <div class="modal-footer">
-                        <button type="submit" name="add_sc" value="save" class="btn btn-success">ADD</button>
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" name="action" value="add_sc" class="btn btn-success">ADD</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
                 </div>
             </div>
         </div>

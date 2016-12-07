@@ -34,27 +34,79 @@
 
     {foreach $supplier in $table}
 
-    <div class="member-entry">
-        <a href="../timeline/index" class="member-img"> <img src="../../assets/images/member-1.jpg" class="img-rounded" /> <i class="entypo-forward"></i> </a>
-        <div class="member-details">
-            <h4>{$supplier->name}</h4>
-            <div class="row info-list">
-                <div class="col-sm-3"> <i class="entypo-mail"></i> <a href="index#">{$supplier->email}</a> </div>
-                <div class="col-sm-3"> <i class="entypo-location"></i> <a href="index#">{$supplier->state}</a> </div>
-                <div class="clear"></div>
-                <div class="clear"></div>
-                <div class="col-sm-4" style="float:right">
-                    <button type="button" value="{$supplier->id}" data-toggle="modal" data-target="#myModal" class="edit_sc btn btn-info btn-sm btn-icon icon-left">
-                        <i class="entypo-pencil"></i> Edit
-                    </button>&nbsp;&nbsp;
-                    <button type="submit" name="delete" value="{$supplier->id}" class="btn btn-danger btn-sm btn-icon icon-left">
-                        <i class="entypo-cancel"></i> Delete
-                    </button>
-                    
+        {if $supplier->contact_id}
+
+            {script $s = models\User::first(array('id = ?' => $supplier->contact_id))}
+
+            <div class="member-entry">
+                <a href="../timeline/index" class="member-img"> <img src="../../assets/images/member-1.jpg" class="img-rounded" /> <i class="entypo-forward"></i> </a>
+                <div class="member-details">
+                    <h4>{$s->full_name}</h4>
+                    <div class="row info-list">
+                        <div class="col-sm-3"> <i class="entypo-mail"></i> <a href="index#">{$s->email}</a> </div>
+                        <div class="col-sm-3"> <i class="entypo-location"></i> 
+                            <a href="index#">
+                                {if $s->address && $s->state}
+                                    {$s->address}, {$s->state}
+                                {/if}
+                                {else}
+                                    {if $s->address}
+                                        {$s->address}
+                                    {/if}
+                                    {else}
+                                        {if $s->state}
+                                            {$s->state}
+                                        {/if}
+                                        {else}
+
+                                            No Address
+
+                                        {/else}
+
+                                    {/else}
+                                {/else}
+                                
+                            </a> 
+                        </div>
+                        <div class="clear"></div>
+                        <div class="clear"></div>
+                        <div class="col-sm-4" style="float:right; padding-left: 90px">
+                            <button type="submit" name="delete" value="{$supplier->id}" class="btn btn-danger btn-sm btn-icon icon-left">
+                                <i class="entypo-cancel"></i> Delete
+                            </button>
+                            
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
-    </div>
+
+        {/if}
+
+        {else}
+
+            <div class="member-entry">
+                <a href="../timeline/index" class="member-img"> <img src="../../assets/images/member-1.jpg" class="img-rounded" /> <i class="entypo-forward"></i> </a>
+                <div class="member-details">
+                    <h4>{$supplier->name}</h4>
+                    <div class="row info-list">
+                        <div class="col-sm-3"> <i class="entypo-mail"></i> <a href="index#">{$supplier->email}</a> </div>
+                        <div class="col-sm-3"> <i class="entypo-location"></i> <a href="index#">{$supplier->address}, {$supplier->state}</a> </div>
+                        <div class="clear"></div>
+                        <div class="clear"></div>
+                        <div class="col-sm-4" style="float:right">
+                            <button type="button" value="{$supplier->id}" data-toggle="modal" data-target="#myModal" class="edit_sc btn btn-info btn-sm btn-icon icon-left">
+                                <i class="entypo-pencil"></i> Edit
+                            </button>&nbsp;&nbsp;
+                            <button type="submit" name="delete" value="{$supplier->id}" class="btn btn-danger btn-sm btn-icon icon-left">
+                                <i class="entypo-cancel"></i> Delete
+                            </button>
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        {/else}
     {/foreach}
 
 {/if}
@@ -84,7 +136,7 @@
                     ...
                 </div>
                 <div class="modal-footer">
-                    <button type="submit" name="edit_sc" value="save" class="btn btn-success">Save changes</button>
+                    <button type="submit" name="action" value="edit_sc" class="btn btn-success">Save changes</button>
                     <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
                 </div>
             </div>
@@ -164,10 +216,10 @@
                         <br>
                     </div>
                     <br>
-                    <div class="modal-footer">
-                        <button type="submit" name="add_sc" value="save" class="btn btn-success">ADD</button>
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" name="action" value="add_sc" class="btn btn-success">ADD</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
                 </div>
             </div>
         </div>

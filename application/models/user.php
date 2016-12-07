@@ -91,7 +91,7 @@ class User extends \Shared\Model {
      * 
      * @label mobile number
      */
-    protected $_location;
+    protected $_address;
 
     /**
      * @column

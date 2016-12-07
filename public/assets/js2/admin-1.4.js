@@ -28,9 +28,16 @@ $(document).ready(function() {
 
         if (inventory && item && price && quantity) {
 
-            no_items.css('display', 'none');
+            if(quantity != 0){
 
-            target.append('<div class="alert alert-success"><input type="text" name="item_id[]" value="' + item + '" hidden><input type="text" name="price[]" value="' + price + '" hidden><input type="text" name="quantity[]" value="' + quantity + '" hidden><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong>' + name + '!</strong> ' + quantity + ' pieces for Rs ' + price + '</div>');
+                no_items.css('display', 'none');
+
+                target.append('<div class="alert alert-success"><input type="text" name="item_id[]" value="' + item + '" hidden><input type="text" name="price[]" value="' + price + '" hidden><input type="text" name="quantity[]" value="' + quantity + '" hidden><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong>' + name + '!</strong> ' + quantity + ' pieces for Rs ' + price + '</div>');
+            }else{
+
+                alert('Select Quantity');
+
+            }
 
         } else {
 
@@ -373,12 +380,11 @@ $(document).ready(function() {
     $('.edit_ps').on('click', function() {
 
         var self = $(this),
-            target = $('.modal-body');
-        target.html('');
+            target = $('#edit_items_list');
 
         var v = self.val();
 
-        Request.post({ action: "ajax/edit_sc/" + v }, function(data) {
+        Request.post({ action: "ajax/edit_ps", data:{id : v} }, function(data) {
 
 
         });

@@ -1,7 +1,7 @@
 <?php
 
 /**
- * The Payment Model
+ * The Contact Model
  *
  * @author Shreyansh Goel
  */

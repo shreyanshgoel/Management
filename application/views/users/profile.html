@@ -31,11 +31,24 @@
                     <li>
                         <a href="index#">
                             <i class="entypo-location"></i>
-                            {if $user->location}
-                                {$user->location}
+                            {if $user->address && $user->state}
+                                {$user->address}, {$user->state}
                             {/if}
                             {else}
-                                No location
+                                {if $user->address}
+                                    {$user->address}
+                                {/if}
+                                {else}
+                                    {if $user->state}
+                                        {$user->state}
+                                    {/if}
+                                    {else}
+
+                                        No Address
+
+                                    {/else}
+
+                                {/else}
                             {/else}
                         </a>
                     </li>
@@ -146,9 +159,20 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-sm-2 control-label">Location</label>
+                    <label class="col-sm-2 control-label">State</label>
                     <div class="col-sm-5">
-                        <textarea rows="3" style="resize: none" class="form-control" name="location" placeholder="Location">{$user->location}</textarea>
+                        <select name="state" class="form-control">
+                            <option value="">Select</option>
+                            {foreach $s in $state}
+                                <option {if $user->state == $s->name} selected {/if}>{$s->name}</option>
+                            {/foreach}
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">address</label>
+                    <div class="col-sm-5">
+                        <textarea rows="3" style="resize: none" class="form-control" name="address" placeholder="Address">{$user->address}</textarea>
                     </div>
                 </div>
                 <div class="form-group">

@@ -65,6 +65,31 @@ class Ajax extends Controller {
     }
 
     /**
+    * @before _secure
+    */
+    public function edit_ps() {
+        
+        $view = $this->getActionView();
+
+        $id = RequestMethods::post('id');
+
+        $edit_sc = models\Supplier_or_Customer::all(array(
+            'id = ?' => $id,
+            'user_id = ?' => $this->user->id
+            ));
+
+        if(!empty($edit_sc)){
+
+            $view->set($edit_sc);
+
+        }else{
+
+            $view->set(false);
+        }
+
+    }
+
+    /**
 	* @before _secure
 	*/
     public function states() {
@@ -94,7 +119,7 @@ class Ajax extends Controller {
     		$view->set($items);
 
 		}else{
-			
+
 		}
     	
 

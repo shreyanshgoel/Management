@@ -16,6 +16,12 @@ class Home extends Controller {
 
         $view = $this->getActionView();
 
+        $c = models\Contact::all();
+
+        foreach ($c as $a) {
+            $a->delete();
+        }
+
         /*
 
         $i = 0;
