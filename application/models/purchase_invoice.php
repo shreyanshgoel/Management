@@ -6,7 +6,7 @@
  * @author Shreyansh Goel
  */
 namespace models;
-class Purchase_Invoice extends \Shared\Model {
+class Purchase_Sales_Invoice extends \Shared\Model {
 
     /**
      * @column
@@ -36,7 +36,17 @@ class Purchase_Invoice extends \Shared\Model {
      * @validate required
      * @label password
      */
-    protected $_supplier_id;
+    protected $_sc_id;
+
+    /**
+     * @column
+     * @readwrite
+     * @type text
+     * 
+     * @validate required
+     * @label 1 for purchase, 2 for sales
+     */
+    protected $_type;
 
     /**
      * @column
