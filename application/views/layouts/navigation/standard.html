@@ -177,7 +177,7 @@
                             <!-- add class "pull-right" if you want to place this from right -->
                             <a href="/users/dashboard">
                             {script $name = ucfirst($user->full_name)}
-                                {if empty($user->logo_ext)}
+                                {if !empty($user->logo_ext)}
                                     <img src="{echo CDN}uploads/logo/{$user->id}.{$user->logo_ext}" class="img-circle" style="height: 44px; width: 44px" alt="" /> 
                                 {/if}
                                 {else}

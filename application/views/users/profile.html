@@ -2,7 +2,7 @@
     <header class="row">
         <div class="col-sm-2">
             <a href="index#" class="profile-picture">
-                {if empty($user->logo_ext)}
+                {if !empty($user->logo_ext)}
                     <img src="{echo CDN}uploads/logo/{$user->id}.{$user->logo_ext}" class="img-responsive img-circle" style="width:130px; height: 130px" alt="" /> 
                 {/if}
                 {else}

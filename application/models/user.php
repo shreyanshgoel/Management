@@ -179,6 +179,15 @@ class User extends \Shared\Model {
     protected $_wallet_balance = 0;
 
     /**
+     * @column
+     * @readwrite
+     * @type array
+     * 
+     * @label sdsdsd
+     */
+    protected $_creative = [];
+
+    /**
     * @column
     * @readwrite
     * @type boolean
